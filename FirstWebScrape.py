@@ -9,32 +9,28 @@ Helpfull sites:
 3. https://www.udemy.com/course/web-scraping-python-bs/learn/lecture/13378628#overview
 
 Trying to scrape couple of fruits/vegetables names and prices, into a Array.
-
 """
-import inline as inline
-import matplotlib as matplotlib
+
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import re
-import time
-from datetime import datetime
-import matplotlib.dates as mdates
-import matplotlib.ticker as ticker
-from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import requests
+from Vegetable import Vegetable
 
-pageCount = 3  #The number of pages in "משק כישורית" webpage.
-
+pageCount = 3  # The number of pages in "משק כישורית" webpage.
+Vegetables = []  # All the vegetables from "משק כישורית" webpage.
+Data = []  # One list of all the vegetables
 
 """
 scrapePage - This method scrape a web page and extract the relevant data (price and name ) to a list.
-Args: pageNumber -> the page number in this webpage.
 """
 
+
 def scrapePage(pageNumber):
+    """
+    :rtype list of vegetables.
+    :param pageNumber: the page number in this webpage.
+    :return Vegetables: all the vegetables products in this page.
+    """
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
                "Accept-Encoding": "gzip, deflate",
                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT": "1",
@@ -46,16 +42,34 @@ def scrapePage(pageNumber):
     soup = BeautifulSoup(content)
 
     Vegetables = []
-    Prices = []
+    for Element in soup.findAll('div', attrs={'class': 'layout_list_item css_class_47954'}):
+        temp = Element.find('a').contents[0]
+        index = temp.find('(')
+        # retrieve the unit
+        unit = temp[index:]
+        # retrieve the name
+        name = temp[:index]
+        # retrieve the price
+        price = Element.find('strong').contents[0]
+        price = price.replace('₪', '')
+        Vegetables.append(Vegetable(name, price, unit))
 
-    for Element in soup.findAll('div',attrs={'class':'layout_list_item css_class_47954'}):
-        Vegetables.append(Element.find('a').contents[0])
-        Prices.append()
+    return Vegetables
+
+    # Vegetables.append(Element.find('a').contents[0])
 
 
-for i in range(1,pageCount+1):
-    scrapePage(i)
+for i in range(1, pageCount + 1):
+    Vegetables.append(scrapePage(i))
 
-#Vegetables = []
-#Price = []
-
+# falttern the data to single list
+Data = [item for sublist in Vegetables for item in sublist]
+# convert the data to a table
+df = pd.DataFrame.from_records([d.to_dist() for d in Data])
+# create a cvs file out of the table
+df.to_csv('משק כישורית.csv', index=False, encoding='utf-8')
+df = pd.read_csv("משק כישורית.csv")
+temp = pd.ExcelWriter('משק כישורית.xlsx')
+# create a excel flie from cvs
+df.to_excel(temp, index=False)
+temp.save()
