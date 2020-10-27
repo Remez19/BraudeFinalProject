@@ -34,6 +34,8 @@ def scrapePageKishurit(pageNumber,pageLink):
         unit = temp[index:]
         # retrieve the name
         name = temp[:index]
+        name = name.replace("כישורית", "")
+        name = name.replace("*במבצע*", "")
         # retrieve the price
         price = Element.find('strong').contents[0]
         price = price.replace('₪', '')
