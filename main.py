@@ -13,10 +13,13 @@ Helpfull sites:
 Trying to scrape couple of fruits/vegetables names and prices, into a Array.
 """
 
-import os,time
+import os, time
+import pyodbc
 from ImportData import importData
+import CompareData
 
 if __name__ == '__main__':
+    resemblance = []
     lastUpdate = time.ctime(os.path.getmtime('C:/Users/rdone/PycharmProjects/BraudeFinalProject/סולטן.xlsx'))  # not
     # constant can change from pc to pc
     print("The last time you refreshed the sites was: "+lastUpdate)
@@ -29,9 +32,9 @@ if __name__ == '__main__':
         print("The last time you refreshed the sites was: " + lastUpdate)
     else:
         # Analyze data
-        x = 0
-
-
+        resemblance = CompareData.compareData()
+        # print(resemblance)
+    # Compare data from files and DB.
 
 
 
