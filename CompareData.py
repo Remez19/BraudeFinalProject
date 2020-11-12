@@ -1,32 +1,41 @@
-import pandas as pd
-
-
-def compareData():
+def compareData(dataBaseCon):
     """
        compareData - extract the data from each file (including the data base) and compares between the sites.
        """
-    dataBase = []
     resemblance = []
-    with open("DataBase_Products.txt", encoding='utf8') as products:
-        dataBase = products.read().splitlines()
-    df = pd.read_excel('סולטן.xlsx')
-    sultanProducts = df['שם'].tolist()
-    df = pd.read_excel('משק כישורית.xlsx')
-    kishuritProducts = df['שם'].tolist()
+
+    kishuritProducts = []
+    select_qurey_Kishutrit = "SELECT Prod_Name FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Kishurit'"
+    dataBaseCon.execute(select_qurey_Kishutrit)
+    for row in dataBaseCon:
+        kishuritProducts.append(row.Prod_Name)
+
+    select_query_Sultan = "SELECT Prod_Name FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Sultan'"
+    sultanProducts = []
+    dataBaseCon.execute(select_query_Sultan)
+    for row in dataBaseCon:
+        sultanProducts.append(row.Prod_Name)
+
+    AllVegNames_query = "SELECT * FROM [BraudeProject].[dbo].[AllVegNames]"
+    allVegNames = []
+    dataBaseCon.execute(AllVegNames_query)
+    for row in dataBaseCon:
+        allVegNames.append(row.Veg_Name)
+
+    pairs = []
     for product1 in sultanProducts:
         resemblance.append(product1)
         try:
-            index = dataBase.index(product1.split(' ')[0])
-            pairs = []
+            index = allVegNames.index(product1.split(' ')[0])
             for product2 in kishuritProducts:
-                # if product2.find(dataBase[index]) != -1:
-                percent = copmareByPerecent(product1, product2)
-                if percent >= 0.1:
-                    pairs.append(product2)
+                if product2.find(allVegNames[index]) != -1:
+                    percent = copmareByPerecent(product1, product2)
+                    if percent >= 0.2:
+                        pairs.append(product2)
             resemblance.append(pairs)
+            pairs = []
         except ValueError:
             continue
-    print(resemblance)
     return resemblance
 
 
