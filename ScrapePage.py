@@ -34,13 +34,17 @@ def scrapePageKishurit(pageNumber, pageLink):
         unit = temp[index:]
         unit = unit.replace("(", "")
         unit = unit.replace(")", "")
+        unit = " ".join(unit.split())
         # retrieve the name
         name = temp[:index]
         name = name.replace("כישורית", "")
         name = name.replace("*במבצע*", "")
+        name = " ".join(name.split())
+        name = name.strip()
         # retrieve the price
         price = Element.find('strong').contents[0]
         price = price.replace('₪', '')
+        price = " ".join(price.split())
         Vegetables.append(Vegetable(name, price, unit))
 
     return Vegetables
@@ -89,6 +93,7 @@ def scrapePageSultan(pageLink):
             # retrieve name
             name = temp[:index]
             name = " ".join(name.split())
+            name = name.strip()
         # retrieve price and delete duplicate spaces
         price = ElementPrice.contents[0]
         price = " ".join(price.split())
@@ -128,6 +133,8 @@ def scrapePageMichaeli(pageLink):
             if indexUnit is not None:
                 name = str[:indexUnit.start()]
                 name = " ".join(name.split())
+                name = name[:name.index("-")]
+                name = name.strip()
                 unit = str[indexUnit.start():]
                 unit = " ".join(unit.split())
             else:

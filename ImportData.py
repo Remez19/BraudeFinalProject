@@ -1,6 +1,5 @@
 from ScrapePage import scrapePageSultan, scrapePageMichaeli, scrapePageKishurit
-import pandas as pd
-import os
+
 
 
 # Link to 'משק כישורית' site.
@@ -15,6 +14,8 @@ def importData(dataBaseCon):
     delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Michaeli'"
     dataBaseCon.execute(delete_query)
     dataBaseCon.commit()
+    delete_query = "DELETE FROM [BraudeProject].[dbo].[AllVeg] WHERE Prod_Web = 'Michaeli'"
+
 
     # Define insert query
     insert_query = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web)' \
