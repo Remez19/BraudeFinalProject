@@ -1,10 +1,10 @@
 """
 First attempt to scrape.
 
-Web page link:
+Web page link (to scrape):
  1. http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA
  2. http://sultan.pricecall.co.il/
- 3.
+ 3. https://michaelio.co.il/c/%D7%99%D7%A8%D7%A7%D7%95%D7%AA
 
 Helpfull sites:
 1. https://www.dataquest.io/blog/web-scraping-tutorial-python/
