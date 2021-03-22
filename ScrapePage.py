@@ -3,55 +3,6 @@ import requests
 import re
 from Vegetable import Vegetable
 
-"""
-scrapePageKishurit - This method scrape a web page and extract the relevant data (price and name ) to a list in 
-"משק כישורית" website.
- """
-
-
-def scrapePageKishurit(pageNumber, pageLink):
-    """
-    :rtype list of vegetables.
-    :param pageNumber: the page number in this webpage.
-    :param pageLink: the web page address
-    :return Vegetables: all the vegetables products in this page.
-    """
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
-               "Accept-Encoding": "gzip, deflate",
-               "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT": "1",
-               "Connection": "close", "Upgrade-Insecure-Requests": "1"}
-    r = requests.get(
-        pageLink + str(pageNumber),
-        headers=headers)  # , proxies=proxies)
-    content = r.content
-    soup = BeautifulSoup(content, features="html.parser")
-
-    Vegetables = []
-    for Element in soup.findAll('div', attrs={'class': 'layout_list_item css_class_47954'}):
-        temp = Element.find('a').contents[0]
-        index = temp.find('(')
-        # retrieve the unit
-        unit = temp[index:]
-        unit = unit.replace("(", "")
-        unit = unit.replace(")", "")
-        unit = " ".join(unit.split())
-        # retrieve the name
-        name = temp[:index]
-        name = name.replace("כישורית", "")
-        name = name.replace("*במבצע*", "")
-        name = " ".join(name.split())
-        name = name.strip()
-        # retrieve the price
-        price = Element.find('strong').contents[0]
-        price = price.replace('₪', '')
-        price = " ".join(price.split())
-        Vegetables.append(Vegetable(name, price, unit))
-
-    return Vegetables
-
-
-"""scrapePageSultan - This method scrape a web page and extract the relevant data (price and name ) to a list in 
-"סולטן" website. """
 
 
 def scrapePageSultan(pageLink):
@@ -142,7 +93,7 @@ def scrapePageMichaeli(pageLink):
                 name = " ".join(name.split())
                 unit = 'לא מצויין'
             price = ElementPrice.getText()
-            price = price.replace('₪','')
+            price = price.replace('₪', '')
             price = " ".join(price.split())
             Vegetables.append(Vegetable(name, price, unit))
     return Vegetables

@@ -1,27 +1,26 @@
 from ScrapePage import scrapePageSultan, scrapePageMichaeli, scrapePageKishurit
-
+from Kishurit import Kishurit
 
 
 # Link to 'משק כישורית' site.
 def importData(dataBaseCon):
-    # Delete all the data from tables in order to update them
-    delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Sultan'"
-    dataBaseCon.execute(delete_query)
-    dataBaseCon.commit()
-    delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Kishurit'"
-    dataBaseCon.execute(delete_query)
-    dataBaseCon.commit()
-    delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Michaeli'"
-    dataBaseCon.execute(delete_query)
-    dataBaseCon.commit()
-    delete_query = "DELETE FROM [BraudeProject].[dbo].[AllVeg] WHERE Prod_Web = 'Michaeli'"
+    deleteBeforeInsert(dataBaseCon)
+
+    # Devide to Threads
+    kishurit = Kishurit()
+    kishurit.startScrape()
+    for veg in kishurit.resultVegList:
+        row = (veg.vegName, veg.vegUnit, veg.vegPrice, "Kishurit")
+        dataBaseCon.execute(kishurit.insertQuery, row)
+        dataBaseCon.commit()
 
 
-    # Define insert query
+
+    Define insert query
     insert_query = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web)' \
                    'VALUES (?,?,?,?);'
 
-    KishuritLink = 'http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page='
+    KishuritLink = 'http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA'
     SultanLink = 'http://sultan.pricecall.co.il/'
     MichaeliLink = 'https://michaelio.co.il/c/%D7%99%D7%A8%D7%A7%D7%95%D7%AA'
     pageCount = 3  # The number of pages in "משק כישורית" webpage.
@@ -75,3 +74,22 @@ def importData(dataBaseCon):
     #     row = (prod.vegName, prod.vegUnit, int(float(prod.vegPrice)), "Michaeli")
     #     dataBaseCon.execute(insert_query, row)
     #     dataBaseCon.commit()
+
+
+# Delete all the data from tables in order to update them
+def deleteBeforeInsert(dataBaseCon):
+    try:
+        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Sultan'"
+        dataBaseCon.execute(delete_query)
+        dataBaseCon.commit()
+        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Kishurit'"
+        dataBaseCon.execute(delete_query)
+        dataBaseCon.commit()
+        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Michaeli'"
+        dataBaseCon.execute(delete_query)
+        dataBaseCon.commit()
+        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllVeg] WHERE Prod_Web = 'Michaeli'"
+        print("DB READY FOR INSERT")
+    except Exception:
+        print("Data Base delete FAILURE")
+        exit(0)
