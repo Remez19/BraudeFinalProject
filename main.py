@@ -1,24 +1,47 @@
 from datetime import datetime
 from ImportData import importData
 from Utils import connectToDB, selectFromDB, deleteFromDB, insertToDB
+from tkinter import *
+from tkinter import font
+from tkinter import tix
+from App import App
 
 if __name__ == '__main__':
-    serverName = "LAPTOP-VNSLHC31"
-    # Data base name
-    dbName = "BraudeProject"
-    dataBaseCon = connectToDB(serverName, dbName)
-    lastUpdateDate = selectFromDB(dataBaseCon, "SELECT * FROM Updates")
-    for date in lastUpdateDate:
-        print("The last time you refreshed the sites was: " + date)
-        print("would you like to refresh again?")
-    answer = str(input("Press Y:"))
-    if answer == 'Y':
-        importData(dataBaseCon)
-        deleteFromDB(dataBaseCon, deleteQuery="DELETE FROM Updates")
-        lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        insertToDB(dataBaseCon, data=lastUpdate, insertQuery='INSERT INTO Updates (Last_Update)' \
-                                                             'VALUES (?);')
-        print("COMPLETE")
+    # GUI section #
+    app = App()
+    app.startApp()
+    # mainWindow = tix.Tk()
+    # mainWindow.title('Braude Project')
+    # mainWindow.geometry('600x400')
+    #
+    # WelcomeLabelFont = font.Font(family="Helvetica", size=15, weight=font.BOLD,
+    #                              underline=1)
+    # WelcomeLabel = Label(mainWindow, text="Hello Admin", font=WelcomeLabelFont)
+    # LastUpdateDateLabel = Label(mainWindow, text=)
+    # UpdateDbBtn = Button(mainWindow, text="Update Data Base", command=lambda :importData(dataBaseCon))
+    # MatchNames = Button(mainWindow, text="Design data base")
+    #
+    # WelcomeLabel.grid(row=0, column=0)
+    # UpdateDbBtn.grid(row=1, column=0)
+    # # GUI section #
+    #
+    # serverName = "LAPTOP-VNSLHC31"
+    # # Data base name
+    # dbName = "BraudeProject"
+    # dataBaseCon = connectToDB(serverName, dbName)
+    # lastUpdateDate = selectFromDB(dataBaseCon, "SELECT * FROM Updates")
+    # for date in lastUpdateDate:
+    #     print("The last time you refreshed the sites was: " + date)
+    #     print("would you like to refresh again?")
+    # answer = str(input("Press Y:"))
+    # if answer == 'Y':
+    #     importData(dataBaseCon)
+    #     deleteFromDB(dataBaseCon, deleteQuery="DELETE FROM Updates")
+    #     lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    #     insertToDB(dataBaseCon, data=lastUpdate, insertQuery='INSERT INTO Updates (Last_Update)' \
+    #                                                          'VALUES (?);')
+    #     print("COMPLETE")
+    # mainWindow.mainloop()
     # else:
     #
     #     # Analyze data

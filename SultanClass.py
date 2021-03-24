@@ -2,7 +2,7 @@ from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 from VegetableClass import Vegetable
 from Compare import compareNameToBaseName
-
+import time
 
 class Sultan:
     """
@@ -38,7 +38,7 @@ class Sultan:
                Creates a Vegetable instance
     """
 
-    def __init__(self, baseNameList):
+    def __init__(self, baseNameList, progress):
         """
                Parameters
                ----------
@@ -51,8 +51,9 @@ class Sultan:
                            'VALUES (?,?,?,?,?);'
         self.resultVegList = []
         self.baseNameList = baseNameList
+        self.progress = progress
 
-    def startScrape(self, sem, dataBaseCon):
+    def startScrape(self, semDB, semProg, dataBaseCon):
         """Starts scraping each page link in Kishurit website.The start function of the threads.
                Parameters
                ----------
@@ -64,12 +65,15 @@ class Sultan:
         """
         self.getLinkData()
         if len(self.resultVegList):
-            sem.acquire()
+            step = 50 / len(self.resultVegList)
+            semDB.acquire()
             for veg in self.resultVegList:
                 row = veg.getRow()
                 insertToDB(dataBaseCon, row, self.insertQuery)
+                self.progress.put(step)
+                semProg.acquire()
             print("Thread " + self.webName + " finish")
-            sem.release()
+            semDB.release()
 
     def getLinkData(self):
         """Retrieve the link raw data of unit, price and name of a vegetable.

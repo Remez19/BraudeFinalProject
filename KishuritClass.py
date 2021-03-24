@@ -3,6 +3,7 @@ from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 import re
 from VegetableClass import Vegetable
+import time
 
 
 class Kishurit:
@@ -54,7 +55,7 @@ class Kishurit:
 
     """
 
-    def __init__(self, baseNameList, pageCount=3):
+    def __init__(self, baseNameList, progress, pageCount=3):
         """
         Parameters
         ----------
@@ -72,8 +73,9 @@ class Kishurit:
         self.resultVegList = []
         self.createPagesLinks()
         self.baseNameList = baseNameList
+        self.progress = progress
 
-    def startScrape(self, sem, dataBaseCon):
+    def startScrape(self, semDB, semProg, dataBaseCon):
         """Starts scraping each page link in Kishurit website.The start function of the threads.
                Parameters
                ----------
@@ -86,11 +88,14 @@ class Kishurit:
         for link in self.linkList:
             self.getLinkData(link)
             if len(self.resultVegList):
-                sem.acquire()
+                step = 50 / (len(self.resultVegList) * len(self.linkList))
+                semDB.acquire()
                 for veg in self.resultVegList:
                     row = veg.getRow()
                     insertToDB(dataBaseCon, row, self.insertQuery)
-                sem.release()
+                    self.progress.put(step)
+                    semProg.acquire()
+                semDB.release()
         print("Thread " + self.webName + " finish")
 
     def getLinkData(self, link):

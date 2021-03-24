@@ -6,28 +6,30 @@ import threading
 import time
 from threading import Thread, Semaphore
 
-sem = threading.Semaphore() # parallel computing -> using semaphore to sync threads
+semDB = threading.Semaphore() # parallel computing -> using semaphore to sync threads
+
 
 # Link to 'משק כישורית' site.
-def importData(dataBaseCon):
+def importData(dataBaseCon, progress, semProg):
     deleteBeforeInsert(dataBaseCon)
     # Devide to Threads
     Threads = []
     webObjList = []
     baseNames = selectFromDB(dataBaseCon, "SELECT * FROM [BraudeProject].[dbo].[AllVegNames]")
-    kishurit = Kishurit(baseNames)
-    sultan = Sultan(baseNames)
+    kishurit = Kishurit(baseNames, progress)
+    sultan = Sultan(baseNames, progress)
     # michaeli = Michaeli()
     # webObjList.append(michaeli)
     webObjList.append(kishurit)
     webObjList.append(sultan)
     for webObj in webObjList:
-        Threads.append(Thread(target=webObj.startScrape, args=(sem, dataBaseCon)))
+        Threads.append(Thread(target=webObj.startScrape, args=(semDB, semProg, dataBaseCon)))
     startTime = time.time()
     for thread in Threads:
         thread.start()
     for thread in Threads:
         thread.join()
+
     endTime = time.time()
     print('#####  ' + str((endTime - startTime) / 60) + '  ####')
 
