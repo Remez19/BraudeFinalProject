@@ -8,7 +8,6 @@ from App import App
 
 if __name__ == '__main__':
     # GUI section #
-    print("test")
     app = App()
     app.startApp()
     # mainWindow = tix.Tk()
