@@ -16,6 +16,7 @@ def importData(dataBaseCon, progress, semProg):
     Threads = []
     webObjList = []
     baseNames = selectFromDB(dataBaseCon, "SELECT * FROM [BraudeProject].[dbo].[AllVegNames]")
+    baseNames = [''.join(item.split()) for sublist in baseNames for item in sublist]
     kishurit = Kishurit(baseNames, progress)
     sultan = Sultan(baseNames, progress)
     # michaeli = Michaeli()

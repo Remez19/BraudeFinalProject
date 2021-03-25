@@ -77,18 +77,25 @@ def deleteFromDB(dataBaseCon, deleteQuery):
         print(e)
 
 
-def selectFromDB(dataBaseCon, selectQuery):
+def selectFromDB(dataBaseCon, selectQuery, queue=None):
     """
+
           : Handle select query's to Data - Base.
+          :param queue: queue to insert data (for threads)
           :param dataBaseCon: The connection to Data - Base.
           :param selectQuery: The select query to preform.
           :return Data: A list of the data.
           """
     try:
-        Data = []
-        dataBaseCon.execute(selectQuery)
-        for row in dataBaseCon:
-            Data.append(row[0])
-        return Data
+        if queue is not None:
+            dataBaseCon.execute(selectQuery)
+            for row in dataBaseCon:
+                queue.put(row)
+        else:
+            data = []
+            dataBaseCon.execute(selectQuery)
+            for row in dataBaseCon:
+                data.append(row)
+            return data
     except Exception as e:
         print(selectQuery + '  -> Fail')
