@@ -1,0 +1,29 @@
+{
+  "name": "BraudeFinalProject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "express": "^4.17.1",
+    "mssql": "^6.3.1",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Remez19/BraudeFinalProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Remez19/BraudeFinalProject/issues"
+  },
+  "homepage": "https://github.com/Remez19/BraudeFinalProject#readme"
+}
