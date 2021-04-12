@@ -5,7 +5,7 @@ const sql = require('mssql');
 const app = express()
 app.use(express.static('public/'));
 const config = {
-        server: 'LAPTOP-VNSLHC31',  //update me
+        server: 'LAPTOP-VNSLHC31',
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -38,5 +38,11 @@ app.get('/data', (req, res) =>{
         });
     })
 });
+
+app.get('/haim', (req, res) =>{
+    res.json('haim')
+});
+
+
 
 app.listen(3001,() => console.log('App Running'))

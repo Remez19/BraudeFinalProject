@@ -26,6 +26,11 @@
         `);
         }
     }
+    async function updateHaim(root){
+        const response = await fetch('/haim');
+        const data = await response.json();
+        console.log(data)
+    }
     for (const root of document.querySelectorAll('.table-refresh[data-url]')){
         const table = document.createElement('table');
         table.classList.add('content-table')
@@ -41,6 +46,7 @@
             </tbody>
         `;
         root.append(table);
-        updateTable(root);
+        updateHaim(root)
+        // updateTable(root);
     }
 }
