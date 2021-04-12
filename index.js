@@ -5,7 +5,7 @@ const sql = require('mssql');
 const app = express()
 app.use(express.static('public/'));
 const config = {
-        server: 'LAPTOP-VNSLHC31',  //update me
+        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -15,6 +15,7 @@ const config = {
         instanceName: "SQLEXPRESS"
         },
         options:{
+
             encrypt: false
         }
     };
@@ -39,4 +40,10 @@ app.get('/data', (req, res) =>{
     })
 });
 
-app.listen(3001,() => console.log('App Running'))
+
+
+app.get('/haim', (req, res) =>{
+    res.json("Haim");
+    });
+
+app.listen(3000,() => console.log('App Running'))
