@@ -15,7 +15,7 @@ semProg = threading.Semaphore(0)
 
 class App:
     def __init__(self):
-        self.dataBaseCon = connectToDB('LAPTOP-VNSLHC31', 'BraudeProject')
+        self.dataBaseCon = connectToDB('DESKTOP-LRQKMNU\SQLEXPRESS', 'BraudeProject')
         self.progress = queue.Queue()
         selectFromDB(self.dataBaseCon, "SELECT * FROM Updates", self.progress)
         # Gui preparation

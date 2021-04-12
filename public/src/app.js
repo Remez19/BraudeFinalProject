@@ -1,7 +1,7 @@
 {
     async function updateTable(root){
         const table = root.querySelector(".content-table");
-        const response = await fetch(root.dataset.url);
+        const response = await fetch(root.dataset.url);//await fetch("/data");
         const headers = ['שם מוצר', 'יחידה', 'מחיר', 'אתר', 'מוצר בסיסי'];
         const data = await response.json();
         for(let val of data) {
@@ -26,6 +26,15 @@
         `);
         }
     }
+
+
+    async function updateHaim(root){
+        const response = await fetch("/Haim");//await fetch("/data");
+        const data = await response.json();
+        console.log(data);
+    }
+
+
     for (const root of document.querySelectorAll('.table-refresh[data-url]')){
         const table = document.createElement('table');
         table.classList.add('content-table')
@@ -42,5 +51,6 @@
         `;
         root.append(table);
         updateTable(root);
+        updateHaim(root);
     }
 }
