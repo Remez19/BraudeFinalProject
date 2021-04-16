@@ -1,4 +1,4 @@
-{
+
     async function updateTable(root){
         const table = root.querySelector(".content-table");
         const response = await fetch(root.dataset.url);//await fetch("/data");
@@ -13,8 +13,7 @@
         for (const header of headers){
             table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
         }
-        for (const row of data){
-            // console.log(row.Prod_Name);
+        for (const row of data.rows){
             table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
             <tr>
             <td>${ row.Base_Prod }</td>
@@ -44,5 +43,6 @@
         `;
         root.append(table);
         updateTable(root);
+
     }
-}
+console.log("test");

@@ -1,9 +1,31 @@
-{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="table.css">
+</head>
+
+<body>
+<h1>Products</h1>
+<nav>
+        <ul>
+            <li><a href="/">Home Page</a></li>
+            <li><a href="/Products">Products</a></li>
+        </ul>
+</nav>
+<div class="content-table" data-url="/Products"></div>
+
+<script>
+
     async function updateTable(root){
         const table = root.querySelector(".content-table");
         const response = await fetch(root.dataset.url);//await fetch("/data");
         const headers = ['שם מוצר', 'יחידה', 'מחיר', 'אתר', 'מוצר בסיסי'];
         const data = await response.json();
+        console.log("data");
+        console.log(root.dataset.url)
         for(let val of data) {
             console.log(val);
         }
@@ -14,7 +36,6 @@
             table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
         }
         for (const row of data){
-            // console.log(row.Prod_Name);
             table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
             <tr>
             <td>${ row.Base_Prod }</td>
@@ -28,21 +49,27 @@
     }
 
 
-    for (const root of document.querySelectorAll('.table-refresh[data-url]')){
+    for (const root of document.querySelectorAll('.content-table[data-url]')){
         const table = document.createElement('table');
         table.classList.add('content-table')
         table.innerHTML = `
             <thead>
                 <tr></tr>
             </thead>
-            
+
             <tbody>
                 <tr>
                     <td>Loading</td>
-                </tr>  
+                </tr>
             </tbody>
         `;
         root.append(table);
         updateTable(root);
+
     }
-}
+console.log("test");
+
+
+</script>
+</body>
+</html>

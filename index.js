@@ -1,8 +1,7 @@
 const express = require('express');
 const sql = require('mssql');
-
-
 const app = express()
+
 app.use(express.static('public/'));
 const config = {
         server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
@@ -19,10 +18,15 @@ const config = {
             encrypt: false
         }
     };
+
 const conn = new sql.ConnectionPool(config);
 
+app.get('/',(req,res)=>{
+    res.render('HomePage',{title:'Home Page'});
+})
 
-app.get('/data', (req, res) =>{
+
+app.get('/Products', (req, res) =>{
     var record = conn.connect( function (err){
         if (err)
             throw err;
