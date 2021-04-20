@@ -2,22 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Products</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="table.css">
+    <title>Home Page</title>
+<link rel="stylesheet" href="homepagedesign.css" />
+<link rel="stylesheet" href="login window.css" />
+<link rel="stylesheet" href="table.css" />
+    <link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
 </head>
-
 <body>
-<h1>Products</h1>
-<nav>
-        <ul>
-            <li><a href="/">Home Page</a></li>
-            <li><a href="/Products">Products</a></li>
-        </ul>
-</nav>
+
+<div class="logo">
+    <img src="logo.jpg" alt="logop" width="1000" height="331">
+    <div class="welcome">Welcome</div>
+</div>
+
+<div class="menu">
+
+        <div class="b">menu</div>
+
+    <button class="big-button" onclick="moveProdPage()">Products</button>
+    <button class="big-button" onclick="movAboutPage()">About</button>
+    <button class="big-button" onclick="myFunction()">What new</button>
+    <button class="big-button" onclick="moveBuyPage()">buy</button>
+    <button class="big-button" onclick="moveHomePage()">Home</button>
+
+</div>
+<div class="centered">
 <div class="content-table" data-url="/Products"></div>
 
 <script>
+    function moveProdPage() {
+  location.href = "/Products2";
+}
+function moveHomePage() {
+  location.href = "/new";
+}
 
     async function updateTable(root){
         const table = root.querySelector(".content-table");
@@ -71,5 +89,6 @@ console.log("test");
 
 
 </script>
+</div>
 </body>
 </html>

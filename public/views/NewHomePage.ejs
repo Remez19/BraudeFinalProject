@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+<link rel="stylesheet" href="homepagedesign.css" />
+<link rel="stylesheet" href="login window.css" />
+    <link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
+</head>
+<body>
+
+<div class="logo">
+    <img src="logo.jpg" alt="logop" width="1000" height="331">
+    <div class="welcome">Welcome</div>
+</div>
+
+<div class="menu">
+
+        <div class="b">menu</div>
+
+    <button class="big-button" onclick="moveProdPage()">Products</button>
+    <button class="big-button" onclick="movAboutPage()">About</button>
+    <button class="big-button" onclick="myFunction()">What new</button>
+    <button class="big-button" onclick="moveBuyPage()">buy</button>
+    <button class="big-button" onclick="moveHomePage()">Home</button>
+
+</div>
+
+<div class="main page">
+     <div class="column">
+         <div class="login_window">
+
+<form action="/action_page.php" method="post">
+  <div class="imgcontainer">
+    <img src="login.jpg" alt="Avatar" class="avatar">
+  </div>
+
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+
+    <button class="submit" onclick="loginFunc()">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1; border-bottom-left-radius:20px;border-bottom-right-radius:20px;">
+
+    <span class="psw">Forgot <a href="#">password?</a></span>
+
+  </div>
+</form>
+
+         </div>
+     </div>
+
+
+    <div class="centered">
+    <div class="row">
+  <div class="column">
+      <img src="kishorit.jpg" alt="kishorit">
+    <h2>Kishurit</h2>
+
+
+      <a href="https://michaelio.co.il/" target="_blank">kishorit</a>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+  </div>
+
+  <div class="column">
+      <img src="Michaeli Logo.jpg" alt="Michaeli">
+
+    <h2>Michaeli</h2>
+      <li><a href="https://michaelio.co.il/">Michaeli</a></li>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+  </div>
+
+  <div class="column">
+<img src="sultan.jpg" alt="sultan">
+      <h2>Sultan</h2>
+      <li><a href="https://michaelio.co.il/">Michaeli</a></li>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+  </div>
+    </div>
+</div>
+</div>
+
+<script>
+
+    function loginFunc() {
+
+    }
+function moveProdPage() {
+  location.href = "/Products2";
+}
+function moveHomePage() {
+  location.href = "/new";
+}
+</script>
+
+</body>
+</html>

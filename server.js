@@ -29,12 +29,22 @@ app.set('view engine','ejs');
 app.set('views','./public/views');
 
 app.use(express.static('./public/styleEJS'));
+app.use( express.static( "./public/png" ) );
+app.use( express.static( "./public/views" ) );
+app.use( express.static( "./public/views/partials" ) );
 
 app.get('/',(req,res)=>{
     var conn= new sql.ConnectionPool(config);
     res.render('HomePage',{title:'Home Page'});
     conn.close();
 })
+
+app.get('/new',(req,res)=>{
+    var conn= new sql.ConnectionPool(config);
+    res.render('NewHomePage',{title:'Home Page'});
+    conn.close();
+})
+
 /*test*/
 app.get('/testpage',(req,res)=>{
     res.render('testpage.ejs');
@@ -58,15 +68,12 @@ app.get('/testdata',(req,res)=>{
 });
 /*test end*/
 
-app.get('/Home',(req,res)=>{
-    res.render('Home',{title:'Home'});
-})
+
 app.get('/Products2',(req,res)=>{
     res.render('Products.ejs');
 })
 app.get('/Products',(req,res)=>{
     var conn= new sql.ConnectionPool(config);
-    //res.render('Products',{title:'Products'});
     var record = conn.connect( function (err){
         if (err)
             throw err;
@@ -76,10 +83,7 @@ app.get('/Products',(req,res)=>{
            else
            {
                conn.close();
-               //res.send("test");
-               //res.render('Products.ejs');
                res.json(recordSet[0]);
-               //return recordSet;
            }
 
         });
