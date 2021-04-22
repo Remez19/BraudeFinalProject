@@ -35,7 +35,7 @@ app.use( express.static( "./public/views/partials" ) );
 
 app.get('/',(req,res)=>{
     var conn= new sql.ConnectionPool(config);
-    res.render('HomePage',{title:'Home Page'});
+    res.render('NewHomePage',{title:'Home Page'});
     conn.close();
 })
 
@@ -79,6 +79,32 @@ app.get('/Products',(req,res)=>{
             throw err;
         var req = new sql.Request(conn);
         req._query('SELECT * FROM AllProds', function (err, recordSet){
+           if (err) throw err;
+           else
+           {
+               conn.close();
+               res.json(recordSet[0]);
+           }
+
+        });
+    })
+});
+
+app.get('/buy',(req,res)=>{
+    res.render('buy.ejs');
+})
+
+app.get('/submit',(req,res)=>{
+    res.render('submitlst.ejs');
+})
+
+app.get('/basicNames',(req,res)=>{
+    var conn= new sql.ConnectionPool(config);
+    var record = conn.connect( function (err){
+        if (err)
+            throw err;
+        var req = new sql.Request(conn);
+        req._query('SELECT * FROM AllVegNames', function (err, recordSet){
            if (err) throw err;
            else
            {

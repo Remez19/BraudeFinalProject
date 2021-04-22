@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>buy</title>
 <link rel="stylesheet" href="homepagedesign.css" />
 <link rel="stylesheet" href="login window.css" />
 <link rel="stylesheet" href="table.css" />
@@ -27,34 +27,60 @@
 
 </div>
 <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
+    <table class="table table-bordered table-striped mb-0">
 <div class="centered">
-<div class="content-table" data-url="/Products"></div>
+<div class="content-table" data-url="/basicNames"></div>
+</div>
 
+    </table>
+  </div>
+<button class="submit_list" onclick="movesubmitLst()">SUBMIT</button>
+</div>
+
+
+
+</body>
 <script>
-function moveProdPage() {
-  location.href = "/Products2";
+    class Veg{
+  constructor(basicName, quantity) {
+    this.basicName = basicName;
+    this.quantity = quantity;
+  }
+}
+
+var vegLst=[];
+
+    //move button functions
+  function moveProdPage() {
+  location.href = '/Products2';
 }
 function moveHomePage() {
-  location.href = "/";
+  location.href = "/new";
 }
 
 function moveBuyPage() {
   location.href = "/buy";
 }
 
+function movesubmitLst() {
+   // myVegLst = new VegLst("Ford", 2014);
 
+    //var person = prompt("Please enter your name", "Harry Potter");
+    location.href = '/submit';
+}
 
+    //take the veg names from basic veg table
     async function updateTable(root){
         const table = root.querySelector(".content-table");
-        const response = await fetch(root.dataset.url);//await fetch("/data");
-        const headers = ['שם מוצר', 'יחידה', 'מחיר', 'אתר', 'מוצר בסיסי'];
+        const response = await fetch('/basicNames');//await fetch("/data");
+        const headers = ['שם מוצר'];
         const data = await response.json();
         console.log("data");
         console.log(root.dataset.url)
         for(let val of data) {
             console.log(val);
         }
+
         // Clear Table
         table.querySelector("thead tr").innerHTML = '';
         table.querySelector("tbody").innerHTML = '';
@@ -62,17 +88,29 @@ function moveBuyPage() {
             table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
         }
         for (const row of data){
+            let v = new Veg(row.Veg_Name, 0);
+            var str=  String(row.Veg_Name);
             table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
             <tr>
-            <td>${ row.Base_Prod }</td>
-            <td>${ row.Prod_Web }</td>
-            <td>${ row.Prod_Price }</td>
-            <td>${ row.Prod_Unit }</td>
-            <td>${ row.Prod_Name }</td>
+            <td>
+               ${ row.Veg_Name }
+                <div class="counter">
+                <span class="down" onClick='decreaseCount(event, this)'>-</span>
+
+                <input type="text" value="0">
+                <span class="up" onClick='increaseCount(event, this)'>+</span>
+                </div>
+            </td>
             </tr>
+
         `);
+            vegLst.push(v);
+            //console.log(this);
+            //console.log(v.basicName+' , '+v.quantity);
+
         }
     }
+
 
 
     for (const root of document.querySelectorAll('.content-table[data-url]')){
@@ -89,14 +127,33 @@ function moveBuyPage() {
                 </tr>
             </tbody>
         `;
-        root.append(table);
-        updateTable(root);
+         root.append(table);
+         updateTable(root);
+
 
     }
-console.log("test");
 
+    //for the quantity increaseCount
+    function increaseCount(a, b) {
+      var input = b.previousElementSibling;
+     // var veg=b.previousElementSibling;
+      var value = parseInt(input.value, 10);
+      value = isNaN(value) ? 0 : value;
+      value++;
+      input.value = value;
+      console.log(b);
+    }
+
+    //for the quantity decreaseCount
+    function decreaseCount(a, b) {
+      var input = b.nextElementSibling;
+      var value = parseInt(input.value, 10);
+      if (value > 0) {
+        value = isNaN(value) ? 0 : value;
+        value--;
+        input.value = value;
+      }
+    }
 
 </script>
-</div>
-</body>
 </html>
