@@ -41,6 +41,7 @@
 
 </body>
 <script>
+
     class Veg{
   constructor(basicName, quantity) {
     this.basicName = basicName;
@@ -48,7 +49,55 @@
   }
 }
 
-var vegLst=[];
+class  Cart {
+        constructor(userId){
+            this.userId = userId
+            this.products = []
+        }
+
+        //while add quantity to the shopping cart, update it
+        addProduct(name, q) {
+            var foundIndex = this.findProduct(name);
+            if(foundIndex === -1) {
+                var newProduct= new Veg(name, q)
+                this.products.push(newProduct)
+                return
+            }
+            else {
+                this.products[foundIndex].quantity = q
+            }
+             console.log(this.products);
+        }
+
+        subtractProduct(name,q) {
+            var foundIndex = this.findProduct(name);
+            if(foundIndex === -1)
+                return
+            else {
+                if(q === 0)
+                    this.products.splice(foundIndex, 1);
+                else
+                    this.products[foundIndex].quantity = q;
+            }
+            console.log(this.products);
+        }
+
+        findProduct(name) {
+            //console.log('try to find: '+name);
+            let i=0;
+
+            for(let val of this.products)
+            {
+                if(val.basicName===name)
+                    return i;
+                else
+                    i++;
+            }
+            return -1;
+
+            //return this.products.findIndex(n=> n === name);
+        }
+}
 
     //move button functions
   function moveProdPage() {
@@ -63,9 +112,8 @@ function moveBuyPage() {
 }
 
 function movesubmitLst() {
-   // myVegLst = new VegLst("Ford", 2014);
-
-    //var person = prompt("Please enter your name", "Harry Potter");
+   //console.log(shoppingCart);
+    window.localStorage.setItem('Shopping cart list', JSON.stringify(shoppingCart));
     location.href = '/submit';
 }
 
@@ -92,27 +140,24 @@ function movesubmitLst() {
             var str=  String(row.Veg_Name);
             table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
             <tr>
-            <td>
+            <td  >
                ${ row.Veg_Name }
-                <div class="counter">
-                <span class="down" onClick='decreaseCount(event, this)'>-</span>
+                <div class="counter" data-name=${row.Veg_Name}>
+                <span class="down" onclick="decreaseCount(event)" >-</span>
 
                 <input type="text" value="0">
-                <span class="up" onClick='increaseCount(event, this)'>+</span>
+                <span class="up" onclick="increaseCount(event)">+</span>
                 </div>
             </td>
             </tr>
 
         `);
-            vegLst.push(v);
-            //console.log(this);
-            //console.log(v.basicName+' , '+v.quantity);
-
+            //vegLst.push(v);
         }
     }
 
 
-
+    let shoppingCart =new Cart(0);
     for (const root of document.querySelectorAll('.content-table[data-url]')){
         const table = document.createElement('table');
         table.classList.add('content-table')
@@ -130,29 +175,31 @@ function movesubmitLst() {
          root.append(table);
          updateTable(root);
 
-
     }
 
     //for the quantity increaseCount
-    function increaseCount(a, b) {
-      var input = b.previousElementSibling;
-     // var veg=b.previousElementSibling;
-      var value = parseInt(input.value, 10);
-      value = isNaN(value) ? 0 : value;
-      value++;
-      input.value = value;
-      console.log(b);
+    function increaseCount(event) {
+        var input = event.target.previousElementSibling;
+        var currentVege = event.target.parentElement.getAttribute('data-name')
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 0 : value;
+        value++;
+        input.value = value;
+        shoppingCart.addProduct(currentVege,value);
     }
 
     //for the quantity decreaseCount
-    function decreaseCount(a, b) {
-      var input = b.nextElementSibling;
+    function decreaseCount(event) {
+      var input = event.target.nextElementSibling;
+      var currentVege = event.target.parentElement.getAttribute('data-name')
       var value = parseInt(input.value, 10);
       if (value > 0) {
         value = isNaN(value) ? 0 : value;
         value--;
         input.value = value;
       }
+      shoppingCart.subtractProduct(currentVege,value);
+
     }
 
 </script>

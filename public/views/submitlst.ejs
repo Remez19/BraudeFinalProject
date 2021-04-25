@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,12 +25,17 @@
     <button class="big-button" onclick="myFunction()">What new</button>
     <button class="big-button" onclick="moveBuyPage()">buy</button>
     <button class="big-button" onclick="moveHomePage()">Home</button>
-
 </div>
-
-
-
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-bordered table-striped mb-0">
+<div class="centered">
+<div class="content-table" data-url="/basicNames"></div>
+</div>
+    </table>
+  </div>
+</div>
 </body>
+
 <script>
     //move button functions
   function moveProdPage() {
@@ -42,5 +48,66 @@ function moveHomePage() {
 function moveBuyPage() {
   location.href = "/buy";
 }
+
+
+//check if the user filled a shopping cart, if true display it if not create a message
+    async function updateTable(root){
+        const table = root.querySelector(".content-table");
+        const response = await fetch('/basicNames');//await fetch("/data");
+        const headers = ['שם מוצר', 'כמות'];
+        const nonProd=['לא נמצאו מוצרים בסל הקניות. אנא חזרו ומלאו שוב את הסל'];
+
+        if(products['products'].length === 0) {
+            console.log("no")
+            table.querySelector("thead tr").innerHTML = '';
+            table.querySelector("tbody").innerHTML = '';
+            table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ nonProd }</th>`);
+        }
+        else {
+            var prodLst=products['products'];
+            console.log("yes")
+            //console.log(prodLst)
+            // Clear Table
+            table.querySelector("thead tr").innerHTML = '';
+            table.querySelector("tbody").innerHTML = '';
+            for (const header of headers){
+                table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
+            }
+
+            for (const row of prodLst){
+                console.log(row);
+            table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
+            <tr>
+                <td>${ row.quantity }</td>
+                <td>${row.basicName}</td>
+            </tr>
+        `);
+        }
+        }
+    }
+
+    var shoplst=window.localStorage.getItem('Shopping cart list');
+    var products = JSON.parse(shoplst);
+
+    for (const root of document.querySelectorAll('.content-table[data-url]')){
+        const table = document.createElement('table');
+        table.classList.add('content-table')
+        table.innerHTML = `
+            <thead>
+                <tr></tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Loading</td>
+                </tr>
+            </tbody>
+        `;
+
+         root.append(table);
+         updateTable(root);
+
+    }
+
 </script>
 </html>
