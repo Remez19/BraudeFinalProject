@@ -16,7 +16,6 @@
 </div>
 
 <div class="menu">
-
         <div class="b">menu</div>
 
     <button class="big-button" onclick="moveProdPage()">Products</button>
@@ -24,20 +23,39 @@
     <button class="big-button" onclick="myFunction()">What new</button>
     <button class="big-button" onclick="moveBuyPage()">buy</button>
     <button class="big-button" onclick="moveHomePage()">Home</button>
-
 </div>
+
+
+
+    <table id="myTable"class="ruleToRemove" style="left: 400px;
+  text-align: center;position: relative;border-collapse: collapse;margin: 0px 0px;font-size: 20px;min-width: 600px;border-radius: 30px 30px 30px 30px;overflow: hidden;box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);border-collapse: collapse; border-radius: 30px;">
+        <tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
 <div class="table-wrapper-scroll-y my-custom-scrollbar">
     <table class="table table-bordered table-striped mb-0">
 <div class="centered">
 <div class="content-table" data-url="/basicNames"></div>
 </div>
-
     </table>
   </div>
+
 <button class="submit_list" onclick="movesubmitLst()">SUBMIT</button>
 </div>
-
-
 
 </body>
 <script>
@@ -66,7 +84,7 @@ class  Cart {
             else {
                 this.products[foundIndex].quantity = q
             }
-             console.log(this.products);
+             //console.log(this.products);
         }
 
         subtractProduct(name,q) {
@@ -79,7 +97,7 @@ class  Cart {
                 else
                     this.products[foundIndex].quantity = q;
             }
-            console.log(this.products);
+            //console.log(this.products);
         }
 
         findProduct(name) {
@@ -117,16 +135,19 @@ function movesubmitLst() {
     location.href = '/submit';
 }
 
-    //take the veg names from basic veg table
+    //take the veg names from basic veg table and their costs from the different suppliers
     async function updateTable(root){
         const table = root.querySelector(".content-table");
         const response = await fetch('/basicNames');//await fetch("/data");
-        const headers = ['שם מוצר'];
-        const data = await response.json();
-        console.log("data");
-        console.log(root.dataset.url)
-        for(let val of data) {
-            console.log(val);
+        const headers = ['שם מוצר','כמות','סולטן','כישורית','מיכאלי'];
+        const dataProdsName = await response.json();
+
+        const response2= await fetch('/basicNamesCost');
+        const dataProdsCost=await response2.json();
+
+        //console.log(root.dataset.url)
+        for(let val of dataProdsCost) {
+            //console.log(val);
         }
 
         // Clear Table
@@ -135,33 +156,124 @@ function movesubmitLst() {
         for (const header of headers){
             table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
         }
-        for (const row of data){
-            let v = new Veg(row.Veg_Name, 0);
-            var str=  String(row.Veg_Name);
-            table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
-            <tr>
-            <td  >
-               ${ row.Veg_Name }
-                <div class="counter" data-name=${row.Veg_Name}>
-                <span class="down" onclick="decreaseCount(event)" >-</span>
 
+        var sultan='-';
+        var kishurit='-';
+        var michaeli='-';
+
+        for (const row of dataProdsName){
+            sultan='-';
+            kishurit='-';
+            michaeli='-';
+            var min=-1;
+            for(const r of dataProdsCost) {
+                if(r.Base_Prod === row.Veg_Name) {
+                    //console.log("yess");
+                    if(r.Prod_Web=='Sultan'){
+                        sultan=r.Prod_Price;
+                        min=sultan;
+                    }
+                    if(r.Prod_Web=='Kishurit'){
+                        kishurit=r.Prod_Price;
+                        if(min>kishurit)min=kishurit;
+                    }
+                    if(r.Prod_Web=='Michaeli'){
+                        michaeli=r.Prod_Price;
+                        if(min>michaeli)min=michaeli;
+                    }
+                }
+            }
+            console.log("prod:"+row.Veg_Name+" k:"+kishurit+" m:"+michaeli+" s:"+sultan);
+
+            //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
+            //quantity from the specific prod
+            if(michaeli === "-" && kishurit === "-" && sultan === "-")
+            {
+                table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
+            <tr>
+            <td>
+                ${michaeli}
+            </td>
+            <td>
+                ${kishurit}
+            </td>
+            <td>
+                ${sultan}
+            </td>
+            <td>
+                <div class="counter" data-name=${row.Veg_Name}>
+                <span class="down"  >-</span>
                 <input type="text" value="0">
-                <span class="up" onclick="increaseCount(event)">+</span>
+                <span class="up" >+</span>
                 </div>
+            </td>
+            <td>
+               ${row.Veg_Name}
             </td>
             </tr>
 
         `);
+            }
+            else{
+                table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
+            <tr>
+            <td>
+                ${michaeli}
+            </td>
+            <td>
+                ${kishurit}
+            </td>
+            <td>
+                ${sultan}
+            </td>
+            <td>
+                <div class="counter" data-name=${row.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
+                <span class="down" onclick="decreaseCount(event)" >-</span>
+                <input type="text" value="0">
+                <span class="up" onclick="increaseCount(event)">+</span>
+                </div>
+            </td>
+            <td>
+               ${row.Veg_Name}
+            </td>
+            </tr>
+
+        `);
+
+
+
+            }
+
             //vegLst.push(v);
         }
     }
 
 
     let shoppingCart =new Cart(0);
+    var costSultan=0;
+    var costMichaeli=0;
+    var costKishurit=0;
+    var tbl=document.getElementById("myTable");
+    tbl.classList.add('myTable')
+
+    tbl.innerHTML = `<tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td>${costMichaeli}</td>
+                <td>${costKishurit}</td>
+                <td>${costSultan}</td>
+            </tr>
+        </tbody>`;
+
     for (const root of document.querySelectorAll('.content-table[data-url]')){
         const table = document.createElement('table');
         table.classList.add('content-table')
         table.innerHTML = `
+
             <thead>
                 <tr></tr>
             </thead>
@@ -172,8 +284,12 @@ function movesubmitLst() {
                 </tr>
             </tbody>
         `;
+
+
+
          root.append(table);
          updateTable(root);
+
 
     }
 
@@ -186,6 +302,34 @@ function movesubmitLst() {
         value++;
         input.value = value;
         shoppingCart.addProduct(currentVege,value);
+
+        var costS=event.target.parentElement.getAttribute('cost-sultan');
+        if(costS!='-')
+            costSultan+=parseInt(costS);
+
+        var costM=event.target.parentElement.getAttribute('cost-michaeli');
+        if(costM!='-')
+            costMichaeli+=parseInt(costM);
+
+        var costK=event.target.parentElement.getAttribute('cost-kishurit');
+        if(costK!='-')
+            costKishurit+=parseInt(costK);
+
+        tbl.innerHTML = `<tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td>${costMichaeli}</td>
+                <td>${costKishurit}</td>
+                <td>${costSultan}</td>
+            </tr>
+        </tbody>`;
+
+
+        //console.log("s:"+costS+" m:"+costM+" k:"+costK+" total sum s:"+costSultan+" total sum m:"+costMichaeli+" total sum k:"+costKishurit);
     }
 
     //for the quantity decreaseCount
@@ -199,6 +343,36 @@ function movesubmitLst() {
         input.value = value;
       }
       shoppingCart.subtractProduct(currentVege,value);
+
+      var costS=event.target.parentElement.getAttribute('cost-sultan');
+        if(costS!='-')
+            costSultan-=parseInt(costS);
+        if(costSultan<0) costSultan=0;
+
+        var costM=event.target.parentElement.getAttribute('cost-michaeli');
+        if(costM!='-')
+            costMichaeli-=parseInt(costM);
+        if(costMichaeli<0) costMichaeli=0;
+
+        var costK=event.target.parentElement.getAttribute('cost-kishurit');
+        if(costK!='-')
+            costKishurit-=parseInt(costK);
+        if(costKishurit<0)costKishurit=0;
+
+
+        tbl.innerHTML = `<tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td>${costMichaeli}</td>
+                <td>${costKishurit}</td>
+                <td>${costSultan}</td>
+            </tr>
+        </tbody>`;
+        //console.log("s:"+costS+" m:"+costM+" k:"+costK+" total sum s:"+costSultan+" total sum m:"+costMichaeli+" total sum k:"+costKishurit);
 
     }
 

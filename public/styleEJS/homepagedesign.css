@@ -24,6 +24,7 @@ position: relative;
 
   font-family: 'Alex Brush';
 }
+
 .menu{
     position: relative;
   top: -20px;
@@ -39,6 +40,10 @@ position: relative;
 	animation: gradient 15s ease infinite;
 
 }
+
+
+
+
 
 /*bottom*/
 .big-button{
@@ -138,11 +143,7 @@ text-align: center;
 
 }
 
-.list_table {
-     border-collapse: collapse;
-  width: 100%;
 
-}
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -166,6 +167,11 @@ text-align: center;
   background: #555;
     border-radius: 50px;
 }
+
+.myTable{
+    border-radius: 30px;
+}
+
 
 
 

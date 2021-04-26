@@ -98,23 +98,40 @@ app.get('/submit',(req,res)=>{
     res.render('submitlst.ejs');
 })
 
+//get the basic names of the products
 app.get('/basicNames',(req,res)=>{
     var conn= new sql.ConnectionPool(config);
     var record = conn.connect( function (err){
         if (err)
             throw err;
-        var req = new sql.Request(conn);
-        req._query('SELECT * FROM AllVegNames', function (err, recordSet){
+        var req1 = new sql.Request(conn);
+        req1._query('SELECT * FROM AllVegNames', function (err, recordSet){
            if (err) throw err;
            else
            {
                conn.close();
                res.json(recordSet[0]);
            }
-
         });
     })
 });
+
+//get the cost and the webs of the basic products
+app.get('/basicNamesCost',(req,res)=>{
+    var conn=new sql.ConnectionPool(config);
+    var record=conn.connect(function(err){
+        if(err)
+            throw err;
+        var req2=new sql.Request(conn);
+        req2._query('SELECT Base_Prod,Prod_Web,Prod_Price,Prod_Unit FROM AllProds',function (err, recordSet){
+            if (err) throw err;
+            else {
+                conn.close();
+                res.json(recordSet[0]);
+            }
+        });
+    })
+})
 
 //if we get into team page we will go to about page
 app.get('/team',(req,res)=>{
