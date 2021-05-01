@@ -98,6 +98,10 @@ app.get('/submit',(req,res)=>{
     res.render('submitlst.ejs');
 })
 
+app.get('/totalSum',(req,res)=>{
+    res.render('TotalSum.ejs');
+})
+
 //get the basic names of the products
 app.get('/basicNames',(req,res)=>{
     var conn= new sql.ConnectionPool(config);

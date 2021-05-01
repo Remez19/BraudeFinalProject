@@ -20,7 +20,7 @@ th {
   margin: 0px 0px;
   font-size: 20px;
   min-width: 600px;
-  border-radius: 30px 30px 30px 30px;
+  border-radius: 0px 30px 30px 30px;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   border-collapse: collapse;

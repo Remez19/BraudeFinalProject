@@ -67,15 +67,27 @@ function moveBuyPage() {
             var prodLst=products['products'];
             console.log("yes")
             //console.log(prodLst)
+            var prodsSultan=products['prodsSultan'];
+            var missSultan=products['missSultan'];
             // Clear Table
             table.querySelector("thead tr").innerHTML = '';
             table.querySelector("tbody").innerHTML = '';
             for (const header of headers){
                 table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
             }
+            console.log("**prod sultan:");
+            for(const row of prodsSultan){
+                console.log(row);
+            }
+            console.log("**miss sultan:");
+            for(const row of missSultan){
+                console.log(row);
+            }
 
+            console.log("**products list:");
             for (const row of prodLst){
                 console.log(row);
+
             table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
             <tr>
                 <td>${ row.quantity }</td>
