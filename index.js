@@ -1,11 +1,10 @@
 const express = require('express');
 const sql = require('mssql');
-
-
 const app = express()
+
 app.use(express.static('public/'));
 const config = {
-        server: 'LAPTOP-VNSLHC31',
+        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -15,13 +14,19 @@ const config = {
         instanceName: "SQLEXPRESS"
         },
         options:{
+
             encrypt: false
         }
     };
+
 const conn = new sql.ConnectionPool(config);
 
+app.get('/',(req,res)=>{
+    res.render('HomePage',{title:'Home Page'});
+})
 
-app.get('/data', (req, res) =>{
+
+app.get('/Products', (req, res) =>{
     var record = conn.connect( function (err){
         if (err)
             throw err;
@@ -39,10 +44,10 @@ app.get('/data', (req, res) =>{
     })
 });
 
+
+
 app.get('/haim', (req, res) =>{
-    res.json('haim')
-});
+    res.json("Haim");
+    });
 
-
-
-app.listen(3001,() => console.log('App Running'))
+app.listen(3000,() => console.log('App Running'))

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>buy</title>
+<link rel="stylesheet" href="homepagedesign.css" />
+<link rel="stylesheet" href="login window.css" />
+<link rel="stylesheet" href="table.css" />
+    <link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
+</head>
+<body>
+<div class="logo">
+    <img src="logo.jpg" alt="logop" width="1000" height="331">
+    <div class="welcome">Welcome</div>
+</div>
+
+<div class="menu">
+    <div class="b">menu</div>
+    <button class="big-button" onclick="moveProdPage()">Products</button>
+    <button class="big-button" onclick="movAboutPage()">About</button>
+    <button class="big-button" onclick="myFunction()">What new</button>
+    <button class="big-button" onclick="moveBuyPage()">buy</button>
+    <button class="big-button" onclick="moveHomePage()">Home</button>
+</div>
+
+    <table id="myTable"class="ruleToRemove" style="left: 400px;
+  text-align: center;position: relative;border-collapse: collapse;margin: 0px 0px;font-size: 20px;min-width: 240px;border-radius: 30px 30px 0px 0px;overflow: hidden;box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);border-collapse: collapse; ">
+        <tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-bordered table-striped mb-0">
+<div class="centered">
+<div class="content-table" data-url="/basicNames"></div>
+</div>
+    </table>
+  </div>
+
+<button class="submit_list" onclick="movesubmitLst()">SUBMIT</button>
+</div>
+</body>
+<script>
+
+    class Veg{
+  constructor(basicName, quantity) {
+    this.basicName = basicName;
+    this.quantity = quantity;
+  }
+}
+
+class  Cart {
+        constructor(userId){
+            this.userId = userId
+            this.products = []
+            this.prodsKishurit=[]
+            this.missKishurit=[]
+            this.prodsSultan=[]
+            this.missSultan=[]
+            this.prodsMichaeli=[]
+            this.missMichaeli=[]
+        }
+
+        //while add quantity to the shopping cart, update it
+        addProduct(name, q) {
+            var foundIndex = this.findProduct(name);
+            if(foundIndex === -1) {
+                var newProduct= new Veg(name, q)
+                this.products.push(newProduct)
+                return
+            }
+            else {
+                this.products[foundIndex].quantity = q
+            }
+        }
+
+        //this function add product to supplier list
+        addSupplierLst(nameProd, nameSupplier, q) {
+            if(nameSupplier==="Kishurit") {
+                var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                if(foundIndex === -1) {
+                    var newProduct= new Veg(nameProd, q)
+                    this.prodsKishurit.push(newProduct)
+                    return
+                }
+                else {
+                    this.prodsKishurit[foundIndex].quantity = q
+                }
+            }
+            else if(nameSupplier==="Sultan") {
+                var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                if(foundIndex === -1) {
+                    var newProduct= new Veg(nameProd, q)
+                    this.prodsSultan.push(newProduct)
+                    return
+                }
+                else {
+                    this.prodsSultan[foundIndex].quantity = q
+                }
+            }
+            else if(nameSupplier==="Michaeli") {
+                    var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1) {
+                        var newProduct= new Veg(nameProd, q)
+                        this.prodsMichaeli.push(newProduct)
+                        return
+                    }
+                    else {
+                        this.prodsMichaeli[foundIndex].quantity = q
+                    }
+            }
+        }
+
+        addMissSupplierLst(nameProd, nameSupplier,q) {
+            if(nameSupplier==="Kishurit") {
+                var foundIndex = this.findProdInMissSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1) {
+                        var newProduct= new Veg(nameProd, q)
+                        this.missKishurit.push(newProduct)
+                        return
+                    }
+                    else {
+                        return
+                    }
+            }
+            else if(nameSupplier==="Sultan") {
+                    var foundIndex = this.findProdInMissSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1) {
+                        var newProduct= new Veg(nameProd, q)
+                        this.missSultan.push(newProduct)
+                        return
+                    }
+                    else {
+                        return
+                    }
+            }
+            else if(nameSupplier==="Michaeli") {
+                    var foundIndex = this.findProdInMissSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1) {
+                        var newProduct= new Veg(nameProd, q)
+                        this.missMichaeli.push(newProduct)
+                        return
+                    }
+                    else {
+                        return
+                    }
+            }
+        }
+
+        subtractSupplierLst(nameProd, nameSupplier, q) {
+            if(nameSupplier==="Kishurit") {
+                var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                if(foundIndex === -1)
+                    return
+                else {
+                    if(q === 0)
+                        this.prodsKishurit.splice(foundIndex, 1);
+                    else
+                        this.prodsKishurit[foundIndex].quantity = q;
+                }
+            }
+            else if(nameSupplier==="Sultan") {
+                    var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1)
+                        return
+                    else {
+                        if(q === 0)
+                            this.prodsSultan.splice(foundIndex, 1);
+                        else
+                            this.prodsSultan[foundIndex].quantity = q;
+                    }
+            }
+            else if(nameSupplier==="Michaeli") {
+                    var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                    if(foundIndex === -1)
+                        return
+                    else {
+                        if(q === 0)
+                            this.prodsMichaeli.splice(foundIndex, 1);
+                        else
+                            this.prodsMichaeli[foundIndex].quantity = q;
+                    }
+            }
+        }
+
+        subtractProduct(name,q) {
+            var foundIndex = this.findProduct(name);
+            if(foundIndex === -1)
+                return
+            else {
+                if(q === 0)
+                    this.products.splice(foundIndex, 1);
+                else
+                    this.products[foundIndex].quantity = q;
+            }
+        }
+
+        findProdInSupplierLst(nameProd,nameSupplier) {
+            if(nameSupplier==="Kishurit") {
+                let i=0;
+                for(let val of this.prodsKishurit)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+            else if(nameSupplier==="Sultan") {
+                let i=0;
+                for(let val of this.prodsSultan)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+            else if(nameSupplier==="Michaeli") {
+                let i=0;
+                for(let val of this.prodsMichaeli)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+        }
+
+        findProdInMissSupplierLst(nameProd,nameSupplier) {
+            if(nameSupplier==="Kishurit") {
+                let i=0;
+                for(let val of this.missKishurit)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+            else if(nameSupplier==="Sultan") {
+                let i=0;
+                for(let val of this.missSultan)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+            else if(nameSupplier==="Michaeli") {
+                let i=0;
+                for(let val of this.missMichaeli)
+                {
+                    if(val.basicName===nameProd)
+                        return i;
+                    else
+                        i++;
+                }
+                return -1;
+            }
+        }
+
+        findProduct(name) {
+            let i=0;
+            for(let val of this.products)
+            {
+                if(val.basicName===name)
+                    return i;
+                else
+                    i++;
+            }
+            return -1;
+        }
+}
+
+  //move button functions
+  function moveProdPage() {
+  location.href = '/Products2';
+}
+function moveHomePage() {
+  location.href = "/new";
+}
+
+function moveBuyPage() {
+  location.href = "/buy";
+}
+
+function movesubmitLst() {
+    //console.log(shoppingCart);
+    window.localStorage.setItem('Shopping cart list', JSON.stringify(shoppingCart));
+    window.localStorage.setItem('sum sultan', JSON.stringify(costSultan));
+    window.localStorage.setItem('sum kishurit', JSON.stringify(costKishurit));
+    window.localStorage.setItem('sum michaeli', JSON.stringify(costMichaeli));
+    location.href = '/totalSum';
+}
+
+    //take the veg names from basic veg table and their costs from the different suppliers
+    async function updateTable(root){
+        const table = root.querySelector(".content-table");
+        const response = await fetch('/basicNames');//await fetch("/data");
+        const headers = ['שם מוצר','כמות','סולטן','כישורית','מיכאלי'];
+        const basicNames = await response.json();
+
+        const response2= await fetch('/basicNamesCost');
+        const allProds=await response2.json();
+
+
+        // Clear Table
+        table.querySelector("thead tr").innerHTML = '';
+        table.querySelector("tbody").innerHTML = '';
+        for (const header of headers){
+            table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
+        }
+
+        var sultan='-';
+        var kishurit='-';
+        var michaeli='-';
+
+        for (const base of basicNames){
+            sultan='-';
+            kishurit='-';
+            michaeli='-';
+            var min=-1;
+            for(const r of allProds) {
+                if (r.Base_Prod === base.Veg_Name) {
+                    if (r.Prod_Web === 'Sultan') {
+                        sultan = r.Prod_Price;
+                        // min=sultan;
+                    }
+                    if (r.Prod_Web === 'Kishurit') {
+                        kishurit = r.Prod_Price;
+                        // if(min>kishurit)min=kishurit;
+                    }
+                    if (r.Prod_Web === 'Michaeli') {
+                        michaeli = r.Prod_Price;
+                        // if(min>michaeli)min=michaeli;
+                    }
+                }
+            }
+            //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
+            //quantity from the specific prod
+            if(michaeli === "-" && kishurit === "-" && sultan === "-")
+            {
+                continue;
+            }
+            else{
+                table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
+            <tr>
+            <td>
+                ${michaeli}
+            </td>
+            <td>
+                ${kishurit}
+            </td>
+            <td>
+                ${sultan}
+            </td>
+            <td>
+                <div class="counter" data-name=${base.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
+                <span class="down" onclick="decreaseCount(event)" >-</span>
+                <input type="text" value="0">
+                <span class="up" onclick="increaseCount(event)">+</span>
+                </div>
+            </td>
+            <td>
+               ${base.Veg_Name}
+            </td>
+            </tr>
+
+        `);
+            }
+        }
+    }
+
+    let shoppingCart =new Cart(0);
+    var costSultan=0;
+    var costMichaeli=0;
+    var costKishurit=0;
+    var tbl=document.getElementById("myTable");
+    tbl.classList.add('myTable')
+
+    //init tables
+    tbl.innerHTML = `<tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td>${costMichaeli}</td>
+                <td>${costKishurit}</td>
+                <td>${costSultan}</td>
+            </tr>
+        </tbody>`;
+
+    for (const root of document.querySelectorAll('.content-table[data-url]')){
+        const table = document.createElement('table');
+        table.classList.add('content-table')
+        table.innerHTML = `
+
+            <thead>
+                <tr></tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Loading</td>
+                </tr>
+            </tbody>
+        `;
+
+         root.append(table);
+         updateTable(root);
+    }
+
+    //for the quantity increaseCount
+    function increaseCount(event) {
+        var input = event.target.previousElementSibling;
+        var currentVege = event.target.parentElement.getAttribute('data-name')
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 0 : value;
+        value++;
+        input.value = value;
+        shoppingCart.addProduct(currentVege,value);
+
+        var costS=event.target.parentElement.getAttribute('cost-sultan');
+        if(costS!='-') {
+            costSultan += parseInt(costS);
+            shoppingCart.addSupplierLst(currentVege,"Sultan",value);
+        }
+        else
+            shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
+
+        var costM=event.target.parentElement.getAttribute('cost-michaeli');
+        if(costM!='-') {
+            costMichaeli += parseInt(costM);
+            shoppingCart.addSupplierLst(currentVege,"Michaeli",value);
+        }
+        else
+            shoppingCart.addMissSupplierLst(currentVege,"Michaeli",value);
+
+        var costK=event.target.parentElement.getAttribute('cost-kishurit');
+        if(costK!='-') {
+            costKishurit += parseInt(costK);
+            shoppingCart.addSupplierLst(currentVege,"Kishurit",value);
+        }
+        else
+            shoppingCart.addMissSupplierLst(currentVege,"Kishurit",value);
+
+        tbl.innerHTML = `<tbody>
+            <tr>
+                <td>מיכאלי</td>
+                <td>כישורית</td>
+                <td>סולטן</td>
+            </tr>
+            <tr>
+                <td>${costMichaeli}</td>
+                <td>${costKishurit}</td>
+                <td>${costSultan}</td>
+            </tr>
+        </tbody>`;
+    }
+
+    //for the quantity decreaseCount
+    function decreaseCount(event) {
+      var input = event.target.nextElementSibling;
+      var currentVege = event.target.parentElement.getAttribute('data-name')
+      var value = parseInt(input.value, 10);
+      if (value > 0) {
+        value = isNaN(value) ? 0 : value;
+        value--;
+        input.value = value;
+
+        shoppingCart.subtractProduct(currentVege,value);
+          var costS=event.target.parentElement.getAttribute('cost-sultan');
+            if(costS!='-') {
+                costSultan -= parseInt(costS);
+                shoppingCart.subtractSupplierLst(currentVege,"Sultan",value);
+            }
+            if(costSultan<0) costSultan=0;
+
+            var costM=event.target.parentElement.getAttribute('cost-michaeli');
+            if(costM!='-') {
+                costMichaeli -= parseInt(costM);
+                shoppingCart.subtractSupplierLst(currentVege,"Michaeli",value);
+            }
+            if(costMichaeli<0) costMichaeli=0;
+
+            var costK=event.target.parentElement.getAttribute('cost-kishurit');
+            if(costK!='-') {
+                costKishurit -= parseInt(costK);
+                shoppingCart.subtractSupplierLst(currentVege,"Kishurit",value);
+            }
+            if(costKishurit<0)costKishurit=0;
+            tbl.innerHTML = `<tbody>
+                <tr>
+                    <td>מיכאלי</td>
+                    <td>כישורית</td>
+                    <td>סולטן</td>
+                </tr>
+                <tr>
+                    <td>${costMichaeli}</td>
+                    <td>${costKishurit}</td>
+                    <td>${costSultan}</td>
+                </tr>
+            </tbody>`;
+        }
+      //console.log("***sultan there:"+shoppingCart.prodsSultan+" ***michaeli there:"+shoppingCart.prodsMichaeli+" ***kishurit there:"+shoppingCart.prodsKishurit)
+
+
+    }
+</script>
+</html>

@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Total Sum</title>
+<link rel="stylesheet" href="homepagedesign.css" />
+<link rel="stylesheet" href="login window.css" />
+<link rel="stylesheet" href="table.css" />
+    <link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="logo">
+    <img src="logo.jpg" alt="logop" width="1000" height="331">
+    <div class="welcome">Welcome</div>
+</div>
+
+<div class="menu">
+
+        <div class="b">menu</div>
+
+    <button class="big-button" onclick="moveProdPage()">Products</button>
+    <button class="big-button" onclick="movAboutPage()">About</button>
+    <button class="big-button" onclick="myFunction()">What new</button>
+    <button class="big-button" onclick="moveBuyPage()">buy</button>
+    <button class="big-button" onclick="moveHomePage()">Home</button>
+</div>
+
+<div class="main_page">
+    <div class="column">
+    <div class="TotalSum">
+        <h1>סולטן</h1>
+        <div class="miss">
+        <div class="missS">
+        <ul id="ulSultan" style="position:relative; font-size: 23px; top:-26px;">
+        </ul>
+        </div>
+    </div>
+        <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
+        <p id="total_sum_sultan" style="position: relative; top:-40px; font-size: 40px;"></p>
+        <button class="calcS" onclick="moveSultan()">הזמן כעת</button>
+    </div>
+    </div>
+    <div class="column">
+    <div class="TotalSum">
+        <h1>כישורית</h1>
+        <div class="miss">
+        <div class="missK">
+        <ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;">
+        </ul>
+        </div>
+    </div>
+        <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
+        <p id="total_sum_kishurit" style="position: relative;top:-40px; font-size: 40px;"></p>
+        <button class="calcK" onclick="moveKishurit()">הזמן כעת</button>
+    </div>
+    </div>
+    <div class="column">
+    <div class="TotalSum">
+        <h1>מיכאלי</h1>
+        <div class="miss">
+        <div class="missM">
+        <ul id="ulMichaeli"style="position:relative; font-size: 23px; top:-26px;">
+        </ul>
+        </div>
+    </div>
+        <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
+        <p id="total_sum_michaeli" style="position: relative;top:-40px; font-size: 40px;"></p>
+        <button class="calcM" onclick="moveMichaeli()">הזמן כעת</button>
+    </div>
+    </div>
+</div>
+<p style="font-family: Assistant; position: relative; top:650px; font-size: 30px; left:-380px;">מעוניין להוזיל עוד?</p>
+<button class="calcAnotherSplit" style="vertical-align:middle" onclick="calcAnotherSplit()"><span>בדוק אפשרות לפצל הזמנה</span></button>
+</body>
+
+<script>
+    //move button functions
+  function moveProdPage() {
+  location.href = '/Products2';
+}
+function moveHomePage() {
+  location.href = "/new";
+}
+
+function moveBuyPage() {
+  location.href = "/buy";
+}
+
+var shoplst=window.localStorage.getItem('Shopping cart list');
+var products = JSON.parse(shoplst);
+var prodsSultan=products['prodsSultan'];
+var missSultan=products['missSultan'];
+var prodsMichaeli=products['prodsMichaeli'];
+var missMichaeli=products['missMichaeli'];
+var prodsKishurit=products['prodsKishurit'];
+var missKishurit=products['missKishurit'];
+
+console.log("s: ");
+for(const row of prodsSultan) {
+        console.log(row.basicName);
+        console.log(row.quantity);
+    }
+
+console.log("k: ");
+for(const row of prodsKishurit) {
+    console.log(row.basicName);
+    console.log(row.quantity);
+    }
+
+//put exist list to any supplier
+if(products['prodsMichaeli'].length!==0){
+    for(const row of prodsMichaeli) {
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulMichaeli').innerHTML += '<br>';
+}
+
+if(products['prodsKishurit'].length!==0){
+    for(const row of prodsKishurit) {
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulKishurit').innerHTML += '<br>';
+}
+
+if(products['prodsSultan'].length!==0){
+    for(const row of prodsSultan) {
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulSultan').innerHTML += '<br>';
+}
+
+//put miss list to any supplier
+if(products['missSultan'].length !== 0){
+        document.getElementById('ulSultan').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missSultan'].length+'</dt>';
+    for(const row of missSultan) {
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+    }
+}
+
+
+if(products['missMichaeli'].length !== 0){
+    document.getElementById('ulMichaeli').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missMichaeli'].length+'</dt>';
+    for(const row of missMichaeli) {
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+    }
+}
+
+if(products['missKishurit'].length !== 0){
+   document.getElementById('ulKishurit').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missKishurit'].length+'</dt>';
+    for(const row of missKishurit) {
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+    }
+}
+
+//update total sum of suppliers
+document.getElementById('total_sum_sultan').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum sultan')+'</b>';
+document.getElementById('total_sum_kishurit').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum kishurit')+'</b>';
+document.getElementById('total_sum_michaeli').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum michaeli')+'</b>';
+
+
+
+</script>
+</html>

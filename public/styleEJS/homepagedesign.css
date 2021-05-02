@@ -1,0 +1,336 @@
+
+.logo {
+  position: relative;
+  height: 331px;
+  width: 900px;
+  background-color: #eaf7ee;
+  border-top-left-radius:20px;border-top-right-radius:20px;
+}
+
+.logo img {
+
+position: relative;
+  left: 500px;
+  top: 0px;
+   border-top-left-radius:20px;border-top-right-radius:20px;
+
+}
+
+.welcome {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  font-size: 150px;
+
+  font-family: 'Alex Brush';
+}
+
+.menu{
+    position: relative;
+  top: -20px;
+  height: 150px;
+  width: 1500px;
+  font-family: 'Alex Brush';
+  font-size: 50px;
+  border-bottom-left-radius:20px;border-bottom-right-radius:20px;
+
+
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+
+}
+
+
+
+
+
+/*bottom*/
+.big-button{
+  font-family: 'Ariel';
+  font-size: 20px;
+  left:500px;
+  top: 20px;
+  position: relative;
+  background-color: #e7e7e7;
+position: center;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+  border: 1px solid green;
+
+}
+
+.big-button:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 20%;
+  padding: 15px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width:600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+.centered {
+  position: absolute;
+  left: 400px;
+  text-align: center;
+}
+div.b {
+text-align: center;
+   -webkit-text-decoration-line: underline; /* Safari */
+   text-decoration-line: underline;
+}
+
+.counter {
+    width: 150px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.counter input {
+    width: 50px;
+    border: 0;
+    line-height: 30px;
+    font-size: 20px;
+    text-align: center;
+    background: #0052cc;
+    color: #fff;
+    appearance: none;
+    outline: 0;
+}
+.counter span {
+    display: block;
+    font-size: 25px;
+    padding: 0 10px;
+    cursor: pointer;
+    color: #0052cc;
+    user-select: none;
+}
+
+.submit_list {
+   background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+   position: absolute;
+  left: 130px;
+  text-align: center;
+    top:700px;
+    border-radius: 30px;
+
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+    border-radius: 50px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+    border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+    border-radius: 50px;
+}
+
+.myTable{
+    border-radius: 30px;
+}
+
+.main_page{
+    position: relative;
+    left: 200px;
+
+}
+
+.TotalSum{
+    border-radius: 30px;
+    background-color: antiquewhite;
+    width: 300px;
+    height: 570px;
+    text-align: center;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+font-family: Assistant;
+}
+
+.miss{
+    position: relative;
+    background-color: white;
+    width: 280px;
+    height: 280px;
+    left:10px;
+    overflow: scroll;
+}
+
+.calcM{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+     display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+    font-family: Assistant;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+    position: relative;
+    top:-50px;
+}
+
+.calcM:hover {background-color: #3e8e41}
+
+.calcM:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.calcK{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+     display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+    font-family: Assistant;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+    position: relative;
+    top:-50px;
+}
+
+.calcK:hover {background-color: #3e8e41}
+
+.calcK:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.calcS{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+     display: inline-block;
+    font-family: Assistant;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+    position: relative;
+    top:-50px;
+}
+
+.calcS:hover {background-color: #3e8e41}
+
+.calcS:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.calcAnotherSplit{
+    font-family: Assistant;
+ display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 400px;
+    border-radius: 30px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+    position: relative;
+    top:620px;
+    left:-480px;
+}
+
+.calcAnotherSplit span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.calcAnotherSplit span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.calcAnotherSplit:hover span {
+  padding-right: 25px;
+}
+
+.calcAnotherSplit:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+
+
+
+
+
+
+
+
+
