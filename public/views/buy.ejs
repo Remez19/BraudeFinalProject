@@ -316,15 +316,11 @@ function movesubmitLst() {
         const table = root.querySelector(".content-table");
         const response = await fetch('/basicNames');//await fetch("/data");
         const headers = ['שם מוצר','כמות','סולטן','כישורית','מיכאלי'];
-        const dataProdsName = await response.json();
+        const basicNames = await response.json();
 
         const response2= await fetch('/basicNamesCost');
-        const dataProdsCost=await response2.json();
+        const allProds=await response2.json();
 
-        //console.log(root.dataset.url)
-        for(let val of dataProdsCost) {
-            //console.log(val);
-        }
 
         // Clear Table
         table.querySelector("thead tr").innerHTML = '';
@@ -337,33 +333,32 @@ function movesubmitLst() {
         var kishurit='-';
         var michaeli='-';
 
-        for (const row of dataProdsName){
+        for (const base of basicNames){
             sultan='-';
             kishurit='-';
             michaeli='-';
             var min=-1;
-            for(const r of dataProdsCost) {
-                if(r.Base_Prod === row.Veg_Name) {
-                    if(r.Prod_Web==='Sultan'){
-                        sultan=r.Prod_Price;
-                        min=sultan;
+            for(const r of allProds) {
+                if (r.Base_Prod === base.Veg_Name) {
+                    if (r.Prod_Web === 'Sultan') {
+                        sultan = r.Prod_Price;
+                        // min=sultan;
                     }
-                    if(r.Prod_Web==='Kishurit'){
-                        kishurit=r.Prod_Price;
-                        if(min>kishurit)min=kishurit;
+                    if (r.Prod_Web === 'Kishurit') {
+                        kishurit = r.Prod_Price;
+                        // if(min>kishurit)min=kishurit;
                     }
-                    if(r.Prod_Web==='Michaeli'){
-                        michaeli=r.Prod_Price;
-                        if(min>michaeli)min=michaeli;
+                    if (r.Prod_Web === 'Michaeli') {
+                        michaeli = r.Prod_Price;
+                        // if(min>michaeli)min=michaeli;
                     }
                 }
             }
-
             //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
             //quantity from the specific prod
             if(michaeli === "-" && kishurit === "-" && sultan === "-")
             {
-              continue;
+                continue;
             }
             else{
                 table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
@@ -378,14 +373,14 @@ function movesubmitLst() {
                 ${sultan}
             </td>
             <td>
-                <div class="counter" data-name=${row.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
+                <div class="counter" data-name=${base.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
                 <span class="down" onclick="decreaseCount(event)" >-</span>
                 <input type="text" value="0">
                 <span class="up" onclick="increaseCount(event)">+</span>
                 </div>
             </td>
             <td>
-               ${row.Veg_Name}
+               ${base.Veg_Name}
             </td>
             </tr>
 
@@ -446,7 +441,7 @@ function movesubmitLst() {
         shoppingCart.addProduct(currentVege,value);
 
         var costS=event.target.parentElement.getAttribute('cost-sultan');
-        if(costS!=='-') {
+        if(costS!='-') {
             costSultan += parseInt(costS);
             shoppingCart.addSupplierLst(currentVege,"Sultan",value);
         }
@@ -454,7 +449,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
 
         var costM=event.target.parentElement.getAttribute('cost-michaeli');
-        if(costM!=='-') {
+        if(costM!='-') {
             costMichaeli += parseInt(costM);
             shoppingCart.addSupplierLst(currentVege,"Michaeli",value);
         }
@@ -462,7 +457,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Michaeli",value);
 
         var costK=event.target.parentElement.getAttribute('cost-kishurit');
-        if(costK!=='-') {
+        if(costK!='-') {
             costKishurit += parseInt(costK);
             shoppingCart.addSupplierLst(currentVege,"Kishurit",value);
         }
