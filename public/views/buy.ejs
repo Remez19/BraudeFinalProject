@@ -344,15 +344,15 @@ function movesubmitLst() {
             var min=-1;
             for(const r of dataProdsCost) {
                 if(r.Base_Prod === row.Veg_Name) {
-                    if(r.Prod_Web=='Sultan'){
+                    if(r.Prod_Web==='Sultan'){
                         sultan=r.Prod_Price;
                         min=sultan;
                     }
-                    if(r.Prod_Web=='Kishurit'){
+                    if(r.Prod_Web==='Kishurit'){
                         kishurit=r.Prod_Price;
                         if(min>kishurit)min=kishurit;
                     }
-                    if(r.Prod_Web=='Michaeli'){
+                    if(r.Prod_Web==='Michaeli'){
                         michaeli=r.Prod_Price;
                         if(min>michaeli)min=michaeli;
                     }
@@ -446,7 +446,7 @@ function movesubmitLst() {
         shoppingCart.addProduct(currentVege,value);
 
         var costS=event.target.parentElement.getAttribute('cost-sultan');
-        if(costS!='-') {
+        if(costS!=='-') {
             costSultan += parseInt(costS);
             shoppingCart.addSupplierLst(currentVege,"Sultan",value);
         }
@@ -454,7 +454,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
 
         var costM=event.target.parentElement.getAttribute('cost-michaeli');
-        if(costM!='-') {
+        if(costM!=='-') {
             costMichaeli += parseInt(costM);
             shoppingCart.addSupplierLst(currentVege,"Michaeli",value);
         }
@@ -462,7 +462,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Michaeli",value);
 
         var costK=event.target.parentElement.getAttribute('cost-kishurit');
-        if(costK!='-') {
+        if(costK!=='-') {
             costKishurit += parseInt(costK);
             shoppingCart.addSupplierLst(currentVege,"Kishurit",value);
         }

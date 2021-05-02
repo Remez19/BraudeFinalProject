@@ -114,45 +114,45 @@ for(const row of prodsKishurit) {
 //put exist list to any supplier
 if(products['prodsMichaeli'].length!==0){
     for(const row of prodsMichaeli) {
-        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">'+row.basicName+' '+row.quantity+'</dt>';
     }
     document.getElementById('ulMichaeli').innerHTML += '<br>';
 }
 
 if(products['prodsKishurit'].length!==0){
     for(const row of prodsKishurit) {
-        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">'+row.basicName+' '+row.quantity+'</dt>';
     }
     document.getElementById('ulKishurit').innerHTML += '<br>';
 }
 
 if(products['prodsSultan'].length!==0){
     for(const row of prodsSultan) {
-        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">'+row.basicName+' '+row.quantity+'</dt>';
     }
     document.getElementById('ulSultan').innerHTML += '<br>';
 }
 
 //put miss list to any supplier
 if(products['missSultan'].length !== 0){
-        document.getElementById('ulSultan').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missSultan'].length+'</dt>';
+        document.getElementById('ulSultan').innerHTML+='<dt style="text-align: right;color:#C9C9C9; font-size: 18px;" >'+'חוסרים מהרשימה: '+products['missSultan'].length+'</dt>';
     for(const row of missSultan) {
-        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right;font-size: 18px;color:#C9C9C9;">'+row.basicName+'</dt>';
     }
 }
 
 
 if(products['missMichaeli'].length !== 0){
-    document.getElementById('ulMichaeli').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missMichaeli'].length+'</dt>';
+    document.getElementById('ulMichaeli').innerHTML+='<dt style="text-align: right; font-size: 18px;color:#C9C9C9;" >'+'חוסרים מהרשימה: '+products['missMichaeli'].length+'</dt>';
     for(const row of missMichaeli) {
-        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;font-size: 18px;color:#C9C9C9;">'+row.basicName+'</dt>';
     }
 }
 
 if(products['missKishurit'].length !== 0){
-   document.getElementById('ulKishurit').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missKishurit'].length+'</dt>';
+   document.getElementById('ulKishurit').innerHTML+='<dt style="text-align: right; font-size: 18px;color:#C9C9C9;" >'+'חוסרים מהרשימה: '+products['missKishurit'].length+'</dt>';
     for(const row of missKishurit) {
-        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right;font-size: 18px;color:#C9C9C9;">'+row.basicName+'</dt>';
     }
 }
 
