@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Total Sum</title>
@@ -33,7 +33,6 @@
     <div class="column">
     <div class="TotalSum">
         <h1>סולטן</h1>
-        <p style="position:relative;top:0px; text-align: right">חוסרים</p>
         <div class="miss">
         <div class="missS">
         <ul id="ulSultan" style="position:relative; font-size: 23px; top:-26px;">
@@ -48,7 +47,6 @@
     <div class="column">
     <div class="TotalSum">
         <h1>כישורית</h1>
-        <p style="position:relative;top:0px; text-align: right">חוסרים</p>
         <div class="miss">
         <div class="missK">
         <ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;">
@@ -63,7 +61,6 @@
     <div class="column">
     <div class="TotalSum">
         <h1>מיכאלי</h1>
-        <p style="position:relative;top:0px; text-align: right">חוסרים</p>
         <div class="miss">
         <div class="missM">
         <ul id="ulMichaeli"style="position:relative; font-size: 23px; top:-26px;">
@@ -77,7 +74,7 @@
     </div>
 </div>
 <p style="font-family: Assistant; position: relative; top:650px; font-size: 30px; left:-380px;">מעוניין להוזיל עוד?</p>
-<button class="calcAnotherSplit" style="vertical-align:middle" onclick="calcAnotherSplit()">בדוק אפשרות לפצל הזמנה</button>
+<button class="calcAnotherSplit" style="vertical-align:middle" onclick="calcAnotherSplit()"><span>בדוק אפשרות לפצל הזמנה</span></button>
 </body>
 
 <script>
@@ -93,9 +90,6 @@ function moveBuyPage() {
   location.href = "/buy";
 }
 
-async function updateInfo(){
-
-}
 var shoplst=window.localStorage.getItem('Shopping cart list');
 var products = JSON.parse(shoplst);
 var prodsSultan=products['prodsSultan'];
@@ -105,26 +99,60 @@ var missMichaeli=products['missMichaeli'];
 var prodsKishurit=products['prodsKishurit'];
 var missKishurit=products['missKishurit'];
 
+console.log("s: ");
+for(const row of prodsSultan) {
+        console.log(row.basicName);
+        console.log(row.quantity);
+    }
+
+console.log("k: ");
+for(const row of prodsKishurit) {
+    console.log(row.basicName);
+    console.log(row.quantity);
+    }
+
+//put exist list to any supplier
+if(products['prodsMichaeli'].length!==0){
+    for(const row of prodsMichaeli) {
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulMichaeli').innerHTML += '<br>';
+}
+
+if(products['prodsKishurit'].length!==0){
+    for(const row of prodsKishurit) {
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulKishurit').innerHTML += '<br>';
+}
+
+if(products['prodsSultan'].length!==0){
+    for(const row of prodsSultan) {
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right">'+row.basicName+' '+row.quantity+'</dt>';
+    }
+    document.getElementById('ulSultan').innerHTML += '<br>';
+}
 
 //put miss list to any supplier
 if(products['missSultan'].length !== 0){
         document.getElementById('ulSultan').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missSultan'].length+'</dt>';
     for(const row of missSultan) {
-        document.getElementById('ulSultan').innerHTML += '<dt>'+row.basicName+'</dt>';
+        document.getElementById('ulSultan').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
     }
 }
+
 
 if(products['missMichaeli'].length !== 0){
     document.getElementById('ulMichaeli').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missMichaeli'].length+'</dt>';
     for(const row of missMichaeli) {
-        document.getElementById('ulMichaeli').innerHTML += '<dt>'+row.basicName+'</dt>';
+        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
     }
 }
 
 if(products['missKishurit'].length !== 0){
    document.getElementById('ulKishurit').innerHTML+='<dt style="text-align: right; font-size: 23px;" >'+'חוסרים מהרשימה: '+products['missKishurit'].length+'</dt>';
     for(const row of missKishurit) {
-        document.getElementById('ulKishurit').innerHTML += '<dt>'+row.basicName+'</dt>';
+        document.getElementById('ulKishurit').innerHTML += '<dt style="text-align: right;">'+row.basicName+'</dt>';
     }
 }
 

@@ -98,15 +98,15 @@ class  Cart {
                 }
             }
             else if(nameSupplier==="Sultan") {
-                    var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
-                    if(foundIndex === -1) {
-                        var newProduct= new Veg(nameProd, q)
-                        this.prodsSultan.push(newProduct)
-                        return
-                    }
-                    else {
-                        this.prodsSultan[foundIndex].quantity = q
-                    }
+                var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
+                if(foundIndex === -1) {
+                    var newProduct= new Veg(nameProd, q)
+                    this.prodsSultan.push(newProduct)
+                    return
+                }
+                else {
+                    this.prodsSultan[foundIndex].quantity = q
+                }
             }
             else if(nameSupplier==="Michaeli") {
                     var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
