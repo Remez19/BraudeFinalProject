@@ -1,3 +1,4 @@
+
 from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 from VegetableClass import Vegetable
@@ -38,7 +39,7 @@ class Sultan:
                Creates a Vegetable instance
     """
 
-    def __init__(self, baseNameList, progress):
+    def __init__(self, baseNameList):
         """
                Parameters
                ----------
@@ -47,13 +48,10 @@ class Sultan:
         """
         self.webName = 'Sultan'
         self.pageLink = 'http://sultan.pricecall.co.il/'
-        self.insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod)' \
-                           'VALUES (?,?,?,?,?);'
         self.resultVegList = []
         self.baseNameList = baseNameList
-        self.progress = progress
 
-    def startScrape(self, semDB, semProg, dataBaseCon):
+    def startScrape(self):
         """Starts scraping each page link in Kishurit website.The start function of the threads.
                Parameters
                ----------
@@ -64,16 +62,7 @@ class Sultan:
                    The connection to the DB
         """
         self.getLinkData()
-        if len(self.resultVegList):
-            step = 50 / len(self.resultVegList)
-            semDB.acquire()
-            for veg in self.resultVegList:
-                row = veg.getRow()
-                insertToDB(dataBaseCon, row, self.insertQuery)
-                self.progress.put(step)
-                semProg.acquire()
-            print("Thread " + self.webName + " finish")
-            semDB.release()
+        return self.webName, self.resultVegList
 
     def getLinkData(self):
         """Retrieve the link raw data of unit, price and name of a vegetable.

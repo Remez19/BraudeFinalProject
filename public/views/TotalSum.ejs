@@ -73,8 +73,13 @@
     </div>
     </div>
 </div>
-<p style="font-family: Assistant; position: relative; top:650px; font-size: 30px; left:-380px;">מעוניין להוזיל עוד?</p>
-<button class="calcAnotherSplit" style="vertical-align:middle" onclick="calcAnotherSplit()"><span>בדוק אפשרות לפצל הזמנה</span></button>
+<p style="font-family: Assistant; position: relative; top:650px; font-size: 30px; left:-500px;">מעוניין להוזיל עוד?</p>
+<button class="calcAnotherSplit" style="vertical-align:middle;left:-600px;" onclick="calcAnotherSplit()"><span>בדוק אפשרות לפצל הזמנה</span></button>
+
+<br>
+<div class id="separateOrder">
+</div>
+
 </body>
 
 <script>
@@ -90,6 +95,28 @@ function moveBuyPage() {
   location.href = "/buy";
 }
 
+
+//display a continues window when press on the separate button
+function calcAnotherSplit() {
+    console.log("yessss");
+    if(countDisplay===0) {
+        document.getElementById('separateOrder').innerHTML +=
+            '<h1 style="position: relative; top:650px; left:-670px;font-family: Assistant;">נמצאה הזמנה מוזלת על סך ____ שקלים</h1>'
+            +'<div class=" TotalSum" style="position: relative; top:700px; left:300px;"></div> '
+            + '<img src="+.jpg"  style="position: relative; height:100px; width: 100px; top:350px; left:700px;"alt="+">'
+            +'<h1 style="position: relative;font-family: Assistant;left:400px;">כישורית</h1><div class="miss" style="top:0px;left:310px;"><div class="missK"><ul id="ulKishurit"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+            +'<div class=" TotalSum" style="position: relative; top:-330px; left:900px;"></div>'
+            +'<h1 style="font-family: Assistant;position: relative;left:1000px; top:-920px;">מיכאלי</h1><div class="miss" style="top:-930px;left:910px;font-family: Assistant;"><div class="missK"><ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+            +'<button class="calcM" style="position: relative; top:-800px; left:380px;" onclick="moveMichaeli() ">הזמן כעת</button>'
+            +'<button class="calcM" style="position: relative; top:-800px; left:840px;" onclick="moveMichaeli() ">הזמן כעת</button>'
+            +'<p style="position:relative;font-family: Assistant;right:-310px;top:-1000px;font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>'
+            +'<p id="total_sum_kishurit" style="position: relative;top:-40px; font-size: 40px;"></p>'
+            +'<p style="position:relative;font-family: Assistant;right:-910px;top:-1070px;font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>';
+    }
+    countDisplay++;
+}
+
+countDisplay=0;
 var shoplst=window.localStorage.getItem('Shopping cart list');
 var products = JSON.parse(shoplst);
 var prodsSultan=products['prodsSultan'];

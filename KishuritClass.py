@@ -55,7 +55,7 @@ class Kishurit:
 
     """
 
-    def __init__(self, baseNameList, progress, pageCount=3):
+    def __init__(self, baseNameList, pageCount=3):
         """
         Parameters
         ----------
@@ -66,16 +66,13 @@ class Kishurit:
         """
         self.webName = 'Kishurit'
         self.pageLink = 'http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page='
-        self.insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod)' \
-                           'VALUES (?,?,?,?,?);'
         self.pageCount = pageCount
         self.linkList = []
         self.resultVegList = []
         self.createPagesLinks()
         self.baseNameList = baseNameList
-        self.progress = progress
 
-    def startScrape(self, semDB, semProg, dataBaseCon):
+    def startScrape(self):
         """Starts scraping each page link in Kishurit website.The start function of the threads.
                Parameters
                ----------
@@ -87,16 +84,7 @@ class Kishurit:
         """
         for link in self.linkList:
             self.getLinkData(link)
-            if len(self.resultVegList):
-                step = 50 / (len(self.resultVegList) * len(self.linkList))
-                semDB.acquire()
-                for veg in self.resultVegList:
-                    row = veg.getRow()
-                    insertToDB(dataBaseCon, row, self.insertQuery)
-                    self.progress.put(step)
-                    semProg.acquire()
-                semDB.release()
-        print("Thread " + self.webName + " finish")
+        return self.webName, self.resultVegList
 
     def getLinkData(self, link):
         """Retrieve the link raw data of unit, price and name of a vegetable.
@@ -140,9 +128,9 @@ class Kishurit:
                   unit : str
                       String of the unit of a vegetable
                   """
-        if unit.find('ק"ג') is not -1:
+        if unit.find('ק"ג') != -1:
             return 'ק"ג'
-        elif unit.find("יח") is not -1:
+        elif unit.find("יח") != -1:
             indexNumber = re.search(r"\d", unit)  # 2 יחידות לדוגמא
             if indexNumber:
                 return unit[indexNumber.start()] + ' ' + "יח'"
