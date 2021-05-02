@@ -10,7 +10,7 @@ const config = {
         server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
         user: 'Remez',
         password: '123456789',
-        database: "BraudeProject",
+        database: "BraudeProject1",
         dialect: "mssql",
         port: 1433,
         dialectOptions: {
