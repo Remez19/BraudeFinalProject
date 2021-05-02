@@ -98,4 +98,17 @@ def selectFromDB(dataBaseCon, selectQuery, queue=None):
                 data.append(row)
             return data
     except Exception as e:
+        print(e)
         print(selectQuery + '  -> Fail')
+
+
+def updateDB(dataBaseCon, updateQuery):
+    try:
+        dataBaseCon.execute(updateQuery)
+        if dataBaseCon.rowcount == 0:
+            return False
+    except Exception as e:
+        print(e)
+        print(updateQuery + '  -> Fail')
+        return False
+    return True

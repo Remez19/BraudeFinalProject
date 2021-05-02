@@ -1,55 +1,54 @@
 from KishuritClass import Kishurit
 from SultanClass import Sultan
-from MichaeliClass import Michaeli
-from Utils import deleteFromDB, selectFromDB
-import threading
+from Utils import deleteFromDB, selectFromDB, insertToDB, updateDB
 import time
-from threading import Thread, Semaphore
-
-semDB = threading.Semaphore() # parallel computing -> using semaphore to sync threads
+from datetime import datetime
+import concurrent.futures
 
 
 # Link to 'משק כישורית' site.
-def importData(dataBaseCon, progress, semProg):
-    deleteBeforeInsert(dataBaseCon)
+def importData(dataBaseCon, baseNamesList):
     # Devide to Threads
-    Threads = []
-    webObjList = []
-    baseNames = selectFromDB(dataBaseCon, "SELECT * FROM [BraudeProject].[dbo].[AllVegNames]")
-    baseNames = [''.join(item.split()) for sublist in baseNames for item in sublist]
-    kishurit = Kishurit(baseNames, progress)
-    sultan = Sultan(baseNames, progress)
-    # michaeli = Michaeli()
-    # webObjList.append(michaeli)
-    webObjList.append(kishurit)
-    webObjList.append(sultan)
-    for webObj in webObjList:
-        Threads.append(Thread(target=webObj.startScrape, args=(semDB, semProg, dataBaseCon)))
+    kishurit = Kishurit(baseNamesList)
+    sultan = Sultan(baseNamesList)
     startTime = time.time()
-    for thread in Threads:
-        thread.start()
-    for thread in Threads:
-        thread.join()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        workThreads = [executor.submit(kishurit.startScrape), executor.submit(sultan.startScrape)]
+        for work in concurrent.futures.as_completed(workThreads):
+            checkBeforeInsert(dataBaseCon, work.result()[1])
+            print(f'Thread {work.result()[0]} Finish')
+        deleteFromDB(dataBaseCon, deleteQuery="DELETE FROM Updates")
+        lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        insertToDB(dataBaseCon, data=lastUpdate, insertQuery='INSERT INTO Updates (Last_Update)' \
+                                                             'VALUES (?);')
+        endTime = time.time()
+        print('#####  ' + str((endTime - startTime) / 60) + '  ####')
+        return lastUpdate
 
-    endTime = time.time()
-    print('#####  ' + str((endTime - startTime) / 60) + '  ####')
+
+def checkBeforeInsert(dataBaseCon, newVegList):
+    for veg in newVegList:
+        row = veg.getRow()
+        unit = row[1].replace("'", "''") if "'" in row[1] else row[1]
+        prodName = row[0].replace("'", "''") if "'" in row[0] else row[0]
+        updateQuery = f"UPDATE [BraudeProject].[dbo].[AllProds]" \
+                      f"SET Prod_Unit ='{unit}' , Prod_Price = {row[2]}" \
+                      f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
+        if not updateDB(dataBaseCon, updateQuery):
+            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod)' \
+                          'VALUES (?,?,?,?,?);'
+            insertToDB(dataBaseCon, row, insertQuery)
 
 
-
-# Delete all the data from tables in order to update them
-
-"""
-:
-"""
-def deleteBeforeInsert(dataBaseCon):
-    try:
-        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Sultan'"
-        deleteFromDB(dataBaseCon, delete_query)
-        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Kishurit'"
-        deleteFromDB(dataBaseCon, delete_query)
-        delete_query = "DELETE FROM [BraudeProject].[dbo].[AllProds] WHERE Prod_Web = 'Michaeli'"
-        deleteFromDB(dataBaseCon, delete_query)
-        print("DB READY FOR INSERT")
-    except Exception:
-        print("Data Base delete FAILURE")
-        exit(1)
+def insertAdminData(dataBaseCon, data):
+    for row in data:
+        prodName = row[0].replace("'", "''") if "'" in row[0] else row[0]
+        updateQuery = f"UPDATE [BraudeProject].[dbo].[AllProds]" \
+                      f"SET Base_Prod ='{row[4]}' " \
+                      f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
+        updateDB(dataBaseCon, updateQuery)
+    lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    insertToDB(dataBaseCon, data=lastUpdate, insertQuery='INSERT INTO Updates (Last_Update)' \
+                                                         'VALUES (?);')
+    print("Insert Admin Finish")
+    return lastUpdate

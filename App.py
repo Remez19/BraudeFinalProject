@@ -1,23 +1,20 @@
-import threading
+import concurrent.futures
 from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from tkinter import tix
-from datetime import datetime
-from ImportData import importData
-from threading import Thread
+from ImportData import importData, insertAdminData
 import time
-import queue
-from Utils import connectToDB, selectFromDB, deleteFromDB, insertToDB
 
-semProg = threading.Semaphore(0)
+from Utils import connectToDB, selectFromDB, deleteFromDB, insertToDB
 
 
 class App:
     def __init__(self):
         self.dataBaseCon = connectToDB('LAPTOP-VNSLHC31', 'BraudeProject')
-        self.progress = queue.Queue()
-        selectFromDB(self.dataBaseCon, "SELECT * FROM Updates", self.progress)
+        lastUpdate = selectFromDB(self.dataBaseCon, "SELECT * FROM Updates")
+        self.baseNamesList = selectFromDB(self.dataBaseCon, 'SELECT * FROM [BraudeProject].[dbo].[AllVegNames]')
+        self.baseNamesList = [''.join(item.split()) for sublist in self.baseNamesList for item in sublist]
         # Gui preparation
 
         self.xChange = 800
@@ -33,11 +30,12 @@ class App:
         # Labels
         self.WelcomeLabel = Label(self.mainWindow, text="Hello Admin", font=self.WelcomeLabelFont, fg='blue')
         self.LastUpdateDateLabel = Label(self.mainWindow,
-                                         text='The last time you updated the DB was: ' + self.progress.get()[0],
+                                         text='The last time you updated the DB was: ' + str(lastUpdate[0][0]),
                                          fg="#FFBD09", bg='black')
         self.loadingLabel = Label(self.mainWindow, text="Loading...", font="Bahnschrift", bg='black', fg="#FFBD09")
         self.nameLabel = Label(self.mainWindow, text="מוצר שם", font="Bahnschrift", bg='black', fg="#FFBD09")
         self.baseNameLabel = Label(self.mainWindow, text="בסיסי שם", font="Bahnschrift", bg='black', fg="#FFBD09")
+        self.comboBoxLabel = Label(self.mainWindow, text="בסיס מוצרי", font="Bahnschrift", bg='black', fg="#FFBD09")
 
         self.LoadingBar = []
         for i in range(10):
@@ -53,10 +51,10 @@ class App:
         self.UpdateDbBtn = Button(self.mainWindow, text="Update Data Base",
                                   command=self.updateDataBaseBtn, width=20, height=1)
         self.EditDbBtn = Button(self.mainWindow, text="Edit data base", command=self.EditDbBtn, width=20, height=1)
-        self.saveChangesBtn = Button(self.mainWindow, text="Save changes", command=self.EditDbBtn, width=20, height=1)
+        self.saveChangesBtn = Button(self.mainWindow, text="Save changes", command=self.saveChangesBtn, width=20,
+                                     height=1)
+        self.saveItem = Button(self.mainWindow, text="Save", command=self.saveItemChangeToTable, width=10, height=1)
         # Buttons
-
-        # self.progressBar = ttk.Progressbar(self.mainWindow, orient=HORIZONTAL, length=100, mode='determinate')
 
         # Tree View
         self.treeView = ttk.Treeview(self.mainWindow)
@@ -77,94 +75,98 @@ class App:
         self.treeView.bind('<ButtonRelease-1>', self.getItemFromList)
         # Tree View
 
-
+        # ComboBox
+        self.basicNameComBox = ttk.Combobox(self.mainWindow, width=15, textvariable=StringVar())
+        self.basicNameComBox['values'] = tuple(self.baseNamesList)
+        self.basicNameComBox['state'] = 'readonly'
+        self.basicNameComBox.bind('<<ComboboxSelected>>', self.setBasicNameFromComboBox)
+        # ComboBox
 
         self.WelcomeLabel.place(x=356, y=10)
         self.LastUpdateDateLabel.place(x=260, y=50)
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
 
-
         # Gui preparation
 
     def startApp(self):
         self.mainWindow.mainloop()
 
-    def windowResize(self, e):
-        return
-
     def getItemFromList(self, e):
-
         selectedItem = self.treeView.focus()
         selectedItem = self.treeView.item(selectedItem, 'values')
         if len(selectedItem) > 1:
             self.basicNameEntry.delete(0, END)
             self.basicNameEntry.insert(0, selectedItem[4])
+            self.nameEntry.config(state=NORMAL)
             self.nameEntry.delete(0, END)
             self.nameEntry.insert(0, selectedItem[0])
+            self.nameEntry.config(state=DISABLED)
+            self.mainWindow.update()
+
+    def saveItemChangeToTable(self):
+        selectedItem = self.treeView.focus()
+        if selectedItem:
+            baseName = self.basicNameEntry.get()
+            if baseName not in self.baseNamesList:
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    allProdsThread = executor.submit(insertToDB, self.dataBaseCon, baseName,
+                                                     'INSERT INTO AllVegNames (Veg_Name)' \
+                                                     'VALUES (?);')
+                self.baseNamesList.append(baseName)
+                self.basicNameComBox['values'] = tuple(self.baseNamesList)
+            item = self.treeView.item(selectedItem, 'values')
+            item = (item[0], item[1], item[2], item[3], baseName)
+            self.treeView.item(selectedItem, values=item)
+
+    def setBasicNameFromComboBox(self, event):
+        self.basicNameEntry.delete(0, END)
+        self.basicNameEntry.insert(0, self.basicNameComBox.get())
+
+    def saveChangesBtn(self):
+        self.hideGuiWidgets()
+        data = []
+        for child in self.treeView.get_children():
+            data.append(tuple(self.treeView.item(child)['values']))
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            insertAdminThread = executor.submit(insertAdminData, self.dataBaseCon, data)
+            self.loadingAnimation([insertAdminThread])
+            self.LastUpdateDateLabel.place(x=270, y=50)
+            self.LastUpdateDateLabel['text'] = "Operation COMPLETE last update: " + insertAdminThread.result()
+            self.placeGuiWidgets()
             self.mainWindow.update()
 
     def EditDbBtn(self):
+        self.hideGuiWidgets()
         self.treeViewFlag = True
-        self.LastUpdateDateLabel.grid_forget()
-        self.treeView.place_forget()
-        self.nameLabel.place_forget()
-        self.nameEntry.place_forget()
         self.nameEntry.delete(0, END)
-        self.baseNameLabel.place_forget()
-        self.basicNameEntry.place_forget()
         self.basicNameEntry.delete(0, END)
         for i in self.treeView.get_children():
             self.treeView.delete(i)
-        self.loadingLabel.place(x=375, y=73)
-        self.UpdateDbBtn.place(x=350, y=145)
-        self.EditDbBtn.place(x=350, y=185)
-        self.progress.queue.clear()
-        for i, label in enumerate(self.LoadingBar):
-            label.place(x=(i + 15) * 21, y=100)
-        self.UpdateDbBtn['state'] = 'disable'
-        self.EditDbBtn['state'] = 'disable'
-        self.thread = Thread(target=selectFromDB, args=(self.dataBaseCon, 'SELECT * FROM [BraudeProject].[dbo].['
-                                                                          'AllProds]', self.progress))
-        self.thread.start()
-        self.loadingAnimation()
-        self.loadingLabel.place_forget()
-        for label in self.LoadingBar:
-            label.place_forget()
-        self.LastUpdateDateLabel.place(x=270, y=50)
-        self.UpdateDbBtn.place(x=340, y=78)
-        self.EditDbBtn.place(x=340, y=110)
-        self.UpdateDbBtn['state'] = 'active'
-        self.EditDbBtn['state'] = 'active'
-        self.saveChangesBtn.place(x=340, y=480)
-        self.nameLabel.place(x=560, y=390)
-        self.nameEntry.place(x=497, y=420)
-        self.baseNameLabel.place(x=400, y=390)
-        self.basicNameEntry.place(x=342, y=420)
-        self.treeView.place(x=220, y=150)
-        i = 0
-        while not self.progress.empty():
-            self.treeView.insert(parent='', index='end', iid=i, values=tuple(self.progress.get()))
-            i = i + 1
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            allProdsThread = executor.submit(selectFromDB, self.dataBaseCon, 'SELECT * FROM [BraudeProject].[dbo].['
+                                                                             'AllProds]')
+            workThreads = [allProdsThread]
+            self.loadingAnimation(workThreads)
+            self.LastUpdateDateLabel.place(x=270, y=50)
+            self.placeGuiWidgets()
+            for work in workThreads:
+                for i, prod in enumerate(work.result()):
+                    self.treeView.insert(parent='', index='end', iid=i, values=tuple(prod))
+            self.mainWindow.update()
 
-        self.mainWindow.update()
+    def updateDataBaseBtn(self):
+        self.hideGuiWidgets()
+        self.nameEntry.delete(0, END)
+        self.basicNameEntry.delete(0, END)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            scrapeThread = executor.submit(importData, self.dataBaseCon, self.baseNamesList)
+            self.loadingAnimation([scrapeThread])
+            self.LastUpdateDateLabel['text'] = "Operation COMPLETE last update: " + scrapeThread.result()
+            self.placeGuiWidgets()
+            self.mainWindow.update()
 
-        # while
-        # return
-
-    def updateDataBaseOp(self):
-        self.progress.queue.clear()
-        self.loadingAnimation()
-        deleteFromDB(self.dataBaseCon, deleteQuery="DELETE FROM Updates")
-        lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        insertToDB(self.dataBaseCon, data=lastUpdate, insertQuery='INSERT INTO Updates (Last_Update)' \
-                                                                  'VALUES (?);')
-        # self.progressBar['value'] = 0
-        # self.progressBar.place_forget()
-        self.loadingLabel.place_forget()
-        for label in self.LoadingBar:
-            label.place_forget()
-        self.LastUpdateDateLabel['text'] = "Operation COMPLETE last update: " + lastUpdate
+    def placeGuiWidgets(self):
         self.LastUpdateDateLabel.place(x=270, y=50)
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
@@ -174,43 +176,42 @@ class App:
             self.baseNameLabel.place(x=400, y=390)
             self.basicNameEntry.place(x=342, y=420)
             self.treeView.place(x=220, y=150)
+            self.basicNameComBox.place(x=225, y=420)
+            self.comboBoxLabel.place(x=240, y=390)
+            self.saveItem.place(x=130, y=418)
+            self.saveChangesBtn.place(x=340, y=480)
         self.UpdateDbBtn['state'] = 'active'
         self.EditDbBtn['state'] = 'active'
-        self.mainWindow.update()
 
-    def updateDataBaseBtn(self):
+    def hideGuiWidgets(self):
+        self.loadingLabel.place_forget()
         self.treeView.place_forget()
+        self.saveChangesBtn.place_forget()
+        self.basicNameComBox.place_forget()
+        self.saveItem.place_forget()
+        self.comboBoxLabel.place_forget()
         self.nameLabel.place_forget()
         self.nameEntry.place_forget()
-        self.nameEntry.delete(0, END)
         self.baseNameLabel.place_forget()
         self.basicNameEntry.place_forget()
-        self.basicNameEntry.delete(0, END)
         self.LastUpdateDateLabel.grid_forget()
+        self.UpdateDbBtn['state'] = 'disable'
+        self.EditDbBtn['state'] = 'disable'
+        for label in self.LoadingBar:
+            label.place_forget()
+
+    def loadingAnimation(self, WorkThreads):
         self.loadingLabel.place(x=375, y=73)
         self.UpdateDbBtn.place(x=340, y=145)
         self.EditDbBtn.place(x=340, y=185)
-        # self.progressBar.place(x=250, y=100)
         for i, label in enumerate(self.LoadingBar):
             label.place(x=(i + 15) * 21, y=100)
-        self.UpdateDbBtn['state'] = 'disable'
-        self.EditDbBtn['state'] = 'disable'
-        self.thread = Thread(target=importData, args=(self.dataBaseCon, self.progress, semProg))
-        self.thread.start()
-        self.mainWindow.after(100, self.updateDataBaseOp)
-
-    def loadingAnimation(self):
-        while self.thread.is_alive():
-            while self.thread.is_alive():
-                while not self.progress.empty():
-                    for label in self.LoadingBar:
-                        label.config(bg="#FFBD09")
-                        time.sleep(0.06)
-                        self.mainWindow.update()
-                        label.config(bg="#1F2732")
-                    if not self.thread.is_alive():
-                        break
-                    # self.progressBar['value'] += self.progress.get()
-                    # self.mainWindow.update()
-                if self.progress.empty():
-                    semProg.release()
+        for thread in WorkThreads:
+            while thread.running():
+                for label in self.LoadingBar:
+                    label.config(bg="#FFBD09")
+                    time.sleep(0.04)
+                    self.mainWindow.update()
+                    label.config(bg="#1F2732")
+        for label in self.LoadingBar:
+            label.place_forget()
