@@ -1,7 +1,13 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 form {border: 3px solid #f1f1f1;
-border-radius: 30px;
-background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+border-radius: 0px 30px 30px 0px;
+    top:-150px;
+    font-family: Assistant;
+    position: relative;
+    left:-17px;
+    color:white;
+    text-align: right;
+background: linear-gradient(-45deg, #92b480, #77bb5d, yellowgreen, #b5d333);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;}
  @keyframes gradient {
@@ -21,10 +27,8 @@ input[type=text], input[type=password] {
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-
   border-radius: 30px;
   box-sizing: border-box;
-
 }
 
 .submit {
@@ -40,8 +44,6 @@ input[type=text], input[type=password] {
 .submit:hover {
   opacity: 0.8;
 }
-
-
 
 .imgcontainer {
   text-align: center;
@@ -60,7 +62,6 @@ img.avatar {
 span.psw {
   float: inherit;
   padding-top: 0px;
-
 }
 
 /* Change styles for span and cancel button on extra small screens */
@@ -68,7 +69,5 @@ span.psw {
   span.psw {
      display: block;
      float: none;
-
   }
-
 }

@@ -127,7 +127,7 @@ app.get('/basicNamesCost',(req,res)=>{
         if(err)
             throw err;
         var req2=new sql.Request(conn);
-        req2._query('SELECT Base_Prod,Prod_Web,Prod_Price,Prod_Unit FROM AllProds',function (err, recordSet){
+        req2._query('SELECT Base_Prod,Prod_Web,Prod_Price,Prod_Unit,Prod_Name FROM AllProds',function (err, recordSet){
             if (err) throw err;
             else {
                 conn.close();
