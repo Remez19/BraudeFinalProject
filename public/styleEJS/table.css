@@ -16,6 +16,7 @@ th {
 }
 
 .content-table {
+  font-family: Assistant;
   border-collapse: collapse;
   margin: 0px 0px;
   font-size: 20px;
@@ -27,7 +28,7 @@ th {
 }
 
 .content-table thead tr {
-  background-color: #009879;
+  background-color: #60b456;
   color: #ffffff;
   text-align: left;
   font-weight: bold;
@@ -56,21 +57,22 @@ content-table th {
 }
 
 .content-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 2px solid #60b456;
 }
 
 .content-table tbody tr.active-row {
   font-weight: bold;
-  color: #009879;
+  color: #60b456;
 }
 
 tr:hover {background-color:#f5f5f5;}
 
 .my-custom-scrollbar {
 position: relative;
-height: 350px;
 overflow: auto;
+  overflow-scrolling: auto;
   left:0px;
+  scroll-margin-inline: 300px;
 
 }
 .table-wrapper-scroll-y {
