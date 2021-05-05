@@ -9,6 +9,7 @@ import concurrent.futures
 # Link to 'משק כישורית' site.
 def importData(dataBaseCon, baseNamesList):
     # Devide to Threads
+    # deleteFromDB(dataBaseCon, deleteQuery="DELETE FROM AllProds")
     kishurit = Kishurit(baseNamesList)
     sultan = Sultan(baseNamesList)
     startTime = time.time()

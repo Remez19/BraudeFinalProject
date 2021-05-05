@@ -3,11 +3,11 @@ const express = require('express');
 const path = require("ejs");
 const app = express();
 const port = 3000;
-
+// https://www.youtube.com/watch?v=6IOrp8HgnJU&t=355s
 /////////////////////////////////connection to DB
 const sql = require('mssql');
 const config = {
-        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
+        server: 'LAPTOP-VNSLHC31',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -45,7 +45,6 @@ app.get('/new',(req,res)=>{
     conn.close();
 })
 
-/*test*/
 app.get('/testpage',(req,res)=>{
     res.render('testpage.ejs');
 })
@@ -66,7 +65,7 @@ app.get('/testdata',(req,res)=>{
         });
     })
 });
-/*test end*/
+/test end/
 
 
 app.get('/Products2',(req,res)=>{
