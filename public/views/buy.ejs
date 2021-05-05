@@ -2,28 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>buy</title>
+    <title>Home Page</title>
 <link rel="stylesheet" href="homepagedesign.css" />
 <link rel="stylesheet" href="login window.css" />
-<link rel="stylesheet" href="table.css" />
-    <link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
+<link rel="stylesheet" href="table.css">
+<link href='https://fonts.googleapis.com/css?family=Alex Brush' rel='stylesheet'>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@1,500&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="logo">
-    <img src="logo.jpg" alt="logop" width="1000" height="331">
-    <div class="welcome">Welcome</div>
+
+<div class="headWelcome" >
+    <div class="topHead" style="background: linear-gradient(to bottom, #4caf50 0%, #80bd5f 100%); height: 90px;"></div>
+    <div class="downHead" style="background-color: white; height: 90px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);"></div>
+    <img src="logoShape.png" style="position:relative;left:700px;top:-180px;width: 330px;height: 180px;" alt="shape">
+    <h1 style="position:relative;top:-300px;color: white; left:785px;font-family: 'Exo', sans-serif;">Auto shop</h1>
 </div>
 
-<div class="menu">
-    <div class="b">menu</div>
-    <button class="big-button" onclick="moveProdPage()">Products</button>
-    <button class="big-button" onclick="movAboutPage()">About</button>
-    <button class="big-button" onclick="myFunction()">What new</button>
-    <button class="big-button" onclick="moveBuyPage()">buy</button>
-    <button class="big-button" onclick="moveHomePage()">Home</button>
+<div class="menuHead" style="position: relative;height: 100px; left:550px; width: 700px; top:-260px;">
+<button class="menuButton" style="position: relative; " onclick="moveProdPage()">מה חדש</button>
+<label class="control-label" style="font-size: 16px;color: gray;">|</label>
+<button class="menuButton" style="position: relative; " onclick="movAboutPage()">צרו קשר</button>
+<label class="control-label" style="font-size: 16px;color: gray;">|</label>
+<button class="menuButton" style="position: relative; " onclick="movAboutPage()">אודות</button>
+<label class="control-label" style="font-size: 16px;color: gray;">|</label>
+<button class="menuButton" style="position: relative; " onclick="moveBuyPage()">רכישת סל</button>
+<label class="control-label" style="font-size: 16px;color: gray;">|</label>
+<button class="menuButton" style="position: relative; " onclick="moveHomePage()">דף הבית</button>
 </div>
 
-    <table id="myTable"class="ruleToRemove" style="left: 400px;
+
+    <table id="myTable"class="ruleToRemove" style="left: 550px; top:-270px;font-family: Assistant;
   text-align: center;position: relative;border-collapse: collapse;margin: 0px 0px;font-size: 20px;min-width: 240px;border-radius: 30px 30px 0px 0px;overflow: hidden;box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);border-collapse: collapse; ">
         <tbody>
             <tr>
@@ -39,16 +50,18 @@
         </tbody>
     </table>
 
-<div class="table-wrapper-scroll-y my-custom-scrollbar">
+<div class="table-wrapper-scroll-y my-custom-scrollbar" style="position: relative; top:-270px; height: 500px;">
     <table class="table table-bordered table-striped mb-0">
 <div class="centered">
-<div class="content-table" data-url="/basicNames"></div>
+<div class="content-table" style="position: relative; left:150px;" data-url="/basicNames"></div>
 </div>
     </table>
   </div>
 
-<button class="submit_list" onclick="movesubmitLst()">SUBMIT</button>
+<button class="submit_list" onclick="movesubmitLst()">סיימתי</button>
 </div>
+
+
 </body>
 <script>
 
@@ -316,15 +329,11 @@ function movesubmitLst() {
         const table = root.querySelector(".content-table");
         const response = await fetch('/basicNames');//await fetch("/data");
         const headers = ['שם מוצר','כמות','סולטן','כישורית','מיכאלי'];
-        const dataProdsName = await response.json();
+        const basicNames = await response.json();
 
         const response2= await fetch('/basicNamesCost');
-        const dataProdsCost=await response2.json();
+        const allProds=await response2.json();
 
-        //console.log(root.dataset.url)
-        for(let val of dataProdsCost) {
-            //console.log(val);
-        }
 
         // Clear Table
         table.querySelector("thead tr").innerHTML = '';
@@ -337,34 +346,32 @@ function movesubmitLst() {
         var kishurit='-';
         var michaeli='-';
 
-        for (const row of dataProdsName){
+        for (const base of basicNames){
             sultan='-';
             kishurit='-';
             michaeli='-';
             var min=-1;
-            for(const r of dataProdsCost) {
-                if(r.Base_Prod === row.Veg_Name) {
-
-                    if(r.Prod_Web==='Sultan'){
-                        sultan=r.Prod_Price;
-                        min=sultan;
+            for(const r of allProds) {
+                if (r.Base_Prod === base.Veg_Name) {
+                    if (r.Prod_Web === 'Sultan') {
+                        sultan = r.Prod_Price;
+                        // min=sultan;
                     }
-                    if(r.Prod_Web==='Kishurit'){
-                        kishurit=r.Prod_Price;
-                        if(min>kishurit)min=kishurit;
+                    if (r.Prod_Web === 'Kishurit') {
+                        kishurit = r.Prod_Price;
+                        // if(min>kishurit)min=kishurit;
                     }
-                    if(r.Prod_Web==='Michaeli'){
-                        michaeli=r.Prod_Price;
-                        if(min>michaeli)min=michaeli;
+                    if (r.Prod_Web === 'Michaeli') {
+                        michaeli = r.Prod_Price;
+                        // if(min>michaeli)min=michaeli;
                     }
                 }
             }
-
             //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
             //quantity from the specific prod
             if(michaeli === "-" && kishurit === "-" && sultan === "-")
             {
-                console.log("Hey")
+                continue;
             }
             else{
                 table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
@@ -379,14 +386,14 @@ function movesubmitLst() {
                 ${sultan}
             </td>
             <td>
-                <div class="counter" data-name=${row.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
+                <div class="counter" data-name=${base.Veg_Name} cost-sultan=${sultan}  cost-kishurit=${kishurit}  cost-michaeli=${michaeli}>
                 <span class="down" onclick="decreaseCount(event)" >-</span>
                 <input type="text" value="0">
                 <span class="up" onclick="increaseCount(event)">+</span>
                 </div>
             </td>
             <td>
-               ${row.Veg_Name}
+               ${base.Veg_Name}
             </td>
             </tr>
 
@@ -416,6 +423,25 @@ function movesubmitLst() {
             </tr>
         </tbody>`;
 
+    for (const root of document.querySelectorAll('.content-table[data-url]')){
+        const table = document.createElement('table');
+        table.classList.add('content-table')
+        table.innerHTML = `
+
+            <thead>
+                <tr></tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Loading</td>
+                </tr>
+            </tbody>
+        `;
+
+         root.append(table);
+         updateTable(root);
+    }
 
     //for the quantity increaseCount
     function increaseCount(event) {
@@ -428,7 +454,7 @@ function movesubmitLst() {
         shoppingCart.addProduct(currentVege,value);
 
         var costS=event.target.parentElement.getAttribute('cost-sultan');
-        if(costS!=='-') {
+        if(costS!='-') {
             costSultan += parseInt(costS);
             shoppingCart.addSupplierLst(currentVege,"Sultan",value);
         }
@@ -436,7 +462,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
 
         var costM=event.target.parentElement.getAttribute('cost-michaeli');
-        if(costM!=='-') {
+        if(costM!='-') {
             costMichaeli += parseInt(costM);
             shoppingCart.addSupplierLst(currentVege,"Michaeli",value);
         }
@@ -444,7 +470,7 @@ function movesubmitLst() {
             shoppingCart.addMissSupplierLst(currentVege,"Michaeli",value);
 
         var costK=event.target.parentElement.getAttribute('cost-kishurit');
-        if(costK!=='-') {
+        if(costK!='-') {
             costKishurit += parseInt(costK);
             shoppingCart.addSupplierLst(currentVege,"Kishurit",value);
         }
@@ -509,29 +535,9 @@ function movesubmitLst() {
                 </tr>
             </tbody>`;
         }
-      //console.log("**sultan there:"+shoppingCart.prodsSultan+" *michaeli there:"+shoppingCart.prodsMichaeli+" **kishurit there:"+shoppingCart.prodsKishurit)
+      //console.log("***sultan there:"+shoppingCart.prodsSultan+" ***michaeli there:"+shoppingCart.prodsMichaeli+" ***kishurit there:"+shoppingCart.prodsKishurit)
 
 
-    }
-
-    for (const root of document.querySelectorAll('.content-table[data-url]')){
-        const table = document.createElement('table');
-        table.classList.add('content-table')
-        table.innerHTML = `
-
-            <thead>
-                <tr></tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>Loading</td>
-                </tr>
-            </tbody>
-        `;
-
-         root.append(table);
-         updateTable(root);
     }
 </script>
 </html>
