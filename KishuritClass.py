@@ -95,12 +95,13 @@ class Kishurit:
         """
         page = connectionChecker(link, self.webName)
         html = BeautifulSoup(page.content, features="html.parser")
-        for div in html.find_all('div', attrs={'class': 'grid'}):
+        for div in html.select('div[class*="layout_list_item css_class_479"]'):
             title = div.find('div', attrs={'class': 'list_item_title_with_brand'}).text
             price = div.find('a', attrs={'class': 'price'}).text
-            self.resultVegList.append(self.getVegDetails(title, price))
+            prodIdWeb = div.get('id')
+            self.resultVegList.append(self.getVegDetails(title, price, prodIdWeb))
 
-    def getVegDetails(self, title, price):
+    def getVegDetails(self, title, price, prodIdWeb):
         """Creates a Vegetable instance
                Parameters
                ----------
@@ -119,7 +120,7 @@ class Kishurit:
         unit = title[title.find('(') + 1:title.find(')')]
         unit = self.unitSelector(unit)
         baseName = compareNameToBaseName(name, self.baseNameList)
-        return Vegetable(name, price, unit, self.webName, baseName)
+        return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb)
 
     def unitSelector(self, unit):
         """Retrieve the link raw data of unit, price and name of a vegetable.

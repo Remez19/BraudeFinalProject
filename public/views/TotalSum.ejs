@@ -45,7 +45,15 @@
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
         <p id="total_sum_sultan" style="position: relative; top:-40px; font-size: 40px;"></p>
-        <button class="calcS" onclick="moveSultan()">הזמן כעת</button>
+        <button class="calcS" onclick="async function moveSultan() {
+        var shoplst = window.localStorage.getItem('Shopping cart list');
+            var products = JSON.parse(shoplst);
+            var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
+            // var sultanPage = window.open('http://sultan.pricecall.co.il/');
+             automatePurachase(data);
+
+        }
+        moveSultan()">הזמן כעת</button>
     </div>
     </div>
     <div class="column">
@@ -59,7 +67,13 @@
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
         <p id="total_sum_kishurit" style="position: relative;top:-40px; font-size: 40px;"></p>
-        <button class="calcK" onclick="moveKishurit()">הזמן כעת</button>
+        <button class="calcK" onclick="function moveKishurit() {
+            var shoplst = window.localStorage.getItem('Shopping cart list');
+            var products = JSON.parse(shoplst);
+             var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
+            automatePurachase(data);
+        }
+        moveKishurit()">הזמן כעת</button>
     </div>
     </div>
     <div class="column">
@@ -73,7 +87,11 @@
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
         <p id="total_sum_michaeli" style="position: relative;top:-40px; font-size: 40px;"></p>
-        <button class="calcM" onclick="moveMichaeli()">הזמן כעת</button>
+        <button class="calcM" onclick="function moveMichaeli() {
+
+
+        }
+        moveMichaeli()">הזמן כעת</button>
     </div>
     </div>
 </div>
@@ -90,8 +108,22 @@
 
 <script>
     //move button functions
+
   function moveProdPage() {
   location.href = '/Products2';
+}
+async function automatePurachase(purchaseList) {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(purchaseList)
+
+    }
+    const respone = await fetch('/Pup', options);
+    console.log(respone.send)
+
 }
 function moveHomePage() {
   location.href = "/new";

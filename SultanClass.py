@@ -72,11 +72,12 @@ class Sultan:
         for tableNumber, table in enumerate(html.findAll('tbody', attrs={'class': 'table-img-max-height'}), start=1):
             if tableNumber <= 3:
                 for tr in table.find_all('tr'):
+                    prodIdWeb = tr.find('input').get('id')
                     name = tr.find('td', attrs={'class': 'col-name'}).text
                     price = tr.find('td', attrs={'class': 'col-price'}).text
-                    self.resultVegList.append(self.getVegDetails(name, price))
+                    self.resultVegList.append(self.getVegDetails(name, price, prodIdWeb))
 
-    def getVegDetails(self, name, price):
+    def getVegDetails(self, name, price, prodIdWeb):
         """Creates a Vegetable instance
                        Parameters
                        ----------
@@ -91,4 +92,4 @@ class Sultan:
         price = price.split()
         price = ' '.join(price)
         baseName = compareNameToBaseName(name, self.baseNameList)
-        return Vegetable(name, price, 'ק"ג', self.webName, baseName)
+        return Vegetable(name, price, 'ק"ג', self.webName, baseName, prodIdWeb)

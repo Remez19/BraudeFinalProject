@@ -1,13 +1,14 @@
 const http = require('http');
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require("ejs");
 const app = express();
 const port = 3000;
-
+// https://www.youtube.com/watch?v=6IOrp8HgnJU&t=355s
 /////////////////////////////////connection to DB
 const sql = require('mssql');
 const config = {
-        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
+        server: 'LAPTOP-VNSLHC31',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -23,11 +24,11 @@ const config = {
 };
 
 //var conn= new sql.ConnectionPool(config);
-
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 //register view engine
 app.set('view engine','ejs');
 app.set('views','./public/views');
-
+app.use(express.json({limit: '1mb'}));
 app.use(express.static('./public/styleEJS'));
 app.use( express.static( "./public/png" ) );
 app.use( express.static( "./public/views" ) );
@@ -45,7 +46,6 @@ app.get('/new',(req,res)=>{
     conn.close();
 })
 
-/*test*/
 app.get('/testpage',(req,res)=>{
     res.render('testpage.ejs');
 })
@@ -66,7 +66,7 @@ app.get('/testdata',(req,res)=>{
         });
     })
 });
-/*test end*/
+
 
 
 app.get('/Products2',(req,res)=>{
@@ -136,7 +136,49 @@ app.get('/basicNamesCost',(req,res)=>{
         });
     })
 })
+app.post('/Pup', urlencodedParser,(req,res)=>{
+        console.log(req.body);
+    const puppeteer = require('puppeteer');
+    (async () => {
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+        if(req.body.site === 'kishurit'){
+            await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page=1');
+            await page.screenshot({ path: 'kishurit.png' });
+        }
+        else{
+            await page.goto('http://sultan.pricecall.co.il/');
 
+            const  x = await page.$('[id="350"]');
+            await x.type('4', {delay: 5})
+
+
+
+  //             const data = await page.evaluate(() => {
+  //                 const tds = Array.from(document.querySelectorAll('table tr td'))
+  //                 return tds.map(td => td.innerText)
+  // });
+  //             console.log(data);
+  //           var i = 0;
+  //            for(var row in data)
+  //            {
+  //                if(data[row] !== ''){
+  //                    console.log(data[row]);
+  //                    i =  i + 1;
+  //                }
+  //            }
+  //            console.log(i)
+            await page.screenshot({ path: 'sultan.png' });
+
+        }
+
+
+  // await browser.close();
+})();
+res.send('Good Pic')
+
+
+});
 //if we get into team page we will go to about page
 app.get('/team',(req,res)=>{
     res.redirect('/Products');
@@ -146,4 +188,39 @@ app.use((req,res)=>{
     res.status(404).render('404');
 })
 
+
 app.listen(port, () => {console.log('Server run');})
+
+//     console.log(req.body);
+//     const puppeteer = require('puppeteer');
+//     (async () => {
+//         const browser = await puppeteer.launch({headless:false});
+//         const page = await browser.newPage();
+//         if(req.body.site === 'kishurit'){
+//             await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page=1');
+//             await page.screenshot({ path: 'kishurit.png' });
+//         }
+//         else{
+//             await page.goto('http://sultan.pricecall.co.il/');
+//               const data = await page.evaluate(() => {
+//                   const tds = Array.from(document.querySelectorAll('table tr td'))
+//                   return tds.map(td => td.innerText)
+//   });
+//               console.log(data);
+//             var i = 0;
+//              for(var row in data)
+//              {
+//                  if(data[row] !== ''){
+//                      console.log(data[row]);
+//                      i =  i + 1;
+//                  }
+//              }
+//              console.log(i)
+//             await page.screenshot({ path: 'sultan.png' });
+//
+//         }
+//
+//
+//   await browser.close();
+// })();
+// res.json('Good Pic')
