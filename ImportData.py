@@ -28,16 +28,17 @@ def importData(dataBaseCon, baseNamesList):
 
 
 def checkBeforeInsert(dataBaseCon, newVegList):
+    # deleteFromDB(dataBaseCon, 'DELETE FROM AllProds')
     for veg in newVegList:
         row = veg.getRow()
         unit = row[1].replace("'", "''") if "'" in row[1] else row[1]
         prodName = row[0].replace("'", "''") if "'" in row[0] else row[0]
         updateQuery = f"UPDATE [BraudeProject].[dbo].[AllProds]" \
-                      f"SET Prod_Unit ='{unit}' , Prod_Price = {row[2]}" \
-                      f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
+                      f"SET Prod_Id_Web ='{row[5]}' , Prod_Unit ='{unit}' , Prod_Price = {row[2]}" \
+                      f"WHERE Prod_Name = '{row[0]}' AND Prod_Web = '{row[3]}'"
         if not updateDB(dataBaseCon, updateQuery):
-            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod)' \
-                          'VALUES (?,?,?,?,?);'
+            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod,Prod_Id_Web)' \
+                          'VALUES (?,?,?,?,?,?);'
             insertToDB(dataBaseCon, row, insertQuery)
 
 
