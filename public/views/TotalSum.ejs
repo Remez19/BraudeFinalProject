@@ -49,9 +49,7 @@
         var shoplst = window.localStorage.getItem('Shopping cart list');
             var products = JSON.parse(shoplst);
             var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
-            // var sultanPage = window.open('http://sultan.pricecall.co.il/');
              automatePurachase(data);
-
         }
         moveSultan()">הזמן כעת</button>
     </div>
@@ -70,7 +68,7 @@
         <button class="calcK" onclick="function moveKishurit() {
             var shoplst = window.localStorage.getItem('Shopping cart list');
             var products = JSON.parse(shoplst);
-             var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
+            var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
             automatePurachase(data);
         }
         moveKishurit()">הזמן כעת</button>

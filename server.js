@@ -8,7 +8,7 @@ const port = 3000;
 /////////////////////////////////connection to DB
 const sql = require('mssql');
 const config = {
-        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
+        server: 'LAPTOP-VNSLHC31',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
@@ -137,43 +137,41 @@ app.get('/basicNamesCost',(req,res)=>{
     })
 })
 app.post('/Pup', urlencodedParser,(req,res)=>{
-        console.log(req.body);
+
     const puppeteer = require('puppeteer');
     (async () => {
         const browser = await puppeteer.launch({headless:false});
         const page = await browser.newPage();
         if(req.body.site === 'kishurit'){
             await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page=1');
-            await page.screenshot({ path: 'kishurit.png' });
+             for(var row of req.body.purchaseList){
+                // console.log(row.realName)
+                var id = '[id="' + row.realName + '"]';
+                console.log(id);
+                console.log(row.quantity);
+                console.log('---------');
+                const  div = await page.$(id);
+                 console.log(div)
+                const inputField = div.$('[class="counter"]')
+                 console.log(inputField)
+                // await inputField.type(row.quantity.toString())
+            }
         }
         else{
             await page.goto('http://sultan.pricecall.co.il/');
-
-            const  x = await page.$('[id="350"]');
-            await x.type('4', {delay: 5})
-
-
-
-  //             const data = await page.evaluate(() => {
-  //                 const tds = Array.from(document.querySelectorAll('table tr td'))
-  //                 return tds.map(td => td.innerText)
-  // });
-  //             console.log(data);
-  //           var i = 0;
-  //            for(var row in data)
-  //            {
-  //                if(data[row] !== ''){
-  //                    console.log(data[row]);
-  //                    i =  i + 1;
-  //                }
-  //            }
-  //            console.log(i)
-            await page.screenshot({ path: 'sultan.png' });
-
+            for(var row of req.body.purchaseList){
+                // console.log(row.realName)
+                var id = '[id="' + row.realName + '"]';
+                console.log(id);
+                console.log(row.quantity);
+                console.log('---------');
+                const  inputField = await page.$(id);
+                await inputField.type(row.quantity.toString())
+            }
         }
 
 
-  // await browser.close();
+  await browser.close();
 })();
 res.send('Good Pic')
 
