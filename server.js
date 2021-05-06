@@ -8,7 +8,7 @@ const port = 3000;
 /////////////////////////////////connection to DB
 const sql = require('mssql');
 const config = {
-        server: 'LAPTOP-VNSLHC31',  //update me
+        server: 'DESKTOP-LRQKMNU\\SQLEXPRESS',  //update me
         user: 'Remez',
         password: '123456789',
         database: "BraudeProject",
