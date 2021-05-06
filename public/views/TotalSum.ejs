@@ -101,6 +101,15 @@ function moveBuyPage() {
   location.href = "/buy";
 }
 
+function moveSultan() {
+    var shoplst = window.localStorage.getItem('Shopping cart list');
+    var products = JSON.parse(shoplst);
+    var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
+    var fenetrePopup = window.open('http://sultan.pricecall.co.il/');
+
+    console.log(fenetrePopup.document.getElementById("350"));
+}
+
 
 //display a continues window when press on the separate button
 function calcAnotherSplit() {
