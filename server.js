@@ -109,7 +109,7 @@ app.get('/basicNames',(req,res)=>{
         if (err)
             throw err;
         var req1 = new sql.Request(conn);
-        req1._query('SELECT * FROM AllVegNames', function (err, recordSet){
+        req1._query('SELECT Base_Prod FROM [BraudeProject].[dbo].[AllProds] GROUP BY Base_Prod', function (err, recordSet){
            if (err) throw err;
            else
            {
@@ -120,6 +120,7 @@ app.get('/basicNames',(req,res)=>{
     })
 });
 
+//get the cost and the webs of the basic products
 //get the cost and the webs of the basic products
 app.get('/basicNamesCost',(req,res)=>{
     var conn=new sql.ConnectionPool(config);

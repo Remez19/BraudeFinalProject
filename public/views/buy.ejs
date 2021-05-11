@@ -348,7 +348,6 @@ function movesubmitLst() {
         window.localStorage.setItem('sum michaeli', JSON.stringify(costMichaeli));
         location.href = '/totalSum';
     }
-
 }
 
     //take the veg names from basic veg table and their costs from the different suppliers
@@ -379,78 +378,71 @@ function movesubmitLst() {
         var kishurit_realName='-';
         var michaeli_realName='-';
 
-        for (const base of basicNames){
-            sultan_price='-';
-            kishurit_price='-';
-            michaeli_price='-';
-            michaeli_price='-';
-            kishurit_realName='-';
-            michaeli_realName='-';
-            var min=-1;
-            for(const r of allProds) {
-                if (r.Base_Prod === base.Veg_Name) {
+        for (const base of basicNames) {
+            sultan_price = '-';
+            kishurit_price = '-';
+            michaeli_price = '-';
+            michaeli_price = '-';
+            kishurit_realName = '-';
+            michaeli_realName = '-';
+
+            for (const r of allProds) {
+                if (r.Base_Prod === base.Base_Prod) {
                     if (r.Prod_Web === 'Sultan') {
                         sultan_price = r.Prod_Price;
-                        sultan_realName=r.Prod_Id_Web;
-                        //console.log("reaal: "+sultan_realName);
-                        // min=sultan;
+                        sultan_realName = r.Prod_Id_Web;
                     }
                     if (r.Prod_Web === 'Kishurit') {
                         kishurit_price = r.Prod_Price;
-                        kishurit_realName=r.Prod_Id_Web;
-                        // if(min>kishurit)min=kishurit;
+                        kishurit_realName = r.Prod_Id_Web;
                     }
                     if (r.Prod_Web === 'Michaeli') {
                         michaeli_price = r.Prod_Price;
-                        michaeli_realName=r.Prod_Id_Web;
-                        // if(min>michaeli)min=michaeli;
+                        michaeli_realName = r.Prod_Id_Web;
                     }
                 }
                 //console.log("real name:"+sultan_realName);
             }
             //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
             //quantity from the specific prod
-            if(michaeli_price === "-" && kishurit_price === "-" && sultan_price === "-")
-            {
+            if (sultan_price === '-' && kishurit_price === '-' && michaeli_price === '-') {
                 continue;
-            }
-            else{
+            } else {
                 table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
-            <tr>
-            <td style="display:none;">
-                ${michaeli_realName}
-            </td>
-            <td style="display:none;">
-                ${kishurit_realName}
-            </td>
-            <td style="display:none;">
-                ${sultan_realName}
-            </td>
-            <td>
-                ${michaeli_price}
-            </td>
-            <td>
-                ${kishurit_price}
-            </td>
-            <td>
-                ${sultan_price}
-            </td>
-            <td>
-                <div class="counter" data-name=${base.Veg_Name} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  michaeli_real_name=${michaeli_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-michaeli=${michaeli_price}>
-                <span class="down" onclick="decreaseCount(event)" >-</span>
-                <input type="text" value="0">
-                <span class="up" onclick="increaseCount(event)">+</span>
-                </div>
-            </td>
-            <td>
-               ${base.Veg_Name}
-            </td>
-            </tr>
+                <tr>
+                <td style="display:none;">
+                    ${michaeli_realName}
+                </td>
+                <td style="display:none;">
+                    ${kishurit_realName}
+                </td>
+                <td style="display:none;">
+                    ${sultan_realName}
+                </td>
+                <td>
+                    ${michaeli_price}
+                </td>
+                <td>
+                    ${kishurit_price}
+                </td>
+                <td>
+                    ${sultan_price}
+                </td>
+                <td>
+                    <div class="counter" data-name=${base.Base_Prod} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  michaeli_real_name=${michaeli_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-michaeli=${michaeli_price}>
+                    <span class="down" onclick="decreaseCount(event)" >-</span>
+                    <input type="text" value="0">
+                    <span class="up" onclick="increaseCount(event)">+</span>
+                    </div>
+                </td>
+                <td>
+                   ${base.Base_Prod}
+                </td>
+                </tr>
 
-        `);
-            }
+            `);
+                }
         }
-
     }
 
     let shoppingCart =new Cart(0);
@@ -493,7 +485,6 @@ function movesubmitLst() {
          root.append(table);
          updateTable(root);
     }
-
 
     //Allow the slide show in the right page
     var myIndex = 0;
@@ -607,9 +598,7 @@ function movesubmitLst() {
                 </tr>
             </tbody>`;
         }
-      //console.log("***sultan there:"+shoppingCart.prodsSultan+" ***michaeli there:"+shoppingCart.prodsMichaeli+" ***kishurit there:"+shoppingCart.prodsKishurit)
-
-
+      //console.log("**sultan there:"+shoppingCart.prodsSultan+" *michaeli there:"+shoppingCart.prodsMichaeli+" **kishurit there:"+shoppingCart.prodsKishurit)
     }
 </script>
 </html>
