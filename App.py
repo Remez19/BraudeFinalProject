@@ -11,7 +11,7 @@ from Utils import connectToDB, selectFromDB, deleteFromDB, insertToDB
 
 class App:
     def __init__(self):
-        self.dataBaseCon = connectToDB('DESKTOP-LRQKMNU\SQLEXPRESS', 'BraudeProject')
+        self.dataBaseCon = connectToDB('LAPTOP-VNSLHC31', 'BraudeProject')
         lastUpdate = selectFromDB(self.dataBaseCon, "SELECT * FROM Updates")
         self.baseNamesList = selectFromDB(self.dataBaseCon, 'SELECT * FROM [BraudeProject].[dbo].[AllVegNames]')
         self.baseNamesList = [' '.join(item.split()) for sublist in self.baseNamesList for item in sublist]
@@ -51,6 +51,7 @@ class App:
         self.UpdateDbBtn = Button(self.mainWindow, text="Update Data Base",
                                   command=self.updateDataBaseBtn, width=20, height=1)
         self.EditDbBtn = Button(self.mainWindow, text="Edit data base", command=self.EditDbBtn, width=20, height=1)
+        self.DeleteBtn = Button(self.mainWindow, text="Delete DataBase", command=self.deleteBtn, width=20, height=1)
         self.saveChangesBtn = Button(self.mainWindow, text="Save changes", command=self.saveChangesBtn, width=20,
                                      height=1)
         self.saveItem = Button(self.mainWindow, text="Save", command=self.saveItemChangeToTable, width=10, height=1)
@@ -86,8 +87,18 @@ class App:
         self.LastUpdateDateLabel.place(x=260, y=50)
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
+        self.DeleteBtn.place(x=0,y=0)
 
         # Gui preparation
+
+    def deleteBtn(self):
+        self.hideGuiWidgets()
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            scrapeThread = executor.submit(deleteFromDB, self.dataBaseCon, 'DELETE FROM AllProds')
+            self.loadingAnimation([scrapeThread])
+            self.placeGuiWidgets()
+            self.mainWindow.update()
+
 
     def startApp(self):
         self.mainWindow.mainloop()

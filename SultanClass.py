@@ -92,4 +92,6 @@ class Sultan:
         price = price.split()
         price = ' '.join(price)
         baseName = compareNameToBaseName(name, self.baseNameList)
+        name = name.replace("'", "")
+        name = name.replace("`", "")
         return Vegetable(name, price, 'ק"ג', self.webName, baseName, prodIdWeb)

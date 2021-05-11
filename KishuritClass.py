@@ -120,6 +120,9 @@ class Kishurit:
         unit = title[title.find('(') + 1:title.find(')')]
         unit = self.unitSelector(unit)
         baseName = compareNameToBaseName(name, self.baseNameList)
+        name = name.replace("'", "")
+        name = name.replace("'", "")
+        name = name.replace('`', '')
         return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb)
 
     def unitSelector(self, unit):
@@ -134,11 +137,11 @@ class Kishurit:
         elif unit.find("יח") != -1:
             indexNumber = re.search(r"\d", unit)  # 2 יחידות לדוגמא
             if indexNumber:
-                return unit[indexNumber.start()] + ' ' + "יח'"
+                return unit[indexNumber.start()] + ' ' + "יח"
             else:
-                return "יח'"
+                return "יח"
         else:
-            return "יח'"
+            return "יח"
 
     def createPagesLinks(self):
         """Creates the pages links in Kishurit website.

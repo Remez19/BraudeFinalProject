@@ -136,6 +136,8 @@ app.get('/basicNamesCost',(req,res)=>{
         });
     })
 })
+
+
 app.post('/Pup', urlencodedParser,(req,res)=>{
 
     const puppeteer = require('puppeteer');
@@ -143,17 +145,22 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
         const browser = await puppeteer.launch({headless:false});
         const page = await browser.newPage();
         if(req.body.site === 'kishurit'){
-            await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page=1');
-             for(var row of req.body.purchaseList){
-                // console.log(row.realName)
-                var id = '[id="' + row.realName + '"]';
-                console.log(id);
-                console.log(row.quantity);
-                console.log('---------');
-                const  div = await page.$(id);
-                 console.log(div)
-                const inputField = div.$('[class="counter"]')
-                 console.log(inputField)
+            await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA');
+             await autoScroll(page);
+             for(const row of req.body.purchaseList){
+                 const quantity = row.quantity;
+                 var id = 'div'+ '[id="' + row.realName + '"]';
+                 const  div = await page.$(id);
+                 for(let i=0;i<quantity;i++){
+                    await div.$eval('div[class="add_item quantity"]',  el =>{
+                        el.click({clickCount:1})
+                });
+                }
+                // // const inputField = (await div.$eval('div[class="add_item quantity"]', updateQuantity(row.quantity)))
+                // const addQuantity = await div.$('div[class="add_item quantity"]');
+                // await addQuantity.click({clickCount:2})
+                // await addQuantity.click({clickCount:row.quantity})
+                // const inputField = (await div.$('div[class=add_item quantity]')).click({clickCount:row.quantity})
                 // await inputField.type(row.quantity.toString())
             }
         }
@@ -171,7 +178,7 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
         }
 
 
-  await browser.close();
+  // await browser.close();
 })();
 res.send('Good Pic')
 
@@ -189,36 +196,22 @@ app.use((req,res)=>{
 
 app.listen(port, () => {console.log('Server run');})
 
-//     console.log(req.body);
-//     const puppeteer = require('puppeteer');
-//     (async () => {
-//         const browser = await puppeteer.launch({headless:false});
-//         const page = await browser.newPage();
-//         if(req.body.site === 'kishurit'){
-//             await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA?page=1');
-//             await page.screenshot({ path: 'kishurit.png' });
-//         }
-//         else{
-//             await page.goto('http://sultan.pricecall.co.il/');
-//               const data = await page.evaluate(() => {
-//                   const tds = Array.from(document.querySelectorAll('table tr td'))
-//                   return tds.map(td => td.innerText)
-//   });
-//               console.log(data);
-//             var i = 0;
-//              for(var row in data)
-//              {
-//                  if(data[row] !== ''){
-//                      console.log(data[row]);
-//                      i =  i + 1;
-//                  }
-//              }
-//              console.log(i)
-//             await page.screenshot({ path: 'sultan.png' });
-//
-//         }
-//
-//
-//   await browser.close();
-// })();
-// res.json('Good Pic')
+
+async function autoScroll(page){
+    await page.evaluate(async () => {
+        await new Promise((resolve, reject) => {
+            var totalHeight = 0;
+            var distance = 100;
+            var timer = setInterval(() => {
+                var scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+
+                if(totalHeight >= scrollHeight){
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 100);
+        });
+    });
+}
