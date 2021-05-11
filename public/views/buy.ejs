@@ -39,7 +39,7 @@
         <tbody>
 
             <tr>
-                <td>מיכאלי</td>
+                <td>דוב</td>
                 <td>כישורית</td>
                 <td>סולטן</td>
             </tr>
@@ -97,8 +97,8 @@ class  Cart {
             this.missKishurit=[]
             this.prodsSultan=[]
             this.missSultan=[]
-            this.prodsMichaeli=[]
-            this.missMichaeli=[]
+            this.prodsDov=[]
+            this.missDov=[]
         }
 
         //while add quantity to the shopping cart, update it
@@ -140,16 +140,16 @@ class  Cart {
                     this.prodsSultan[foundIndex].quantity = q
                 }
             }
-            else if(nameSupplier==="Michaeli") {
+            else if(nameSupplier==="Dov") {
                     var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                     if(foundIndex === -1) {
                         var newProduct= new Veg(nameProd, q)
                         var newProd=new Prod(nameProd,realName,q)
-                        this.prodsMichaeli.push(newProd)
+                        this.prodsDov.push(newProd)
                         return
                     }
                     else {
-                        this.prodsMichaeli[foundIndex].quantity = q
+                        this.prodsDov[foundIndex].quantity = q
                     }
             }
         }
@@ -177,11 +177,11 @@ class  Cart {
                         return
                     }
             }
-            else if(nameSupplier==="Michaeli") {
+            else if(nameSupplier==="Dov") {
                     var foundIndex = this.findProdInMissSupplierLst(nameProd,nameSupplier);
                     if(foundIndex === -1) {
                         var newProduct= new Veg(nameProd, q)
-                        this.missMichaeli.push(newProduct)
+                        this.missDov.push(newProduct)
                         return
                     }
                     else {
@@ -213,15 +213,15 @@ class  Cart {
                             this.prodsSultan[foundIndex].quantity = q;
                     }
             }
-            else if(nameSupplier==="Michaeli") {
+            else if(nameSupplier==="Dov") {
                     var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                     if(foundIndex === -1)
                         return
                     else {
                         if(q === 0)
-                            this.prodsMichaeli.splice(foundIndex, 1);
+                            this.prodsDov.splice(foundIndex, 1);
                         else
-                            this.prodsMichaeli[foundIndex].quantity = q;
+                            this.prodsDov[foundIndex].quantity = q;
                     }
             }
         }
@@ -261,9 +261,9 @@ class  Cart {
                 }
                 return -1;
             }
-            else if(nameSupplier==="Michaeli") {
+            else if(nameSupplier==="Dov") {
                 let i=0;
-                for(let val of this.prodsMichaeli)
+                for(let val of this.prodsDov)
                 {
                     if(val.basicName===nameProd)
                         return i;
@@ -297,9 +297,9 @@ class  Cart {
                 }
                 return -1;
             }
-            else if(nameSupplier==="Michaeli") {
+            else if(nameSupplier==="Dov") {
                 let i=0;
-                for(let val of this.missMichaeli)
+                for(let val of this.missDov)
                 {
                     if(val.basicName===nameProd)
                         return i;
@@ -345,7 +345,7 @@ function movesubmitLst() {
         window.localStorage.setItem('Shopping cart list', JSON.stringify(shoppingCart));
         window.localStorage.setItem('sum sultan', JSON.stringify(costSultan));
         window.localStorage.setItem('sum kishurit', JSON.stringify(costKishurit));
-        window.localStorage.setItem('sum michaeli', JSON.stringify(costMichaeli));
+        window.localStorage.setItem('sum dov', JSON.stringify(costDov));
         location.href = '/totalSum';
     }
 }
@@ -354,7 +354,7 @@ function movesubmitLst() {
     async function updateTable(root){
         const table = root.querySelector(".content-table");
         const response = await fetch('/basicNames');//await fetch("/data");
-        const headers = ['שם מוצר','כמות','סולטן','כישורית','מיכאלי'];
+        const headers = ['שם מוצר','כמות','סולטן','כישורית','דוב'];
         const basicNames = await response.json();
 
         const response2= await fetch('/basicNamesCost');
@@ -364,7 +364,7 @@ function movesubmitLst() {
         // Clear Table
         table.querySelector("thead tr").innerHTML = '';
         table.querySelector("tbody").innerHTML = '';
-        table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">michaeli Real</th>`);
+        table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">dov Real</th>`);
         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">kishurit Real</th>`);
         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">sultan Real</th>`);
         for (const header of headers){
@@ -373,18 +373,18 @@ function movesubmitLst() {
 
         var sultan_price='-';
         var kishurit_price='-';
-        var michaeli_price='-';
+        var dov_price='-';
         var sultan_realName='-';
         var kishurit_realName='-';
-        var michaeli_realName='-';
+        var dov_realName='-';
 
         for (const base of basicNames) {
             sultan_price = '-';
             kishurit_price = '-';
-            michaeli_price = '-';
-            michaeli_price = '-';
+            dov_price = '-';
+            dov_price = '-';
             kishurit_realName = '-';
-            michaeli_realName = '-';
+            dov_realName = '-';
 
             for (const r of allProds) {
                 if (r.Base_Prod === base.Base_Prod) {
@@ -396,22 +396,22 @@ function movesubmitLst() {
                         kishurit_price = r.Prod_Price;
                         kishurit_realName = r.Prod_Id_Web;
                     }
-                    if (r.Prod_Web === 'Michaeli') {
-                        michaeli_price = r.Prod_Price;
-                        michaeli_realName = r.Prod_Id_Web;
+                    if (r.Prod_Web === 'Dov') {
+                        dov_price = r.Prod_Price;
+                        dov_realName = r.Prod_Id_Web;
                     }
                 }
                 //console.log("real name:"+sultan_realName);
             }
             //check if there is any quantity of the product. if not- dont allow the client to increase or decrease
             //quantity from the specific prod
-            if (sultan_price === '-' && kishurit_price === '-' && michaeli_price === '-') {
+            if (sultan_price === '-' && kishurit_price === '-' && dov_price === '-') {
                 continue;
             } else {
                 table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
                 <tr>
                 <td style="display:none;">
-                    ${michaeli_realName}
+                    ${dov_realName}
                 </td>
                 <td style="display:none;">
                     ${kishurit_realName}
@@ -420,7 +420,7 @@ function movesubmitLst() {
                     ${sultan_realName}
                 </td>
                 <td>
-                    ${michaeli_price}
+                    ${dov_price}
                 </td>
                 <td>
                     ${kishurit_price}
@@ -429,7 +429,7 @@ function movesubmitLst() {
                     ${sultan_price}
                 </td>
                 <td>
-                    <div class="counter" data-name=${base.Base_Prod} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  michaeli_real_name=${michaeli_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-michaeli=${michaeli_price}>
+                    <div class="counter" data-name=${base.Base_Prod} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  dov_real_name=${dov_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-dov=${dov_price}>
                     <span class="down" onclick="decreaseCount(event)" >-</span>
                     <input type="text" value="0">
                     <span class="up" onclick="increaseCount(event)">+</span>
@@ -447,7 +447,7 @@ function movesubmitLst() {
 
     let shoppingCart =new Cart(0);
     var costSultan=0;
-    var costMichaeli=0;
+    var costDov=0;
     var costKishurit=0;
     var tbl=document.getElementById("myTable");
     tbl.classList.add('myTable')
@@ -455,12 +455,12 @@ function movesubmitLst() {
     //init tables
     tbl.innerHTML = `<tbody>
             <tr>
-                <td>מיכאלי</td>
+                <td>דוב</td>
                 <td>כישורית</td>
                 <td>סולטן</td>
             </tr>
             <tr>
-                <td>${costMichaeli}</td>
+                <td>${costDov}</td>
                 <td>${costKishurit}</td>
                 <td>${costSultan}</td>
             </tr>
@@ -522,14 +522,14 @@ function movesubmitLst() {
         else
             shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
 
-        var costM=event.target.parentElement.getAttribute('cost-michaeli');
-        var realNameM=event.target.parentElement.getAttribute('michaeli_real_name');
-        if(costM!='-') {
-            costMichaeli += parseInt(costM);
-            shoppingCart.addSupplierLst(currentVege,"Michaeli",value,realNameM);
+        var costD=event.target.parentElement.getAttribute('cost-Dov');
+        var realNameD=event.target.parentElement.getAttribute('Dov_real_name');
+        if(costD!='-') {
+            costDov += parseInt(costD);
+            shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD);
         }
         else
-            shoppingCart.addMissSupplierLst(currentVege,"Michaeli",value);
+            shoppingCart.addMissSupplierLst(currentVege,"Dov",value);
 
         var costK=event.target.parentElement.getAttribute('cost-kishurit');
         var realNameK=event.target.parentElement.getAttribute('kishurit_real_name');
@@ -542,12 +542,12 @@ function movesubmitLst() {
 
         tbl.innerHTML = `<tbody>
             <tr>
-                <td>מיכאלי</td>
+                <td>דוב</td>
                 <td>כישורית</td>
                 <td>סולטן</td>
             </tr>
             <tr>
-                <td>${costMichaeli}</td>
+                <td>${costDov}</td>
                 <td>${costKishurit}</td>
                 <td>${costSultan}</td>
             </tr>
@@ -572,12 +572,12 @@ function movesubmitLst() {
             }
             if(costSultan<0) costSultan=0;
 
-            var costM=event.target.parentElement.getAttribute('cost-michaeli');
-            if(costM!='-') {
-                costMichaeli -= parseInt(costM);
-                shoppingCart.subtractSupplierLst(currentVege,"Michaeli",value);
+            var costD=event.target.parentElement.getAttribute('cost-dov');
+            if(costD!='-') {
+                costDov -= parseInt(costD);
+                shoppingCart.subtractSupplierLst(currentVege,"Dov",value);
             }
-            if(costMichaeli<0) costMichaeli=0;
+            if(costDov<0) costDov=0;
 
             var costK=event.target.parentElement.getAttribute('cost-kishurit');
             if(costK!='-') {
@@ -592,7 +592,7 @@ function movesubmitLst() {
                     <td>סולטן</td>
                 </tr>
                 <tr>
-                    <td>${costMichaeli}</td>
+                    <td>${costDov}</td>
                     <td>${costKishurit}</td>
                     <td>${costSultan}</td>
                 </tr>
