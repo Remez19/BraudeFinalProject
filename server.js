@@ -157,12 +157,6 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                         el.click({clickCount:1})
                 });
                 }
-                // // const inputField = (await div.$eval('div[class="add_item quantity"]', updateQuantity(row.quantity)))
-                // const addQuantity = await div.$('div[class="add_item quantity"]');
-                // await addQuantity.click({clickCount:2})
-                // await addQuantity.click({clickCount:row.quantity})
-                // const inputField = (await div.$('div[class=add_item quantity]')).click({clickCount:row.quantity})
-                // await inputField.type(row.quantity.toString())
             }
         }
         else{
@@ -170,9 +164,6 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
             for(var row of req.body.purchaseList){
                 // console.log(row.realName)
                 var id = '[id="' + row.realName + '"]';
-                console.log(id);
-                console.log(row.quantity);
-                console.log('---------');
                 const  inputField = await page.$(id);
                 await inputField.type(row.quantity.toString())
             }
