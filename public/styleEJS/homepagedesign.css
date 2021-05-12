@@ -56,6 +56,10 @@ position: relative;
   text-decoration: underline;
 }
 
+.buybtn:hover, .buybtn:focus {
+  text-decoration: underline;
+}
+
 
 
 /*bottom*/
@@ -450,6 +454,46 @@ text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.holder {
+  background-color:white;
+    border-bottom-left-radius: 20px;
+    position: relative;
+    left:3px;
+  width:280px;
+  height:526px;
+  overflow:hidden;
+  padding:10px;
+  font-family: Assistant;
+    color: green;
+    font-size: 20px;
+    text-align: right;
+    overflow: scroll;
+}
+.holder .mask {
+  position: relative;
+  left: 0px;
+  top: 10px;
+  width:250px;
+  height:240px;
+  overflow: hidden;
+}
+.holder ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  position: relative;
+}
+.holder ul li {
+  padding:10px 0px;
+}
+.holder ul li a {
+  color: gray;
+  text-decoration:none;
+}
+
+
 
 
 
