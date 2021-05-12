@@ -76,16 +76,16 @@
     </div>
     <div class="column">
     <div class="TotalSum">
-        <h1>מיכאלי</h1>
+        <h1>דוב</h1>
         <div class="miss">
-        <div class="missM">
-        <ul id="ulMichaeli"style="position:relative; font-size: 23px; top:-26px;">
+        <div class="missD">
+        <ul id="ulDov"style="position:relative; font-size: 23px; top:-26px;">
         </ul>
         </div>
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
-        <p id="total_sum_michaeli" style="position: relative;top:-40px; font-size: 40px;"></p>
-        <button class="calcM" onclick="function moveMichaeli() {
+        <p id="total_sum_dov" style="position: relative;top:-40px; font-size: 40px;"></p>
+        <button class="calcD" onclick="function moveDov() {
 
 
         }
@@ -152,8 +152,8 @@ function calcAnotherSplit() {
             +'<h1 style="position: relative;font-family: Assistant;left:400px;top:-270px;">כישורית</h1><div class="miss" style="position:relative;top:-280px;left:310px;"><div class="missK"><ul id="ulKishurit"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
             +'<div class=" TotalSum" style="position: relative; top:-640px; left:900px;"></div>'
             +'<h1 style="font-family: Assistant;position: relative;left:1000px; top:-1200px;">מיכאלי</h1><div class="miss" style="top:-1210px;left:910px;font-family: Assistant;"><div class="missK"><ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
-            +'<button class="calcM" style="position: relative; top:-1100px; left:380px;" onclick="moveMichaeli() ">הזמן כעת</button>'
-            +'<button class="calcM" style="position: relative; top:-1100px; left:840px;" onclick="moveMichaeli() ">הזמן כעת</button>'
+            +'<button class="calcD" style="position: relative; top:-1100px; left:380px;" onclick="moveDov() ">הזמן כעת</button>'
+            +'<button class="calcD" style="position: relative; top:-1100px; left:840px;" onclick="moveDov() ">הזמן כעת</button>'
             +'<p style="position:relative;font-family: Assistant;right:-310px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>'
             +'<p id="total_sum_kishurit" style="position: relative;top:-840px; font-size: 40px;"></p>'
             +'<p style="position:relative;font-family: Assistant;right:-910px;top:-1350px;font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>' ;
@@ -166,8 +166,8 @@ var shoplst=window.localStorage.getItem('Shopping cart list');
 var products = JSON.parse(shoplst);
 var prodsSultan=products['prodsSultan'];
 var missSultan=products['missSultan'];
-var prodsMichaeli=products['prodsMichaeli'];
-var missMichaeli=products['missMichaeli'];
+var prodsDov=products['prodsDov'];
+var missDov=products['missDov'];
 var prodsKishurit=products['prodsKishurit'];
 var missKishurit=products['missKishurit'];
 
@@ -186,11 +186,11 @@ for(const row of prodsKishurit) {
     }
 
 //put exist list to any supplier
-if(products['prodsMichaeli'].length!==0){
-    for(const row of prodsMichaeli) {
-        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">'+row.basicName+' '+row.quantity+'</dt>';
+if(products['prodsDov'].length!==0){
+    for(const row of prodsDov) {
+        document.getElementById('ulDov').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">'+row.basicName+' '+row.quantity+'</dt>';
     }
-    document.getElementById('ulMichaeli').innerHTML += '<br>';
+    document.getElementById('ulDov').innerHTML += '<br>';
 }
 
 if(products['prodsKishurit'].length!==0){
@@ -216,10 +216,10 @@ if(products['missSultan'].length !== 0){
 }
 
 
-if(products['missMichaeli'].length !== 0){
-    document.getElementById('ulMichaeli').innerHTML+='<dt style="text-align: right; font-size: 18px;color:#C9C9C9;" >'+'חוסרים מהרשימה: '+products['missMichaeli'].length+'</dt>';
-    for(const row of missMichaeli) {
-        document.getElementById('ulMichaeli').innerHTML += '<dt style="text-align: right;font-size: 18px;color:#C9C9C9;">'+row.basicName+'</dt>';
+if(products['missDov'].length !== 0){
+    document.getElementById('ulDov').innerHTML+='<dt style="text-align: right; font-size: 18px;color:#C9C9C9;" >'+'חוסרים מהרשימה: '+products['missDov'].length+'</dt>';
+    for(const row of missDov) {
+        document.getElementById('ulDov').innerHTML += '<dt style="text-align: right;font-size: 18px;color:#C9C9C9;">'+row.basicName+'</dt>';
     }
 }
 
@@ -233,7 +233,7 @@ if(products['missKishurit'].length !== 0){
 //update total sum of suppliers
 document.getElementById('total_sum_sultan').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum sultan')+'</b>';
 document.getElementById('total_sum_kishurit').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum kishurit')+'</b>';
-document.getElementById('total_sum_michaeli').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum michaeli')+'</b>';
+document.getElementById('total_sum_dov').innerHTML += '<b>'+ '₪'+window.localStorage.getItem('sum dov')+'</b>';
 
 
 

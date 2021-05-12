@@ -221,7 +221,7 @@ text-align: center;
     overflow: scroll;
 }
 
-.calcM{
+.calcD{
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     display: inline-block;
     padding: 15px 25px;
@@ -240,9 +240,9 @@ text-align: center;
     top:-50px;
 }
 
-.calcM:hover {background-color: #3e8e41}
+.calcD:hover {background-color: #3e8e41}
 
-.calcM:active {
+.calD:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
