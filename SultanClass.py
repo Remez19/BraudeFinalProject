@@ -75,9 +75,9 @@ class Sultan:
                     prodIdWeb = tr.find('input').get('id')
                     name = tr.find('td', attrs={'class': 'col-name'}).text
                     price = tr.find('td', attrs={'class': 'col-price'}).text
-                    self.resultVegList.append(self.getVegDetails(name, price, prodIdWeb))
+                    self.resultVegList.append(self.getVegDetails(name, price, prodIdWeb, self.pageLink))
 
-    def getVegDetails(self, name, price, prodIdWeb):
+    def getVegDetails(self, name, price, prodIdWeb, link):
         """Creates a Vegetable instance
                        Parameters
                        ----------
@@ -94,4 +94,4 @@ class Sultan:
         baseName = compareNameToBaseName(name, self.baseNameList)
         name = name.replace("'", "")
         name = name.replace("`", "")
-        return Vegetable(name, price, 'ק"ג', self.webName, baseName, prodIdWeb)
+        return Vegetable(name, price, 'ק"ג', self.webName, baseName, prodIdWeb, self.pageLink)

@@ -20,9 +20,9 @@
 </div>
 
 <div class="menuHead" style="position: relative;height: 100px; left:550px; width: 700px; top:-260px;">
-<button class="menuButton" style="position: relative; " onclick="moveProdPage()">מה חדש</button>
+<button class="menuButton" style="position: relative; " onclick="movProdPage()">מה חדש</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
-<button class="menuButton" style="position: relative; " onclick="movAboutPage()">צרו קשר</button>
+<button class="menuButton" style="position: relative; " onclick="movConnectPage()">צרו קשר</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
 <button class="menuButton" style="position: relative; " onclick="movAboutPage()">אודות</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
@@ -117,6 +117,18 @@ function moveHomePage() {
 
 function moveBuyPage() {
   location.href = "/buy";
+}
+
+function movAboutPage() {
+    location.href = "/About";
+}
+
+function movConnectPage() {
+    location.href = "/Connect";
+}
+
+function movWhatsNewPage() {
+    location.href = "/WhatsNew";
 }
 
 //Allow the slide show in the right page
