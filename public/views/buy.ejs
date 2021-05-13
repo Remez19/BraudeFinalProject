@@ -82,10 +82,11 @@
 }
 
 class Prod{
-    constructor(basicName,realName, quantity) {
+    constructor(basicName,realName, quantity, link=null) {
     this.basicName = basicName;
     this.quantity = quantity;
     this.realName=realName;
+    this.link = link
   }
 }
 
@@ -115,7 +116,7 @@ class  Cart {
         }
 
         //this function add product to supplier list
-        addSupplierLst(nameProd, nameSupplier, q, realName) {
+        addSupplierLst(nameProd, nameSupplier, q, realName,link=null) {
             if(nameSupplier==="Kishurit") {
                 var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                 if(foundIndex === -1) {
@@ -144,7 +145,7 @@ class  Cart {
                     var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                     if(foundIndex === -1) {
                         var newProduct= new Veg(nameProd, q)
-                        var newProd=new Prod(nameProd,realName,q)
+                        var newProd=new Prod(nameProd,realName,q,link)
                         this.prodsDov.push(newProd)
                         return
                     }
@@ -336,7 +337,7 @@ function moveBuyPage() {
 }
 
 function movesubmitLst() {
-    //console.log(shoppingCart);
+    console.log(shoppingCart);
     if(shoppingCart.products.length===0) {
         var popup = document.getElementById("myPopup");
         popup.classList.toggle("show");
@@ -364,6 +365,7 @@ function movesubmitLst() {
         // Clear Table
         table.querySelector("thead tr").innerHTML = '';
         table.querySelector("tbody").innerHTML = '';
+         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">dov Link</th>`);
         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">dov Real</th>`);
         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">kishurit Real</th>`);
         table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th style="display:none;">sultan Real</th>`);
@@ -371,12 +373,15 @@ function movesubmitLst() {
             table.querySelector('thead tr').insertAdjacentHTML('afterbegin', `<th>${ header }</th>`);
         }
 
-        var sultan_price='-';
+
         var kishurit_price='-';
-        var dov_price='-';
-        var sultan_realName='-';
         var kishurit_realName='-';
+        var sultan_realName='-';
+        var sultan_price='-';
+
         var dov_realName='-';
+        var dov_price='-';
+        var dov_prod_link = '-';
 
         for (const base of basicNames) {
             sultan_price = '-';
@@ -399,6 +404,7 @@ function movesubmitLst() {
                     if (r.Prod_Web === 'Dov') {
                         dov_price = r.Prod_Price;
                         dov_realName = r.Prod_Id_Web;
+                        dov_prod_link = r.Prod_Id_Web_Link;
                     }
                 }
                 //console.log("real name:"+sultan_realName);
@@ -410,6 +416,9 @@ function movesubmitLst() {
             } else {
                 table.querySelector('tbody').insertAdjacentHTML('beforebegin', `
                 <tr>
+                <td style="display:none;">
+                    ${dov_prod_link}
+                </td>
                 <td style="display:none;">
                     ${dov_realName}
                 </td>
@@ -429,7 +438,7 @@ function movesubmitLst() {
                     ${sultan_price}
                 </td>
                 <td>
-                    <div class="counter" data-name=${base.Base_Prod} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  dov_real_name=${dov_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-dov=${dov_price}>
+                    <div class="counter" data-name=${base.Base_Prod} sultan_real_name=${sultan_realName} kishurit_real_name=${kishurit_realName}  dov_real_name=${dov_realName}  cost-sultan=${sultan_price}  cost-kishurit=${kishurit_price}  cost-dov=${dov_price} dov-prod-link=${dov_prod_link}>
                     <span class="down" onclick="decreaseCount(event)" >-</span>
                     <input type="text" value="0">
                     <span class="up" onclick="increaseCount(event)">+</span>
@@ -524,9 +533,10 @@ function movesubmitLst() {
 
         var costD=event.target.parentElement.getAttribute('cost-Dov');
         var realNameD=event.target.parentElement.getAttribute('Dov_real_name');
+        var prodLinkD = event.target.parentElement.getAttribute('dov-prod-link');
         if(costD!='-') {
             costDov += parseInt(costD);
-            shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD);
+            shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD,prodLinkD);
         }
         else
             shoppingCart.addMissSupplierLst(currentVege,"Dov",value);

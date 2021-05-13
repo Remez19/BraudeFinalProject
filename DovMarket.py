@@ -78,9 +78,9 @@ class DovMarket:
             price = price.replace(' ', '')
             price = price.replace('\n', '')
             prodIdWeb = div.find('button', attrs={'class':'use-ajax-submit button button--primary js-form-submit form-submit btn-primary btn'}).get('id')
-            self.resultVegList.append(self.getVegDetails(name, price, prodIdWeb))
+            self.resultVegList.append(self.getVegDetails(name, price, prodIdWeb, link))
 
-    def getVegDetails(self, name, price, prodIdWeb):
+    def getVegDetails(self, name, price, prodIdWeb, link):
         """Creates a Vegetable instance
                Parameters
                ----------
@@ -94,4 +94,4 @@ class DovMarket:
         price = ''.join(re.findall("\d+\.\d+", price))
         name = name.replace("'", "")
         baseName = compareNameToBaseName(name, self.baseNameList)
-        return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb)
+        return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb, link)

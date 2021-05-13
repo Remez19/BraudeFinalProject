@@ -1,5 +1,4 @@
 
-
 class Vegetable:
     """
           A class used to represent Vegetable
@@ -34,7 +33,7 @@ class Vegetable:
               Returns a tuple of the vegetable details (name, price, unit, website, base name)
 
        """
-    def __init__(self, name, price, unit, webSite, baseProd, prodIdWeb=None):
+    def __init__(self, name, price, unit, webSite, baseProd,   prodIdWeb=None, link=None):
         """
                 Parameters
                 ----------
@@ -56,6 +55,7 @@ class Vegetable:
         self.webSite = webSite
         self.baseProd = baseProd
         self.prodIdWeb = prodIdWeb
+        self.link = link
 
 
     def printVegetableDetails(self):
@@ -71,4 +71,5 @@ class Vegetable:
     def getRow(self):
         """Returns a tuple of the vegetable details (name, price, unit, website, base name)
                """
-        return (self.vegName, self.vegUnit, float(self.vegPrice), self.webSite, self.baseProd, self.prodIdWeb)
+        return \
+        (self.vegName, self.vegUnit, float(self.vegPrice), self.webSite, self.baseProd, self.prodIdWeb, self.link)

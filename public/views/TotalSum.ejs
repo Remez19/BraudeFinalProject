@@ -86,8 +86,10 @@
         <p style="font-size: 23px;"><b>סה"כ הזמנה (כולל מחיר משלוח)</b></p>
         <p id="total_sum_dov" style="position: relative;top:-40px; font-size: 40px;"></p>
         <button class="calcD" onclick="function moveDov() {
-
-
+             var shoplst = window.localStorage.getItem('Shopping cart list');
+            var products = JSON.parse(shoplst);
+            var data = {'site': 'dov', 'purchaseList':products['prodsDov']};
+            automatePurachase(data);
         }
         moveMichaeli()">הזמן כעת</button>
     </div>

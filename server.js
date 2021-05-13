@@ -128,7 +128,7 @@ app.get('/basicNamesCost',(req,res)=>{
         if(err)
             throw err;
         var req2=new sql.Request(conn);
-        req2._query('SELECT Prod_Id_Web,Base_Prod,Prod_Web,Prod_Price,Prod_Unit,Prod_Name FROM AllProds',function (err, recordSet){
+        req2._query('SELECT * FROM AllProds',function (err, recordSet){
             if (err) throw err;
             else {
                 conn.close();
@@ -145,11 +145,14 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
     (async () => {
         const browser = await puppeteer.launch({headless:false});
         const page = await browser.newPage();
-        if(req.body.site === 'kishurit'){
-            await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA');
-             await autoScroll(page);
-             for(const row of req.body.purchaseList){
-                 const quantity = row.quantity;
+        const dovArr = Array();
+        switch (req.body.site){
+            case "kishurit":
+            {
+                await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA');
+                await autoScroll(page);
+                for(const row of req.body.purchaseList){
+                    const quantity = row.quantity;
                  var id = 'div'+ '[id="' + row.realName + '"]';
                  const  div = await page.$(id);
                  for(let i=0;i<quantity;i++){
@@ -158,16 +161,25 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                 });
                 }
             }
+                break;
+            }// case Kishurit
+            case "sultan":
+            {
+                await page.goto('http://sultan.pricecall.co.il/');
+                for(var row of req.body.purchaseList){
+                    var id = '[id="' + row.realName + '"]';
+                    const  inputField = await page.$(id);
+                    await inputField.type(row.quantity.toString())
+                 }
+                break;
+            }// case sultan
+            case "dov":
+            {
+
+            }// case dov
+
         }
-        else{
-            await page.goto('http://sultan.pricecall.co.il/');
-            for(var row of req.body.purchaseList){
-                // console.log(row.realName)
-                var id = '[id="' + row.realName + '"]';
-                const  inputField = await page.$(id);
-                await inputField.type(row.quantity.toString())
-            }
-        }
+
 
 
   // await browser.close();

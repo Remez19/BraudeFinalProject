@@ -40,8 +40,8 @@ def checkBeforeInsert(dataBaseCon, newVegList):
                       f"SET Prod_Id_Web ='{row[5]}' , Prod_Unit ='{unit}' , Prod_Price = {row[2]}" \
                       f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
         if not updateDB(dataBaseCon, updateQuery):
-            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod,Prod_Id_Web)' \
-                          'VALUES (?,?,?,?,?,?);'
+            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod,Prod_Id_Web,Prod_Id_Web_Link)' \
+                          'VALUES (?,?,?,?,?,?,?);'
             insertToDB(dataBaseCon, row, insertQuery)
 
 
