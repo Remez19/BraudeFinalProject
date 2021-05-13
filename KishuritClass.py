@@ -99,9 +99,9 @@ class Kishurit:
             title = div.find('div', attrs={'class': 'list_item_title_with_brand'}).text
             price = div.find('a', attrs={'class': 'price'}).text
             prodIdWeb = div.get('id')
-            self.resultVegList.append(self.getVegDetails(title, price, prodIdWeb))
+            self.resultVegList.append(self.getVegDetails(title, price, prodIdWeb, link))
 
-    def getVegDetails(self, title, price, prodIdWeb):
+    def getVegDetails(self, title, price, prodIdWeb, link):
         """Creates a Vegetable instance
                Parameters
                ----------
@@ -123,7 +123,7 @@ class Kishurit:
         name = name.replace("'", "")
         name = name.replace("'", "")
         name = name.replace('`', '')
-        return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb)
+        return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb, link)
 
     def unitSelector(self, unit):
         """Retrieve the link raw data of unit, price and name of a vegetable.
