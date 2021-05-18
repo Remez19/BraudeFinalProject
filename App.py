@@ -57,8 +57,19 @@ class App:
         self.saveItem = Button(self.mainWindow, text="Save", command=self.saveItemChangeToTable, width=10, height=1)
         # Buttons
 
+        # Tree Frame
+        self.treeFrame = Frame(self.mainWindow)
+        # Tree Frame
+
+        # Tree Scroll Bar
+        self.scrollBar = Scrollbar(self.treeFrame)
+        self.scrollBar.pack(side=RIGHT, fill=Y)
+        # Tree Scroll Bar
+
+
+
         # Tree View
-        self.treeView = ttk.Treeview(self.mainWindow)
+        self.treeView = ttk.Treeview(self.treeFrame, yscrollcommand=self.scrollBar.set)
         self.treeView['columns'] = ('Prod_Name', 'Prod_Unit', 'Prod_Price', 'Prod_Web', 'Base_Prod')
         self.treeView.column('#0', anchor=S, width=0, minwidth=0)
         self.treeView.column('Prod_Name', anchor=S, width=90, minwidth=80)
@@ -74,7 +85,12 @@ class App:
         self.treeView.heading('Prod_Price', text='מחיר', anchor=S)
         self.treeView.heading('Prod_Web', text='אתר', anchor=S)
         self.treeView.bind('<ButtonRelease-1>', self.getItemFromList)
+        self.treeView.pack()
         # Tree View
+
+        # Config Scroll Bar
+        self.scrollBar.config(command=self.treeView.yview)
+        # Config Scroll Bar
 
         # ComboBox
         self.basicNameComBox = ttk.Combobox(self.mainWindow, width=15, textvariable=StringVar())
@@ -127,8 +143,9 @@ class App:
                 self.baseNamesList.append(baseName)
                 self.basicNameComBox['values'] = tuple(self.baseNamesList)
             item = self.treeView.item(selectedItem, 'values')
-            item = (item[0], item[1], item[2], item[3], baseName)
-            self.treeView.item(selectedItem, values=item)
+            item = (item[0], item[1], item[2], item[3], baseName, item[5], item[6], True)
+            self.treeView.delete(selectedItem)
+            self.treeView.insert(parent='', index='end', iid=int(selectedItem), values=item, tags='Checked')
 
     def setBasicNameFromComboBox(self, event):
         self.basicNameEntry.delete(0, END)
@@ -138,6 +155,7 @@ class App:
         self.hideGuiWidgets()
         data = []
         for child in self.treeView.get_children():
+            print()
             data.append(tuple(self.treeView.item(child)['values']))
         with concurrent.futures.ThreadPoolExecutor() as executor:
             insertAdminThread = executor.submit(insertAdminData, self.dataBaseCon, data)
@@ -161,9 +179,19 @@ class App:
             self.loadingAnimation(workThreads)
             self.LastUpdateDateLabel.place(x=270, y=50)
             self.placeGuiWidgets()
+            style = ttk.Style()
+            style.configure("Treeview",
+                            fieldbackground="#ABABAB"
+                            )
+            style.map('Treeview', background=[('selected', '#00A1FF')])
             for work in workThreads:
                 for i, prod in enumerate(work.result()):
-                    self.treeView.insert(parent='', index='end', iid=i, values=tuple(prod))
+                    if prod[7]:
+                        self.treeView.insert(parent='', index='end', iid=i, values=tuple(prod), tags='Checked')
+                    else:
+                        self.treeView.insert(parent='', index=0, iid=i, values=tuple(prod), tags=('Not',))
+            self.treeView.tag_configure('Checked', background='#7FEA4F',foreground='black')
+            self.treeView.tag_configure('Not', background='#EA4F4F', foreground='black')
             self.mainWindow.update()
 
     def updateDataBaseBtn(self):
@@ -186,7 +214,7 @@ class App:
             self.nameEntry.place(x=497, y=420)
             self.baseNameLabel.place(x=400, y=390)
             self.basicNameEntry.place(x=342, y=420)
-            self.treeView.place(x=220, y=150)
+            self.treeFrame.place(x=220, y=150)
             self.basicNameComBox.place(x=225, y=420)
             self.comboBoxLabel.place(x=240, y=390)
             self.saveItem.place(x=130, y=418)
@@ -196,7 +224,7 @@ class App:
 
     def hideGuiWidgets(self):
         self.loadingLabel.place_forget()
-        self.treeView.place_forget()
+        self.treeFrame.place_forget()
         self.saveChangesBtn.place_forget()
         self.basicNameComBox.place_forget()
         self.saveItem.place_forget()

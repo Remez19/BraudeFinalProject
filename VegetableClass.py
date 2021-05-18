@@ -55,6 +55,7 @@ class Vegetable:
         self.webSite = webSite
         self.baseProd = baseProd
         self.prodIdWeb = prodIdWeb
+        self.Checked = False
         self.link = link
 
 
@@ -72,4 +73,4 @@ class Vegetable:
         """Returns a tuple of the vegetable details (name, price, unit, website, base name)
                """
         return \
-        (self.vegName, self.vegUnit, float(self.vegPrice), self.webSite, self.baseProd, self.prodIdWeb, self.link)
+        (self.vegName, self.vegUnit, float(self.vegPrice), self.webSite, self.baseProd, self.prodIdWeb, self.link, self.Checked)

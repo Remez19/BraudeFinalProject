@@ -40,16 +40,17 @@ def checkBeforeInsert(dataBaseCon, newVegList):
                       f"SET Prod_Id_Web ='{row[5]}' , Prod_Unit ='{unit}' , Prod_Price = {row[2]}" \
                       f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
         if not updateDB(dataBaseCon, updateQuery):
-            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod,Prod_Id_Web,Prod_Id_Web_Link)' \
-                          'VALUES (?,?,?,?,?,?,?);'
+            insertQuery = 'INSERT INTO AllProds (Prod_Name,Prod_Unit,Prod_Price,Prod_Web,Base_Prod,Prod_Id_Web,Prod_Id_Web_Link,Checked)' \
+                          'VALUES (?,?,?,?,?,?,?,?);'
             insertToDB(dataBaseCon, row, insertQuery)
 
 
 def insertAdminData(dataBaseCon, data):
+
     for row in data:
         prodName = row[0].replace("'", "")
         updateQuery = f"UPDATE [BraudeProject].[dbo].[AllProds]" \
-                      f"SET Base_Prod ='{row[4]}' " \
+                      f"SET Base_Prod ='{row[4]}' ,Checked = '{row[7]}'" \
                       f"WHERE Prod_Name = '{prodName}' AND Prod_Web = '{row[3]}'"
         updateDB(dataBaseCon, updateQuery)
     lastUpdate = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
