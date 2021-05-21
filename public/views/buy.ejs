@@ -22,9 +22,9 @@
 </div>
 
 <div class="menuHead" style="position: relative;height: 100px; left:550px; width: 700px; top:-260px;">
-<button class="menuButton" style="position: relative; " onclick="moveProdPage()">מה חדש</button>
+<button class="menuButton" style="position: relative; " onclick="movProdPage()">מה חדש</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
-<button class="menuButton" style="position: relative; " onclick="movAboutPage()">צרו קשר</button>
+<button class="menuButton" style="position: relative; " onclick="movConnectPage()">צרו קשר</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
 <button class="menuButton" style="position: relative; " onclick="movAboutPage()">אודות</button>
 <label class="control-label" style="font-size: 16px;color: gray;">|</label>
@@ -88,6 +88,15 @@ class Prod{
     this.realName=realName;
     this.link = link
   }
+}
+
+class ProdTable{
+        constructor(basicName) {
+            this.basicName=basicName;
+            this.products=[];
+        }
+
+
 }
 
 class  Cart {
@@ -336,6 +345,18 @@ function moveBuyPage() {
   location.href = "/buy";
 }
 
+function movAboutPage() {
+    location.href = "/About";
+}
+
+function movConnectPage() {
+    location.href = "/Connect";
+}
+
+function movWhatsNewPage() {
+    location.href = "/WhatsNew";
+}
+
 function movesubmitLst() {
     console.log(shoppingCart);
     if(shoppingCart.products.length===0) {
@@ -418,6 +439,7 @@ function movesubmitLst() {
                 <tr>
                 <td style="display:none;">
                     ${dov_prod_link}
+
                 </td>
                 <td style="display:none;">
                     ${dov_realName}
@@ -524,7 +546,7 @@ function movesubmitLst() {
         var costS=event.target.parentElement.getAttribute('cost-sultan');
         var realNameS=event.target.parentElement.getAttribute('sultan_real_name');
         if(costS!='-') {
-            costSultan += parseInt(costS);
+            costSultan += parseFloat(costS);
             console.log("sultan:"+costS+" realName:"+realNameS+" basic:"+currentVege);
             shoppingCart.addSupplierLst(currentVege,"Sultan",value,realNameS);
         }
@@ -535,7 +557,8 @@ function movesubmitLst() {
         var realNameD=event.target.parentElement.getAttribute('Dov_real_name');
         var prodLinkD = event.target.parentElement.getAttribute('dov-prod-link');
         if(costD!='-') {
-            costDov += parseInt(costD);
+            costDov += parseFloat(costD);
+            costDov=Math.round(costDov * 100) / 100
             shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD,prodLinkD);
         }
         else
@@ -544,7 +567,7 @@ function movesubmitLst() {
         var costK=event.target.parentElement.getAttribute('cost-kishurit');
         var realNameK=event.target.parentElement.getAttribute('kishurit_real_name');
         if(costK!='-') {
-            costKishurit += parseInt(costK);
+            costKishurit += parseFloat(costK);
             shoppingCart.addSupplierLst(currentVege,"Kishurit",value,realNameK);
         }
         else
@@ -577,27 +600,30 @@ function movesubmitLst() {
         shoppingCart.subtractProduct(currentVege,value);
           var costS=event.target.parentElement.getAttribute('cost-sultan');
             if(costS!='-') {
-                costSultan -= parseInt(costS);
+                costSultan -= parseFloat(costS);
                 shoppingCart.subtractSupplierLst(currentVege,"Sultan",value);
             }
             if(costSultan<0) costSultan=0;
 
             var costD=event.target.parentElement.getAttribute('cost-dov');
             if(costD!='-') {
-                costDov -= parseInt(costD);
+                costDov -= parseFloat(costD);
+                costDov=Math.round(costDov * 100) / 100
                 shoppingCart.subtractSupplierLst(currentVege,"Dov",value);
             }
             if(costDov<0) costDov=0;
 
             var costK=event.target.parentElement.getAttribute('cost-kishurit');
             if(costK!='-') {
-                costKishurit -= parseInt(costK);
+                costKishurit -= parseFloat(costK);
                 shoppingCart.subtractSupplierLst(currentVege,"Kishurit",value);
             }
             if(costKishurit<0)costKishurit=0;
+
+
             tbl.innerHTML = `<tbody>
                 <tr>
-                    <td>מיכאלי</td>
+                    <td>דוב</td>
                     <td>כישורית</td>
                     <td>סולטן</td>
                 </tr>

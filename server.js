@@ -67,7 +67,9 @@ app.get('/testdata',(req,res)=>{
     })
 });
 
-
+app.get('/About',(req,res)=>{
+    res.render('About.ejs');
+})
 
 app.get('/Products2',(req,res)=>{
     res.render('Products.ejs');
@@ -100,6 +102,18 @@ app.get('/submit',(req,res)=>{
 
 app.get('/totalSum',(req,res)=>{
     res.render('TotalSum.ejs');
+})
+
+app.get('/totalSum',(req,res)=>{
+    res.render('TotalSum.ejs');
+})
+
+app.get('/Connect',(req,res)=>{
+    res.render('Connect.ejs');
+})
+
+app.get('/WhatsNew',(req,res)=>{
+    res.render('WhatsNew.ejs');
 })
 
 //get the basic names of the products
@@ -152,22 +166,15 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                 await page.goto('http://www.meshek-kishorit.org/47955-%D7%99%D7%A8%D7%A7%D7%95%D7%AA');
                 await autoScroll(page);
                 for(const row of req.body.purchaseList){
-                    var quantity = row.quantity;
-                    var id = 'div'+ '[id="' + row.realName + '"]';
-                    const  div = await page.$(id);
-                    var quantityIncrease = (await (await div.$('.list_item_show_price')).getProperty('textContent')).toString();
-                    if(quantityIncrease.includes('0.5')){
-                        quantity = quantity * 2
-                    }
-                    // if (quantityIncrease.toString().includes('0.5')){
-                    //     console.log('HEY')
-                    // }
-                    for(let i=0;i<quantity;i++){
-                        await div.$eval('div[class="add_item quantity"]',  el =>{
+                    const quantity = row.quantity;
+                 var id = 'div'+ '[id="' + row.realName + '"]';
+                 const  div = await page.$(id);
+                 for(let i=0;i<quantity;i++){
+                    await div.$eval('div[class="add_item quantity"]',  el =>{
                         el.click({clickCount:1})
-                        });
-                    }
+                });
                 }
+            }
                 break;
             }// case Kishurit
             case "sultan":
@@ -182,40 +189,7 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
             }// case sultan
             case "dov":
             {
-                 await page.goto('https://dovdov.co.il/products/category/yrqwt-32');
-                 for(var row of req.body.purchaseList){
-                     if(row.link === "https://dovdov.co.il/products/category/yrqwt-32"){
-                         const quantity = row.quantity;
-                         var id = 'button[id="'+ row.realName +'"]';
-                         for(let i=0;i<quantity;i++){
-                             await page.click(id);
-                             await page.waitForSelector('div[class="messages__wrapper"]',{visible:true})
-                         }
-                     }
-                     else{
-                        dovArr.push(row);
-                     }
-                 }
-                 await page.waitForTimeout(800);
-                 await page.click('a[class="fl4"]');
-                 await page.waitForNavigation();
-                 for(var row of dovArr){
-                     const quantity = row.quantity;
-                     var id = 'button[id="'+ row.realName +'"]';
-                     for(let i=0;i<quantity;i++){
-                         await page.click(id);
-                         await page.waitForSelector('div[class="messages__wrapper"]',{visible:true})
-                     }
-                 }
-                 await page.waitForTimeout(800);
-                 await page.click('a[class="cart-block--link__expand"]');
-                 await page.waitForNavigation();
-                 // await Promise.all([
-                 //      page.waitForTimeout(800),
-                 //      page.click('a[class="cart-block--link__expand"]'),
-                 //      page.waitForNavigation()
-                 // ]);
-                break;
+
             }// case dov
 
         }
