@@ -1,4 +1,4 @@
-from Compare import compareNameToBaseName
+from Compare import compareStrCmp95
 from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 import re
@@ -93,5 +93,5 @@ class DovMarket:
         unit = ''.join(re.sub("\d+\.\d+|[₪,',ל]", "", price))
         price = ''.join(re.findall("\d+\.\d+", price))
         name = name.replace("'", "")
-        baseName = compareNameToBaseName(name, self.baseNameList)
+        baseName = compareStrCmp95(name, self.baseNameList)
         return Vegetable(name, price, unit, self.webName, baseName, prodIdWeb, link)

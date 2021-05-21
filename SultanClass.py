@@ -2,7 +2,7 @@
 from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 from VegetableClass import Vegetable
-from Compare import compareNameToBaseName
+from Compare import compareStrCmp95
 import time
 
 class Sultan:
@@ -91,7 +91,7 @@ class Sultan:
         name = ' '.join(name)
         price = price.split()
         price = ' '.join(price)
-        baseName = compareNameToBaseName(name, self.baseNameList)
+        baseName = compareStrCmp95(name, self.baseNameList)
         name = name.replace("'", "")
         name = name.replace("`", "")
         return Vegetable(name, price, 'ק"ג', self.webName, baseName, prodIdWeb, self.pageLink)

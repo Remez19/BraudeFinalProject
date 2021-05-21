@@ -43,7 +43,7 @@ class App:
         # Labels
 
         # Entry labels
-        self.nameEntry = Entry(self.mainWindow, width=20)
+        # self.nameEntry = Entry(self.mainWindow, width=20)
         self.basicNameEntry = Entry(self.mainWindow, width=20)
         # Entry Labels
 
@@ -54,7 +54,8 @@ class App:
         self.DeleteBtn = Button(self.mainWindow, text="Delete DataBase", command=self.deleteBtn, width=20, height=1)
         self.saveChangesBtn = Button(self.mainWindow, text="Save changes", command=self.saveChangesBtn, width=20,
                                      height=1)
-        self.saveItem = Button(self.mainWindow, text="Save", command=self.saveItemChangeToTable, width=10, height=1)
+        self.saveItem = Button(self.mainWindow, text="Verify Item", command=self.saveItemChangeToTable, width=10, height=1)
+        self.editItemBtn = Button(self.mainWindow, text="Edit Item", command=self.editItemName, width=10, height=1)
         # Buttons
 
         # Tree Frame
@@ -103,9 +104,28 @@ class App:
         self.LastUpdateDateLabel.place(x=260, y=50)
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
-        self.DeleteBtn.place(x=0,y=0)
+        self.DeleteBtn.place(x=0, y=0)
 
         # Gui preparation
+
+    def editItemName(self):
+        self.UpdateDbBtn['state'] = DISABLED
+        self.EditDbBtn['state'] = DISABLED
+        self.editItemBtn.place_forget()
+        self.treeView['selectmode'] = 'none'
+        self.treeView.unbind('<ButtonRelease-1>')
+        selectedItem = self.treeView.focus()
+        selectedItem = self.treeView.item(selectedItem, 'values')
+        self.basicNameEntry.delete(0, END)
+        self.basicNameEntry.insert(0, selectedItem[4])
+        str = ' '.join(reversed(selectedItem[0].split(' ')))
+        self.nameLabel['text'] = f'{str} :מוצר שם'
+        self.nameLabel.place(x=300, y=380)
+        self.baseNameLabel.place(x=550, y=415)
+        self.basicNameEntry.place(x=495, y=440)
+        self.basicNameComBox.place(x=360, y=439)
+        self.comboBoxLabel.place(x=392, y=415)
+        self.saveItem.place(x=265, y=436)
 
     def deleteBtn(self):
         self.hideGuiWidgets()
@@ -123,29 +143,40 @@ class App:
         selectedItem = self.treeView.focus()
         selectedItem = self.treeView.item(selectedItem, 'values')
         if len(selectedItem) > 1:
-            self.basicNameEntry.delete(0, END)
-            self.basicNameEntry.insert(0, selectedItem[4])
-            self.nameEntry.config(state=NORMAL)
-            self.nameEntry.delete(0, END)
-            self.nameEntry.insert(0, selectedItem[0])
-            self.nameEntry.config(state=DISABLED)
+            self.editItemBtn.place(x=420, y=390)
+            self.saveItem.place(x=320, y=390)
             self.mainWindow.update()
+
 
     def saveItemChangeToTable(self):
         selectedItem = self.treeView.focus()
-        if selectedItem:
-            baseName = self.basicNameEntry.get()
-            if baseName not in self.baseNamesList:
-                with concurrent.futures.ThreadPoolExecutor() as executor:
-                    allProdsThread = executor.submit(insertToDB, self.dataBaseCon, baseName,
-                                                     'INSERT INTO AllVegNames (Veg_Name)' \
-                                                     'VALUES (?);')
-                self.baseNamesList.append(baseName)
-                self.basicNameComBox['values'] = tuple(self.baseNamesList)
-            item = self.treeView.item(selectedItem, 'values')
-            item = (item[0], item[1], item[2], item[3], baseName, item[5], item[6], True)
-            self.treeView.delete(selectedItem)
-            self.treeView.insert(parent='', index='end', iid=int(selectedItem), values=item, tags='Checked')
+        item = self.treeView.item(selectedItem, 'values')
+        baseName = item[4] if self.basicNameEntry.get() is '' else self.basicNameEntry.get()
+        print(baseName)
+        if baseName not in self.baseNamesList:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                allProdsThread = executor.submit(insertToDB, self.dataBaseCon, baseName,
+                                                 'INSERT INTO AllVegNames (Veg_Name)' \
+                                                 'VALUES (?);')
+            self.baseNamesList.append(baseName)
+            self.basicNameComBox['values'] = tuple(self.baseNamesList)
+        item = (item[0], item[1], item[2], item[3], baseName, item[5], item[6], True)
+        self.treeView.delete(selectedItem)
+        self.treeView.insert(parent='', index='end', iid=int(selectedItem), values=item, tags='Checked')
+        self.treeView['selectmode'] = 'browse'
+        self.treeView.bind('<ButtonRelease-1>', self.getItemFromList)
+        self.nameLabel.place_forget()
+        self.baseNameLabel.place_forget()
+        self.basicNameEntry.place_forget()
+        self.basicNameComBox.place_forget()
+        self.comboBoxLabel.place_forget()
+        self.saveItem.place_forget()
+        self.editItemBtn.place_forget()
+        self.saveChangesBtn.place(x=340, y=480)
+        self.UpdateDbBtn['state'] = ACTIVE
+        self.EditDbBtn['state'] = ACTIVE
+
+
 
     def setBasicNameFromComboBox(self, event):
         self.basicNameEntry.delete(0, END)
@@ -163,12 +194,13 @@ class App:
             self.LastUpdateDateLabel.place(x=270, y=50)
             self.LastUpdateDateLabel['text'] = "Operation COMPLETE last update: " + insertAdminThread.result()
             self.placeGuiWidgets()
+            self.saveChangesBtn.place_forget()
             self.mainWindow.update()
 
     def EditDbBtn(self):
         self.hideGuiWidgets()
         self.treeViewFlag = True
-        self.nameEntry.delete(0, END)
+        # self.nameEntry.delete(0, END)
         self.basicNameEntry.delete(0, END)
         for i in self.treeView.get_children():
             self.treeView.delete(i)
@@ -196,7 +228,7 @@ class App:
 
     def updateDataBaseBtn(self):
         self.hideGuiWidgets()
-        self.nameEntry.delete(0, END)
+        # self.nameEntry.delete(0, END)
         self.basicNameEntry.delete(0, END)
         with concurrent.futures.ThreadPoolExecutor() as executor:
             scrapeThread = executor.submit(importData, self.dataBaseCon, self.baseNamesList)
@@ -210,29 +242,15 @@ class App:
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
         if self.treeViewFlag:
-            self.nameLabel.place(x=560, y=390)
-            self.nameEntry.place(x=497, y=420)
-            self.baseNameLabel.place(x=400, y=390)
-            self.basicNameEntry.place(x=342, y=420)
-            self.treeFrame.place(x=220, y=150)
-            self.basicNameComBox.place(x=225, y=420)
-            self.comboBoxLabel.place(x=240, y=390)
-            self.saveItem.place(x=130, y=418)
-            self.saveChangesBtn.place(x=340, y=480)
+            self.treeFrame.place(x=185, y=150)
         self.UpdateDbBtn['state'] = 'active'
         self.EditDbBtn['state'] = 'active'
 
     def hideGuiWidgets(self):
         self.loadingLabel.place_forget()
         self.treeFrame.place_forget()
-        self.saveChangesBtn.place_forget()
-        self.basicNameComBox.place_forget()
+        self.editItemBtn.place_forget()
         self.saveItem.place_forget()
-        self.comboBoxLabel.place_forget()
-        self.nameLabel.place_forget()
-        self.nameEntry.place_forget()
-        self.baseNameLabel.place_forget()
-        self.basicNameEntry.place_forget()
         self.LastUpdateDateLabel.grid_forget()
         self.UpdateDbBtn['state'] = 'disable'
         self.EditDbBtn['state'] = 'disable'

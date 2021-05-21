@@ -1,4 +1,4 @@
-from Compare import compareNameToBaseName
+from Compare import compareStrCmp95
 from Utils import connectionChecker, insertToDB
 from bs4 import BeautifulSoup
 import re
@@ -119,7 +119,7 @@ class Kishurit:
         name = ' '.join(name)
         unit = title[title.find('(') + 1:title.find(')')]
         unit = self.unitSelector(unit)
-        baseName = compareNameToBaseName(name, self.baseNameList)
+        baseName = compareStrCmp95(name, self.baseNameList)
         name = name.replace("'", "")
         name = name.replace("'", "")
         name = name.replace('`', '')
