@@ -67,7 +67,9 @@ app.get('/testdata',(req,res)=>{
     })
 });
 
-
+app.get('/About',(req,res)=>{
+    res.render('About.ejs');
+})
 
 app.get('/Products2',(req,res)=>{
     res.render('Products.ejs');
@@ -100,6 +102,18 @@ app.get('/submit',(req,res)=>{
 
 app.get('/totalSum',(req,res)=>{
     res.render('TotalSum.ejs');
+})
+
+app.get('/totalSum',(req,res)=>{
+    res.render('TotalSum.ejs');
+})
+
+app.get('/Connect',(req,res)=>{
+    res.render('Connect.ejs');
+})
+
+app.get('/WhatsNew',(req,res)=>{
+    res.render('WhatsNew.ejs');
 })
 
 //get the basic names of the products
@@ -137,7 +151,6 @@ app.get('/basicNamesCost',(req,res)=>{
         });
     })
 })
-
 
 app.post('/Pup', urlencodedParser,(req,res)=>{
 
@@ -187,8 +200,11 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                      if(row.link === "https://dovdov.co.il/products/category/yrqwt-32"){
                          const quantity = row.quantity;
                          var id = 'button[id="'+ row.realName +'"]';
+                         console.log(row.realName)
+                         console.log(quantity)
                          for(let i=0;i<quantity;i++){
                              await page.click(id);
+                             await page.waitForTimeout(1500);
                              await page.waitForSelector('div[class="messages__wrapper"]',{visible:true})
                          }
                      }
@@ -196,25 +212,23 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                         dovArr.push(row);
                      }
                  }
-                 await page.waitForTimeout(800);
+                 await page.waitForTimeout(1000);
                  await page.click('a[class="fl4"]');
                  await page.waitForNavigation();
                  for(var row of dovArr){
                      const quantity = row.quantity;
+                     console.log('New Page ' + row.realName)
+                     console.log(quantity)
                      var id = 'button[id="'+ row.realName +'"]';
                      for(let i=0;i<quantity;i++){
                          await page.click(id);
+                         await page.waitForTimeout(1000);
                          await page.waitForSelector('div[class="messages__wrapper"]',{visible:true})
                      }
                  }
-                 await page.waitForTimeout(800);
+                 await page.waitForTimeout(1000);
                  await page.click('a[class="cart-block--link__expand"]');
                  await page.waitForNavigation();
-                 // await Promise.all([
-                 //      page.waitForTimeout(800),
-                 //      page.click('a[class="cart-block--link__expand"]'),
-                 //      page.waitForNavigation()
-                 // ]);
                 break;
             }// case dov
 
@@ -228,6 +242,7 @@ res.send('Good Pic')
 
 
 });
+
 //if we get into team page we will go to about page
 app.get('/team',(req,res)=>{
     res.redirect('/Products');
