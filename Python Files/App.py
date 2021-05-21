@@ -11,7 +11,7 @@ from Utils import connectToDB, selectFromDB, deleteFromDB, insertToDB
 
 class App:
     def __init__(self):
-        self.dataBaseCon = connectToDB('LAPTOP-VNSLHC31', 'BraudeProject')
+        self.dataBaseCon = connectToDB('DESKTOP-LRQKMNU\SQLEXPRESS', 'BraudeProject')
         lastUpdate = selectFromDB(self.dataBaseCon, "SELECT * FROM Updates")
         self.baseNamesList = selectFromDB(self.dataBaseCon, 'SELECT * FROM [BraudeProject].[dbo].[AllVegNames]')
         self.baseNamesList = [' '.join(item.split()) for sublist in self.baseNamesList for item in sublist]
