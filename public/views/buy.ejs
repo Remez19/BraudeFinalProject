@@ -82,11 +82,12 @@
 }
 
 class Prod{
-    constructor(basicName,realName, quantity, link=null) {
+    constructor(basicName,realName, quantity, link=null,cost) {
     this.basicName = basicName;
     this.quantity = quantity;
     this.realName=realName;
-    this.link = link
+    this.link = link;
+    this.cost=cost;
   }
 }
 
@@ -125,12 +126,12 @@ class  Cart {
         }
 
         //this function add product to supplier list
-        addSupplierLst(nameProd, nameSupplier, q, realName,link=null) {
+        addSupplierLst(nameProd, nameSupplier, q, realName,link=null,cost) {
             if(nameSupplier==="Kishurit") {
                 var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                 if(foundIndex === -1) {
                     var newProduct= new Veg(nameProd, q)
-                    var newProd=new Prod(nameProd,realName,q)
+                    var newProd=new Prod(nameProd,realName,q,null,cost)
                     this.prodsKishurit.push(newProd)
                     return
                 }
@@ -142,7 +143,7 @@ class  Cart {
                 var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                 if(foundIndex === -1) {
                     var newProduct= new Veg(nameProd, q)
-                    var newProd=new Prod(nameProd,realName,q)
+                    var newProd=new Prod(nameProd,realName,q,null,cost)
                     this.prodsSultan.push(newProd)
                     return
                 }
@@ -154,7 +155,7 @@ class  Cart {
                     var foundIndex = this.findProdInSupplierLst(nameProd,nameSupplier);
                     if(foundIndex === -1) {
                         var newProduct= new Veg(nameProd, q)
-                        var newProd=new Prod(nameProd,realName,q,link)
+                        var newProd=new Prod(nameProd,realName,q,link,cost)
                         this.prodsDov.push(newProd)
                         return
                     }
@@ -548,7 +549,7 @@ function movesubmitLst() {
         if(costS!='-') {
             costSultan += parseFloat(costS);
             console.log("sultan:"+costS+" realName:"+realNameS+" basic:"+currentVege);
-            shoppingCart.addSupplierLst(currentVege,"Sultan",value,realNameS);
+            shoppingCart.addSupplierLst(currentVege,"Sultan",value,realNameS,null,costS);
         }
         else
             shoppingCart.addMissSupplierLst(currentVege,"Sultan",value);
@@ -559,7 +560,7 @@ function movesubmitLst() {
         if(costD!='-') {
             costDov += parseFloat(costD);
             costDov=Math.round(costDov * 100) / 100
-            shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD,prodLinkD);
+            shoppingCart.addSupplierLst(currentVege,"Dov",value,realNameD,prodLinkD,costD);
         }
         else
             shoppingCart.addMissSupplierLst(currentVege,"Dov",value);
@@ -568,7 +569,7 @@ function movesubmitLst() {
         var realNameK=event.target.parentElement.getAttribute('kishurit_real_name');
         if(costK!='-') {
             costKishurit += parseFloat(costK);
-            shoppingCart.addSupplierLst(currentVege,"Kishurit",value,realNameK);
+            shoppingCart.addSupplierLst(currentVege,"Kishurit",value,realNameK,null,costK);
         }
         else
             shoppingCart.addMissSupplierLst(currentVege,"Kishurit",value);

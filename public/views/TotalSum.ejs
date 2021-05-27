@@ -157,21 +157,33 @@ function moveSultan() {
 
 
 //display a continues window when press on the separate button
-function calcAnotherSplit() {
-    console.log("yessss");
-    if(countDisplay===0) {
+async function calcAnotherSplit() {
+
+    var shoplst = window.localStorage.getItem('Shopping cart list');
+    var products = JSON.parse(shoplst);
+    var data = {'purchaseList': products};
+        const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+
+    }
+    const respone = await fetch('/SeparationOp', options);
+    if (countDisplay === 0) {
         document.getElementById('separateOrder').innerHTML +=
             '<h1 style="position: relative; top:360px; left:-600px;font-family: Assistant;">נמצאה הזמנה מוזלת על סך ____ שקלים</h1>'
-            +'<div class=" TotalSum" style="position: relative; top:400px; left:300px;"></div> '
+            + '<div class=" TotalSum" style="position: relative; top:400px; left:300px;"></div> '
             + '<img src="+.jpg"  style="position: relative; height:100px; width: 100px; top:50px; left:700px;"alt="+">'
-            +'<h1 style="position: relative;font-family: Assistant;left:400px;top:-270px;">כישורית</h1><div class="miss" style="position:relative;top:-280px;left:310px;"><div class="missK"><ul id="ulKishurit"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
-            +'<div class=" TotalSum" style="position: relative; top:-640px; left:900px;"></div>'
-            +'<h1 style="font-family: Assistant;position: relative;left:1000px; top:-1200px;">מיכאלי</h1><div class="miss" style="top:-1210px;left:910px;font-family: Assistant;"><div class="missK"><ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
-            +'<button class="calcD" style="position: relative; top:-1100px; left:380px;" onclick="moveDov() ">הזמן כעת</button>'
-            +'<button class="calcD" style="position: relative; top:-1100px; left:840px;" onclick="moveDov() ">הזמן כעת</button>'
-            +'<p style="position:relative;font-family: Assistant;right:-310px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
-            +'<p id="total_sum_kishurit" style="position: relative;top:-840px; font-size: 40px;"></p>'
-            +'<p style="position:relative;font-family: Assistant;right:-910px;top:-1350px;font-size: 23px;"><b>סה"כ הזמנה</b></p>' ;
+            + '<h1 style="position: relative;font-family: Assistant;left:400px;top:-270px;">כישורית</h1><div class="miss" style="position:relative;top:-280px;left:310px;"><div class="missK"><ul id="ulKishurit"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+            + '<div class=" TotalSum" style="position: relative; top:-640px; left:900px;"></div>'
+            + '<h1 style="font-family: Assistant;position: relative;left:1000px; top:-1200px;">מיכאלי</h1><div class="miss" style="top:-1210px;left:910px;font-family: Assistant;"><div class="missK"><ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+            + '<button class="calcD" style="position: relative; top:-1100px; left:380px;" onclick="moveDov() ">הזמן כעת</button>'
+            + '<button class="calcD" style="position: relative; top:-1100px; left:840px;" onclick="moveDov() ">הזמן כעת</button>'
+            + '<p style="position:relative;font-family: Assistant;right:-310px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
+            + '<p id="total_sum_kishurit" style="position: relative;top:-840px; font-size: 40px;"></p>'
+            + '<p style="position:relative;font-family: Assistant;right:-910px;top:-1350px;font-size: 23px;"><b>סה"כ הזמנה</b></p>';
     }
     countDisplay++;
 }

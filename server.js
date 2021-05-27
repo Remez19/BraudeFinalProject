@@ -1,6 +1,8 @@
 const http = require('http');
 const bodyParser = require('body-parser');
+const spawn = require("child_process").spawn;
 const express = require('express');
+const convert = require('iconv-lite');
 const path = require("ejs");
 const app = express();
 const port = 3000;
@@ -115,6 +117,17 @@ app.get('/Connect',(req,res)=>{
 app.get('/WhatsNew',(req,res)=>{
     res.render('WhatsNew.ejs');
 })
+
+app.post('/SeparationOp',(req,res)=>{
+    // console.log(req.body)
+    const pythonProcess = spawn('python',["C:\\Users\\rdone\\PycharmProjects\\BraudeFinalProject\\Python Files\\Stam.py", JSON.stringify(req.body)]);
+    pythonProcess.stdout.on('data', (data) => {
+        // This is theeeee list that get the separate result
+        var list = convert.decode(data,"win1255");
+        console.log(list)
+    });
+})
+
 
 //get the basic names of the products
 app.get('/basicNames',(req,res)=>{
@@ -239,8 +252,6 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
   // await browser.close();
 })();
 res.send('Good Pic')
-
-
 });
 
 //if we get into team page we will go to about page
@@ -274,3 +285,4 @@ async function autoScroll(page){
         });
     });
 }
+
