@@ -1,0 +1,64 @@
+Site: Kishurit
+Basic Name: תפוח
+Quantity: 1
+Cost: 8
+Real Name: item_id_2112537
+Link: None
+
+Site: Kishurit
+Basic Name: קולורבי
+Quantity: 1
+Cost: 6
+Real Name: item_id_837044
+Link: None
+
+Site: Sultan
+Basic Name: שמיר
+Quantity: 1
+Cost: 4
+Real Name: 54
+Link: None
+
+Site: Sultan
+Basic Name: תפוח
+Quantity: 1
+Cost: 5
+Real Name: 76
+Link: None
+
+Site: Sultan
+Basic Name: קייל
+Quantity: 1
+Cost: 8
+Real Name: 338
+Link: None
+
+Site: Dov
+Basic Name: שמיר
+Quantity: 1
+Cost: 5.9
+Real Name: edit-submit--29
+Link: https://dovdov.co.il/products/category/yrq-wsby-tybwl-71
+
+Site: Dov
+Basic Name: תפוח
+Quantity: 1
+Cost: 4.9
+Real Name: edit-submit--41
+Link: https://dovdov.co.il/products/category/yrqwt-32
+
+Site: Dov
+Basic Name: קייל
+Quantity: 1
+Cost: 12.9
+Real Name: edit-submit--27
+Link: https://dovdov.co.il/products/category/yrq-wsby-tybwl-71
+
+Site: Dov
+Basic Name: קולורבי
+Quantity: 1
+Cost: 8.9
+Real Name: edit-submit--36
+Link: https://dovdov.co.il/products/category/yrqwt-32
+
+----------------------------------
