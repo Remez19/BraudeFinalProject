@@ -45,11 +45,11 @@
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה</b></p>
         <p id="total_sum_sultan" style="position: relative; top:-40px; font-size: 40px;"></p>
-        <button class="calcS" onclick="async function moveSultan() {
-        var shoplst = window.localStorage.getItem('Shopping cart list');
-            var products = JSON.parse(shoplst);
-            var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
-             automatePurachase(data);
+        <button class="calcS" onclick="function moveSultan() {
+                var shoplst = window.localStorage.getItem('Shopping cart list');
+                var products = JSON.parse(shoplst);
+                var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
+                automatePurachase(data);
         }
         moveSultan()">הזמן כעת</button>
     </div>
@@ -67,10 +67,10 @@
             </b></p>
         <p id="total_sum_kishurit" style="position: relative;top:-40px; font-size: 40px;"></p>
         <button class="calcK" onclick="function moveKishurit() {
-            var shoplst = window.localStorage.getItem('Shopping cart list');
-            var products = JSON.parse(shoplst);
-            var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
-            automatePurachase(data);
+                var shoplst = window.localStorage.getItem('Shopping cart list');
+                var products = JSON.parse(shoplst);
+                var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
+                automatePurachase(data);
         }
         moveKishurit()">הזמן כעת</button>
     </div>
@@ -87,10 +87,10 @@
         <p style="font-size: 23px;"><b>סה"כ הזמנה</b></p>
         <p id="total_sum_dov" style="position: relative;top:-40px; font-size: 40px;"></p>
         <button class="calcD" onclick="function moveDov() {
-             var shoplst = window.localStorage.getItem('Shopping cart list');
-            var products = JSON.parse(shoplst);
-            var data = {'site': 'dov', 'purchaseList':products['prodsDov']};
-            automatePurachase(data);
+                var shoplst = window.localStorage.getItem('Shopping cart list');
+                var products = JSON.parse(shoplst);
+                var data = {'site': 'dov', 'purchaseList':products['prodsDov']};
+                automatePurachase(data);
         }
         moveDov()">הזמן כעת</button>
     </div>
@@ -110,7 +110,48 @@
 <script>
     //move button functions
 
-  function moveProdPage() {
+    var prodsKishuritAuto = [];
+    var prodsSultanAuto = [];
+    var prodsDovAuto = [];
+    var supplierNameBAuto = '';
+    var supplierNameAAuto = '';
+
+  function SeparatOrderAutoA(){
+ var data = null;
+      var shoplst = null;
+      var products = null;
+      if(supplierNameAAuto === 'Kishurit'){
+          console.log('Kish')
+          data = {'site': 'kishurit', 'purchaseList':prodsKishuritAuto};
+      }
+      if(supplierNameAAuto === 'Sultan'){
+          data = {'site': 'sultan', 'purchaseList':prodsSultanAuto};
+      }
+      if(supplierNameAAuto === 'Dov'){
+          console.log('Dov')
+          data = {'site': 'dov', 'purchaseList':prodsDovAuto};
+      }
+    automatePurachase(data)
+  }
+    function SeparatOrderAutoB(){
+      var data = null;
+      var shoplst = null;
+      var products = null;
+      if(supplierNameBAuto === 'Kishurit'){
+          data = {'site': 'kishurit', 'purchaseList':prodsKishuritAuto};
+      }
+      if(supplierNameBAuto === 'Sultan'){
+          data = {'site': 'sultan', 'purchaseList':prodsSultanAuto};
+      }
+      if(supplierNameBAuto === 'Dov'){
+          data = {'site': 'dov', 'purchaseList':prodsDovAuto};
+      }
+       automatePurachase(data);
+  }
+
+
+
+    function moveProdPage() {
   location.href = '/Products2';
 }
 async function automatePurachase(purchaseList) {
@@ -155,10 +196,18 @@ function moveSultan() {
     console.log(fenetrePopup.document.getElementById("350"));
 }
 
+class Prod{
+    constructor(basicName,realName, quantity, link=null,cost=null) {
+    this.basicName = basicName;
+    this.quantity = quantity;
+    this.realName=realName;
+    this.link = link;
+    this.cost=cost;
+  }
+}
 
 //display a continues window when press on the separate button
 async function calcAnotherSplit() {
-
     var shoplst = window.localStorage.getItem('Shopping cart list');
     var products = JSON.parse(shoplst);
     var data = {'purchaseList': products};
@@ -168,24 +217,148 @@ async function calcAnotherSplit() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-
     }
+    //move the data into python file that calc the split order
     const respone = await fetch('/SeparationOp', options);
-    if (countDisplay === 0) {
-        document.getElementById('separateOrder').innerHTML +=
-            '<h1 style="position: relative; top:360px; left:-600px;font-family: Assistant;">נמצאה הזמנה מוזלת על סך ____ שקלים</h1>'
-            + '<div class=" TotalSum" style="position: relative; top:400px; left:300px;"></div> '
-            + '<img src="+.jpg"  style="position: relative; height:100px; width: 100px; top:50px; left:700px;"alt="+">'
-            + '<h1 style="position: relative;font-family: Assistant;left:400px;top:-270px;">כישורית</h1><div class="miss" style="position:relative;top:-280px;left:310px;"><div class="missK"><ul id="ulKishurit"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
-            + '<div class=" TotalSum" style="position: relative; top:-640px; left:900px;"></div>'
-            + '<h1 style="font-family: Assistant;position: relative;left:1000px; top:-1200px;">מיכאלי</h1><div class="miss" style="top:-1210px;left:910px;font-family: Assistant;"><div class="missK"><ul id="ulKishurit"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
-            + '<button class="calcD" style="position: relative; top:-1100px; left:380px;" onclick="moveDov() ">הזמן כעת</button>'
-            + '<button class="calcD" style="position: relative; top:-1100px; left:840px;" onclick="moveDov() ">הזמן כעת</button>'
-            + '<p style="position:relative;font-family: Assistant;right:-310px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
-            + '<p id="total_sum_kishurit" style="position: relative;top:-840px; font-size: 40px;"></p>'
-            + '<p style="position:relative;font-family: Assistant;right:-910px;top:-1350px;font-size: 23px;"><b>סה"כ הזמנה</b></p>';
+    const allseparate=await respone.json();
+    if(allseparate!="0") {
+        var supplierNameA = "";
+        var supplierNameB = "";
+        var prodsSultan = [];
+        var prodsKishurit = [];
+        var prodsDov = [];
+        for (const r of allseparate) {
+            //console.log("FFFFFFF"+parseFloat(r.cost));
+            //y=parseFloat(r.cost);
+            //console.log("^^^^^"+y+" "+typeof y);
+
+            if (supplierNameA !== r.supplierName && supplierNameA === "") {
+                supplierNameA = r.supplierName;
+                supplierNameAAuto = supplierNameA
+            } else if (r.supplierName !== supplierNameA && r.supplierName !== supplierNameB && supplierNameB === ""){
+                 supplierNameB = r.supplierName;
+                 supplierNameBAuto = supplierNameB;
+            }
+            if (r.supplierName == "Kishurit") {
+                var newProd = new Prod(r.basicName, r.realName, r.quantity, null, parseFloat(r.cost))
+               // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
+                prodsKishuritAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)});
+                prodsKishurit.push(newProd);
+            } else if (r.supplierName == "Sultan") {
+                var newProd = new Prod(r.basicName, r.realName, r.quantity, null, parseFloat(r.cost))
+                // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
+                 prodsSultanAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)});
+                prodsSultan.push(newProd)
+            } else if (r.supplierName == "Dov") {
+                var newProd = new Prod(r.basicName, r.realName, r.quantity, r.link, parseFloat(r.cost))
+                // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
+                prodsDovAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":r.link,"cost":parseFloat(r.cost)});
+                prodsDov.push(newProd)
+            }
+        }
+        // for(var row of prodsDov){
+        //     prodsDovAuto.push(JSON.stringify(row))
+        // }
+        // for(var row of prodsKishurit){
+        //     prodsKishuritAuto.push(JSON.stringify(row))
+        // }
+        // for(var row of prodsSultan){
+        //     prodsSultanAuto.push(JSON.stringify(row))
+        // }
+        // for(var c of prodsSultanAuto){
+        //     console.log(c)
+        // }
+        // console
+        // console.log('prods Dov' + prodsDovAuto)
+        // console.log('prods Kishurit' + prodsKishuritAuto)
+        // console.log('prods Sultan' + prodsSultanAuto)
+
+        if (countDisplay === 0) {
+            document.getElementById('separateOrder').innerHTML +=
+                '<h1 id="title" style="position: relative; top:360px; left:-700px;text-align:center;font-family: Assistant;"></h1>'
+                + '<div class=" TotalSum" style="position: relative; top:400px; left:480px;"></div> '
+                + '<img src="+.jpg"  style="position: relative; height:100px; width: 100px; top:50px; left:840px;"alt="+">'
+                + '<h1 id="supplierA" style="position: relative;font-family: Assistant;left:600px;top:-270px;"></h1><div class="miss" style="position:relative;top:-280px;left:490px;"><div class="missK"><ul id="ulsupplierA"style="position:relative;font-family: Assistant; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+                + '<div class=" TotalSum" style="position: relative; top:-640px; left:1000px;"></div>'
+                + '<h1 id="supplierB" style="font-family: Assistant;position: relative;left:1100px; top:-1200px;"></h1><div class="miss" style="top:-1210px;left:1010px;font-family: Assistant;"><div class="missK"><ul id="ulsupplierB"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
+                + '<button class="calcD" style="position: relative; top:-1100px; left:570px;" onclick="SeparatOrderAutoA()">הזמן כעת</button>'
+                + '<button class="calcD" style="position: relative; top:-1100px; left:950px;" onclick="SeparatOrderAutoB()">הזמן כעת</button>'
+                + '<p style="position:relative;font-family: Assistant;right:-590px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
+                + '<p style="position:relative;font-family: Assistant;right:-1110px;top:-1329px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
+                + '<p id="total_sum_supplierA" style="position: relative;top:-1370px; right:-610px;font-family: Assistant; font-size: 40px;"></p>'
+                + '<p id="total_sum_supplierB" style="position: relative;top:-1460px; right:-1130px;font-family: Assistant; font-size: 40px;"></p>'
+
+            var sumA=0.0;
+            var sumB=0.0;
+            if (supplierNameA == 'Kishurit') {
+                document.getElementById('supplierA').innerHTML += '<b>' + 'כישורית' + '</b>';
+                for (const row of prodsKishurit) {
+                    sumA+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumA);
+                    document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierA').innerHTML += '<br>';
+            } else if (supplierNameA == 'Dov') {
+                document.getElementById('supplierA').innerHTML += '<b>' + 'דוב' + '</b>';
+                for (const row of prodsDov) {
+                    sumA+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumA);
+                    document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierA').innerHTML += '<br>';
+            } else if (supplierNameA == 'Sultan') {
+                document.getElementById('supplierA').innerHTML += '<b>' + 'סולטן' + '</b>';
+                for (const row of prodsSultan) {
+                    sumA+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumA);
+                    document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierA').innerHTML += '<br>';
+            }
+
+            if (supplierNameB == 'Kishurit') {
+                document.getElementById('supplierB').innerHTML += '<b>' + 'כישורית' + '</b>';
+                for (const row of prodsKishurit) {
+                    sumB+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumB);
+                    document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierB').innerHTML += '<br>';
+            } else if (supplierNameB == 'Dov') {
+                document.getElementById('supplierB').innerHTML += '<b>' + 'דוב' + '</b>';
+                for (const row of prodsDov) {
+                    sumB+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumB);
+                    document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierB').innerHTML += '<br>';
+            } else if (supplierNameB == 'Sultan') {
+                document.getElementById('supplierB').innerHTML += '<b>' + 'סולטן' + '</b>';
+                for (const row of prodsSultan) {
+                    sumB+=parseFloat(row.cost)*parseInt(row.quantity);
+                    //console.log(sumB);
+                    document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
+                }
+                document.getElementById('ulsupplierB').innerHTML += '<br>';
+            }
+            // console.log("supp:A"+supplierNameA);
+            // console.log("supp.B"+supplierNameB);
+            document.getElementById('total_sum_supplierA').innerHTML += '<dt>' + '₪'+ sumA + '</dt>';
+            document.getElementById('total_sum_supplierB').innerHTML += '<dt>'+ '₪' +  sumB+ '</dt>';
+            var res=sumA+sumB;
+            document.getElementById('title').innerHTML = 'נמצאה הזמנה מוזלת, המכילה את כלל המוצרים על סך '+ res +' שקלים';
+        }
+        countDisplay++;
     }
-    countDisplay++;
+    else
+    {
+        countDisplay=0;
+        if(countDisplay==0){
+            document.getElementById('separateOrder').innerHTML +=
+                '<h1 style="position: relative; top:360px; left:-600px;font-family: Assistant;">לא נמצאה חלוקה מוזלת יותר עבור הסל</h1>'
+        }
+        countDisplay++;
+    }
 }
 
 countDisplay=0;

@@ -120,11 +120,16 @@ app.get('/WhatsNew',(req,res)=>{
 
 app.post('/SeparationOp',(req,res)=>{
     // console.log(req.body)
-    const pythonProcess = spawn('python',["\\Python Files\\Stam.py", JSON.stringify(req.body)]);
+    const pythonProcess = spawn('python',["C:\\Users\\rdone\\PycharmProjects\\BraudeFinalProject\\Python Files\\SeprateScript.py", JSON.stringify(req.body)]);
     pythonProcess.stdout.on('data', (data) => {
-        // This is theeeee list that get the separate result
         var list = convert.decode(data,"win1255");
-        console.log(list)
+        // console.log(list);
+        if(list!="0") {
+            var y = JSON.parse(list);
+            res.json(y);
+        }
+        else
+            res.json("0");
     });
 })
 
