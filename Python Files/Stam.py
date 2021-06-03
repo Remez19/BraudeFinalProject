@@ -1,5 +1,6 @@
 import sys
 import json
+import simplejson as json
 
 
 # [{'basicName': 'תפוח', 'quantity': 2, 'realName': 'item_id_2112537', 'link': None, 'cost': '8'}
@@ -20,6 +21,8 @@ class Vegetable:
             'quantity': self.quantity,
             'realName': self.realName,
             'link': self.link,
+            'cost': self.cost,
+
         }
 
     def getVegDetails(self):
@@ -53,17 +56,17 @@ def createVegList(data=sys.argv[1]):  # =sys.argv[1]):
         for prod in dovDic:
             dovVegs.append(
                 Vegetable("Dov", prod["basicName"], prod["quantity"], prod["realName"], prod["link"], prod["cost"]))
-        with open("Stam1.txt", "w") as file:
-            for item in kishuritVegs:
-                file.write(item.getVegDetails())
-            for item in sultanVegs:
-                file.write(item.getVegDetails())
-            for item in dovVegs:
-                file.write(item.getVegDetails())
-            file.write("----------------------------------")
+        # with open("Stam1.txt", "w") as file:
+        #     for item in kishuritVegs:
+        #         file.write(item.getVegDetails())
+        #     for item in sultanVegs:
+        #         file.write(item.getVegDetails())
+        #     for item in dovVegs:
+        #         file.write(item.getVegDetails())
+        #     file.write("----------------------------------")
         return kishuritVegs, sultanVegs, dovVegs
     except Exception as e:
-        print("createVegList" + str(e))
+        print(0)
         exit(0)
 
 
@@ -99,7 +102,7 @@ def compareLists(List1, List2):
 
         return resultList, totalListPrice
     except Exception as e:
-        print("compareLists" + str(e))
+        print(0)
         exit(0)
 
 
@@ -111,15 +114,24 @@ def findSeperation(kishurit, sultan, dov):
         resultList = []
 
         # Kishurit - Sultan
-        kishuritSultan, kishuritSultanTotal = compareLists(kishurit, sultan)
+        if len(kishurit) is not 0 and len(sultan) is not 0:
+            kishuritSultan, kishuritSultanTotal = compareLists(kishurit, sultan)
+        else:
+            kishuritSultan, kishuritSultanTotal = [], float('inf')
         # Kishurit - Sultan
 
         # Kishurit - Dov
-        kishuritDov, kishuritDovTotal = compareLists(kishurit, dov)
-        # Kishurit - Dov
+        if len(kishurit) is not 0 and len(dov) is not 0:
+            kishuritDov, kishuritDovTotal = compareLists(kishurit, dov)
+        else:
+            kishuritDov, kishuritDovTotal = [], float('inf')
+            # Kishurit - Dov
 
         # Sultan - Dov
-        sultanDov, sultanDovTotal = compareLists(sultan, dov)
+        if len(dov) is not 0 and len(sultan) is not 0:
+            sultanDov, sultanDovTotal = compareLists(sultan, dov)
+        else:
+            sultanDov, sultanDovTotal = [], float('inf')
         # Sultan - Dov
         # maxLengthList = max(len(kishuritSultan), len(kishuritDov), len(sultanDov))
         if kishuritSultanTotal <= kishuritDovTotal and kishuritSultanTotal <= sultanDovTotal and len(kishuritSultan):
@@ -132,7 +144,7 @@ def findSeperation(kishurit, sultan, dov):
             resultList = sultanDov
             return resultList, sultanDovTotal, "S-D"
     except Exception as e:
-        print("findSeperation" + str(e))
+        print(0)
         exit(0)
 
 
@@ -153,6 +165,19 @@ if __name__ == '__main__':
         #     file.write(str(json.loads(sys.argv[1])))
         # data = {'purchaseList': {'userId': 0, 'products': [{'basicName': 'שמיר', 'quantity': 1}, {'basicName': 'תפוח', 'quantity': 1}, {'basicName': 'קייל', 'quantity': 1}, {'basicName': 'קולורבי', 'quantity': 1}], 'prodsKishurit': [{'basicName': 'תפוח', 'quantity': 1, 'realName': 'item_id_2112537', 'link': None, 'cost': '8'}, {'basicName': 'קולורבי', 'quantity': 1, 'realName': 'item_id_837044', 'link': None, 'cost': '6'}], 'missKishurit': [{'basicName': 'שמיר', 'quantity': 1}, {'basicName': 'קייל', 'quantity': 1}], 'prodsSultan': [{'basicName': 'שמיר', 'quantity': 1, 'realName': '54', 'link': None, 'cost': '4'}, {'basicName': 'תפוח', 'quantity': 1, 'realName': '76', 'link': None, 'cost': '5'}, {'basicName': 'קייל', 'quantity': 1, 'realName': '338', 'link': None, 'cost': '8'}], 'missSultan': [{'basicName': 'קולורבי', 'quantity': 1}], 'prodsDov': [{'basicName': 'שמיר', 'quantity': 1, 'realName': 'edit-submit--29', 'link': 'https://dovdov.co.il/products/category/yrq-wsby-tybwl-71', 'cost': '5.9'}, {'basicName': 'תפוח', 'quantity': 1, 'realName': 'edit-submit--41', 'link': 'https://dovdov.co.il/products/category/yrqwt-32', 'cost': '4.9'}, {'basicName': 'קייל', 'quantity': 1, 'realName': 'edit-submit--27', 'link': 'https://dovdov.co.il/products/category/yrq-wsby-tybwl-71', 'cost': '12.9'}, {'basicName': 'קולורבי', 'quantity': 1, 'realName': 'edit-submit--36', 'link': 'https://dovdov.co.il/products/category/yrqwt-32', 'cost': '8.9'}], 'missDov': []}}
         kishuritVegs, sultanVegs, dovVegs = createVegList()
+        # AllProdsList = []
+        # for veg in kishuritVegs:
+        #     if veg.basicName not in AllProdsList:
+        #         AllProdsList.append(veg.basicName)
+        # for veg in sultanVegs:
+        #     if veg.basicName not in AllProdsList:
+        #         AllProdsList.append(veg.basicName)
+        # for veg in dovVegs:
+        #     if veg.basicName not in AllProdsList:
+        #         AllProdsList.append(veg.basicName)
+        # with open("Stam.txt", "w") as file:
+        #     for veg in AllProdsList:
+        #         file.write(veg.basicName + '\n')
         resList, totalSum, supplierName = findSeperation(kishuritVegs, sultanVegs, dovVegs)
         if supplierName == 'K-S':
             res = checkMiss(resList, dovVegs)
@@ -164,9 +189,9 @@ if __name__ == '__main__':
             finalList = []
             for veg in resList:
                 finalList.append(veg.getVegDic())
-            print(finalList)
+            print(json.dumps(finalList))
         else:
             print(0)
     except Exception as e:
-        print(e)
+        print(0)
     sys.stdout.flush()
