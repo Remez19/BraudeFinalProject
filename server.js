@@ -119,11 +119,9 @@ app.get('/WhatsNew',(req,res)=>{
 })
 
 app.post('/SeparationOp',(req,res)=>{
-    // console.log(req.body)
     const pythonProcess = spawn('python',["C:\\Users\\rdone\\PycharmProjects\\BraudeFinalProject\\Python Files\\SeprateScript.py", JSON.stringify(req.body)]);
     pythonProcess.stdout.on('data', (data) => {
         var list = convert.decode(data,"win1255");
-        // console.log(list);
         if(list!="0") {
             var y = JSON.parse(list);
             res.json(y);
@@ -191,7 +189,6 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                         quantity = quantity * 2
                     }
                     // if (quantityIncrease.toString().includes('0.5')){
-                    //     console.log('HEY')
                     // }
                     for(let i=0;i<quantity;i++){
                         await div.$eval('div[class="add_item quantity"]',  el =>{
@@ -218,11 +215,9 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                      if(row.link === "https://dovdov.co.il/products/category/yrqwt-32"){
                          const quantity = row.quantity;
                          var id = 'button[id="'+ row.realName +'"]';
-                         console.log(row.realName)
-                         console.log(quantity)
                          for(let i=0;i<quantity;i++){
                              await page.click(id);
-                             await page.waitForTimeout(1500);
+                             await page.waitForTimeout(1700);
                              await page.waitForSelector('div[class="messages__wrapper"]',{visible:true})
                          }
                      }
@@ -235,8 +230,6 @@ app.post('/Pup', urlencodedParser,(req,res)=>{
                  await page.waitForNavigation();
                  for(var row of dovArr){
                      const quantity = row.quantity;
-                     console.log('New Page ' + row.realName)
-                     console.log(quantity)
                      var id = 'button[id="'+ row.realName +'"]';
                      for(let i=0;i<quantity;i++){
                          await page.click(id);

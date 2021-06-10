@@ -44,14 +44,15 @@
         </div>
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה</b></p>
+        <p style="font-size: 19px;position: relative;top:-16px;">לא כולל משלוח</p>
         <p id="total_sum_sultan" style="position: relative; top:-40px; font-size: 40px;"></p>
-        <button class="calcS" onclick="function moveSultan() {
+        <button class="calcS" style="position: relative;top:-75px;" onclick="function moveSultan() {
                 var shoplst = window.localStorage.getItem('Shopping cart list');
                 var products = JSON.parse(shoplst);
                 var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
                 automatePurachase(data);
         }
-        moveSultan()">הזמן כעת</button>
+        moveSultan() ">הזמן כעת</button>
     </div>
     </div>
     <div class="column">
@@ -63,10 +64,10 @@
         </ul>
         </div>
     </div>
-        <p style="font-size: 23px;"><b>סה"כ הזמנה
-            </b></p>
+        <p style="font-size: 23px;"><b>סה"כ הזמנה</b></p>
+        <p style="font-size: 19px;position: relative;top:-16px;">לא כולל משלוח</p>
         <p id="total_sum_kishurit" style="position: relative;top:-40px; font-size: 40px;"></p>
-        <button class="calcK" onclick="function moveKishurit() {
+        <button class="calcK" style="position: relative;top:-75px;" onclick="function moveKishurit() {
                 var shoplst = window.localStorage.getItem('Shopping cart list');
                 var products = JSON.parse(shoplst);
                 var data = {'site': 'kishurit', 'purchaseList':products['prodsKishurit']};
@@ -85,8 +86,9 @@
         </div>
     </div>
         <p style="font-size: 23px;"><b>סה"כ הזמנה</b></p>
+        <p style="font-size: 19px;position: relative;top:-16px;">לא כולל משלוח</p>
         <p id="total_sum_dov" style="position: relative;top:-40px; font-size: 40px;"></p>
-        <button class="calcD" onclick="function moveDov() {
+        <button class="calcD" style="position: relative;top:-75px;" onclick="function moveDov() {
                 var shoplst = window.localStorage.getItem('Shopping cart list');
                 var products = JSON.parse(shoplst);
                 var data = {'site': 'dov', 'purchaseList':products['prodsDov']};
@@ -121,14 +123,12 @@
       var shoplst = null;
       var products = null;
       if(supplierNameAAuto === 'Kishurit'){
-          console.log('Kish')
           data = {'site': 'kishurit', 'purchaseList':prodsKishuritAuto};
       }
       if(supplierNameAAuto === 'Sultan'){
           data = {'site': 'sultan', 'purchaseList':prodsSultanAuto};
       }
       if(supplierNameAAuto === 'Dov'){
-          console.log('Dov')
           data = {'site': 'dov', 'purchaseList':prodsDovAuto};
       }
     automatePurachase(data)
@@ -164,7 +164,6 @@ async function automatePurachase(purchaseList) {
 
     }
     const respone = await fetch('/Pup', options);
-    console.log(respone.send)
 
 }
 function moveHomePage() {
@@ -193,7 +192,6 @@ function moveSultan() {
     var data = {'site': 'sultan', 'purchaseList':products['prodsSultan']};
     var fenetrePopup = window.open('http://sultan.pricecall.co.il/');
 
-    console.log(fenetrePopup.document.getElementById("350"));
 }
 
 class Prod{
@@ -208,7 +206,8 @@ class Prod{
 
 //display a continues window when press on the separate button
 async function calcAnotherSplit() {
-    var shoplst = window.localStorage.getItem('Shopping cart list');
+      if(countDispaly === 0){
+          var shoplst = window.localStorage.getItem('Shopping cart list');
     var products = JSON.parse(shoplst);
     var data = {'purchaseList': products};
         const options = {
@@ -228,9 +227,7 @@ async function calcAnotherSplit() {
         var prodsKishurit = [];
         var prodsDov = [];
         for (const r of allseparate) {
-            //console.log("FFFFFFF"+parseFloat(r.cost));
-            //y=parseFloat(r.cost);
-            //console.log("^^^^^"+y+" "+typeof y);
+
 
             if (supplierNameA !== r.supplierName && supplierNameA === "") {
                 supplierNameA = r.supplierName;
@@ -239,41 +236,38 @@ async function calcAnotherSplit() {
                  supplierNameB = r.supplierName;
                  supplierNameBAuto = supplierNameB;
             }
-            if (r.supplierName == "Kishurit") {
+            if (r.supplierName === "Kishurit") {
                 var newProd = new Prod(r.basicName, r.realName, r.quantity, null, parseFloat(r.cost))
-               // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
                 prodsKishuritAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)});
                 prodsKishurit.push(newProd);
-            } else if (r.supplierName == "Sultan") {
+            } else if (r.supplierName === "Sultan") {
                 var newProd = new Prod(r.basicName, r.realName, r.quantity, null, parseFloat(r.cost))
-                // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
                  prodsSultanAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)});
                 prodsSultan.push(newProd)
-            } else if (r.supplierName == "Dov") {
+            } else if (r.supplierName === "Dov") {
                 var newProd = new Prod(r.basicName, r.realName, r.quantity, r.link, parseFloat(r.cost))
-                // console.log({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":null,"cost":parseFloat(r.cost)})
                 prodsDovAuto.push({"basicName":r.basicName, "realName":r.realName, "quantity":r.quantity, "link":r.link,"cost":parseFloat(r.cost)});
                 prodsDov.push(newProd)
             }
         }
-        // for(var row of prodsDov){
-        //     prodsDovAuto.push(JSON.stringify(row))
-        // }
-        // for(var row of prodsKishurit){
-        //     prodsKishuritAuto.push(JSON.stringify(row))
-        // }
-        // for(var row of prodsSultan){
-        //     prodsSultanAuto.push(JSON.stringify(row))
-        // }
-        // for(var c of prodsSultanAuto){
-        //     console.log(c)
-        // }
-        // console
-        // console.log('prods Dov' + prodsDovAuto)
-        // console.log('prods Kishurit' + prodsKishuritAuto)
-        // console.log('prods Sultan' + prodsSultanAuto)
+        var tempArr = []
+        tempArr.push(prodsSultan.length)
+        tempArr.push(prodsDov.length)
+        tempArr.push(prodsKishurit.length)
+        var countSplit = 0
+        for(var r of tempArr) {
+            if(r > 0){
+                countSplit++;
+            }
+        }
+        if(countSplit <= 1){
+             document.getElementById('separateOrder').innerHTML +=
+                '<h1 style="position: relative; top:360px; left:-600px;font-family: Assistant;">לא נמצאה חלוקה מוזלת יותר עבור הסל</h1>'
+            return
+        }
 
-        if (countDisplay === 0) {
+
+        if (countSplit > 1) {
             document.getElementById('separateOrder').innerHTML +=
                 '<h1 id="title" style="position: relative; top:360px; left:-700px;text-align:center;font-family: Assistant;"></h1>'
                 + '<div class=" TotalSum" style="position: relative; top:400px; left:480px;"></div> '
@@ -283,10 +277,10 @@ async function calcAnotherSplit() {
                 + '<h1 id="supplierB" style="font-family: Assistant;position: relative;left:1100px; top:-1200px;"></h1><div class="miss" style="top:-1210px;left:1010px;font-family: Assistant;"><div class="missK"><ul id="ulsupplierB"style="position:relative; font-size: 23px; top:-26px;"> </ul> </div> </div>'
                 + '<button class="calcD" style="position: relative; top:-1100px; left:570px;" onclick="SeparatOrderAutoA()">הזמן כעת</button>'
                 + '<button class="calcD" style="position: relative; top:-1100px; left:950px;" onclick="SeparatOrderAutoB()">הזמן כעת</button>'
-                + '<p style="position:relative;font-family: Assistant;right:-590px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
-                + '<p style="position:relative;font-family: Assistant;right:-1110px;top:-1329px;font-size: 23px;"><b>סה"כ הזמנה</b></p>'
-                + '<p id="total_sum_supplierA" style="position: relative;top:-1370px; right:-610px;font-family: Assistant; font-size: 40px;"></p>'
-                + '<p id="total_sum_supplierB" style="position: relative;top:-1460px; right:-1130px;font-family: Assistant; font-size: 40px;"></p>'
+                + '<p style="position:relative;font-family: Assistant;right:-500px;top:-1280px;font-size: 23px;"><b>סה"כ הזמנה (לא כולל משלוח)</b></p>'
+                + '<p style="position:relative;font-family: Assistant;right:-1020px;top:-1329px;font-size: 23px;"><b>סה"כ הזמנה (לא כולל משלוח)</b></p>'
+                + '<p id="total_sum_supplierA" style="position: relative;top:-1370px; right:-590px;font-family: Assistant; font-size: 40px;"></p>'
+                + '<p id="total_sum_supplierB" style="position: relative;top:-1460px; right:-1110px;font-family: Assistant; font-size: 40px;"></p>'
 
             var sumA=0.0;
             var sumB=0.0;
@@ -294,7 +288,6 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierA').innerHTML += '<b>' + 'כישורית' + '</b>';
                 for (const row of prodsKishurit) {
                     sumA+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumA);
                     document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierA').innerHTML += '<br>';
@@ -302,7 +295,6 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierA').innerHTML += '<b>' + 'דוב' + '</b>';
                 for (const row of prodsDov) {
                     sumA+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumA);
                     document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierA').innerHTML += '<br>';
@@ -310,7 +302,6 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierA').innerHTML += '<b>' + 'סולטן' + '</b>';
                 for (const row of prodsSultan) {
                     sumA+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumA);
                     document.getElementById('ulsupplierA').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierA').innerHTML += '<br>';
@@ -320,7 +311,6 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierB').innerHTML += '<b>' + 'כישורית' + '</b>';
                 for (const row of prodsKishurit) {
                     sumB+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumB);
                     document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierB').innerHTML += '<br>';
@@ -328,7 +318,6 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierB').innerHTML += '<b>' + 'דוב' + '</b>';
                 for (const row of prodsDov) {
                     sumB+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumB);
                     document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierB').innerHTML += '<br>';
@@ -336,32 +325,27 @@ async function calcAnotherSplit() {
                 document.getElementById('supplierB').innerHTML += '<b>' + 'סולטן' + '</b>';
                 for (const row of prodsSultan) {
                     sumB+=parseFloat(row.cost)*parseInt(row.quantity);
-                    //console.log(sumB);
                     document.getElementById('ulsupplierB').innerHTML += '<dt style="text-align: right;font-size: 18px; color:#9BBB59;">' + row.basicName + ' ' + row.quantity + '</dt>';
                 }
                 document.getElementById('ulsupplierB').innerHTML += '<br>';
             }
-            // console.log("supp:A"+supplierNameA);
-            // console.log("supp.B"+supplierNameB);
-            document.getElementById('total_sum_supplierA').innerHTML += '<dt>' + '₪'+ sumA + '</dt>';
-            document.getElementById('total_sum_supplierB').innerHTML += '<dt>'+ '₪' +  sumB+ '</dt>';
+            document.getElementById('total_sum_supplierA').innerHTML += '<dt>' + '₪'+ sumA.toFixed(1) + '</dt>';
+            document.getElementById('total_sum_supplierB').innerHTML += '<dt>'+ '₪' +  sumB.toFixed(1)+ '</dt>';
             var res=sumA+sumB;
-            document.getElementById('title').innerHTML = 'נמצאה הזמנה מוזלת, המכילה את כלל המוצרים על סך '+ res +' שקלים';
+            document.getElementById('title').innerHTML = 'נמצאה הזמנה מוזלת, המכילה את כלל המוצרים על סך '+ res.toFixed(1) +' שקלים';
         }
-        countDisplay++;
+       countDispaly++;
     }
     else
     {
-        countDisplay=0;
-        if(countDisplay==0){
-            document.getElementById('separateOrder').innerHTML +=
+                countDispaly++;
+                document.getElementById('separateOrder').innerHTML +=
                 '<h1 style="position: relative; top:360px; left:-600px;font-family: Assistant;">לא נמצאה חלוקה מוזלת יותר עבור הסל</h1>'
-        }
-        countDisplay++;
     }
-}
+      }
 
-countDisplay=0;
+}
+var countDispaly = 0
 var shoplst=window.localStorage.getItem('Shopping cart list');
 var products = JSON.parse(shoplst);
 var prodsSultan=products['prodsSultan'];
@@ -371,19 +355,6 @@ var missDov=products['missDov'];
 var prodsKishurit=products['prodsKishurit'];
 var missKishurit=products['missKishurit'];
 
-console.log("s: ");
-for(const row of prodsSultan) {
-        console.log("basic: "+ row.basicName);
-        console.log(row.quantity);
-        console.log("real name"+row.realName);
-    }
-
-console.log("k: ");
-for(const row of prodsKishurit) {
-    console.log("basic: "+row.basicName);
-    console.log(row.quantity);
-    console.log("real name"+row.realName);
-    }
 
 //put exist list to any supplier
 if(products['prodsDov'].length!==0){

@@ -111,8 +111,8 @@ def findSeperation(kishurit, sultan, dov):
         kishuritSultan = []
         kishuritDov = []
         sultanDov = []
-        resultList = []
-
+        maxItemsLists = []
+        longestList = max(len(kishurit), len(sultan), len(dov))
         # Kishurit - Sultan
         if len(kishurit) is not 0 and len(sultan) is not 0:
             kishuritSultan, kishuritSultanTotal = compareLists(kishurit, sultan)
@@ -125,7 +125,7 @@ def findSeperation(kishurit, sultan, dov):
             kishuritDov, kishuritDovTotal = compareLists(kishurit, dov)
         else:
             kishuritDov, kishuritDovTotal = [], float('inf')
-            # Kishurit - Dov
+        # Kishurit - Dov
 
         # Sultan - Dov
         if len(dov) is not 0 and len(sultan) is not 0:
@@ -133,16 +133,23 @@ def findSeperation(kishurit, sultan, dov):
         else:
             sultanDov, sultanDovTotal = [], float('inf')
         # Sultan - Dov
-        # maxLengthList = max(len(kishuritSultan), len(kishuritDov), len(sultanDov))
-        if kishuritSultanTotal <= kishuritDovTotal and kishuritSultanTotal <= sultanDovTotal and len(kishuritSultan):
-            resultList = kishuritSultan
-            return resultList, kishuritSultanTotal, "K-S"
-        if kishuritDovTotal <= kishuritSultanTotal and kishuritDovTotal <= sultanDovTotal and len(kishuritDov):
-            resultList = kishuritDov
-            return resultList, kishuritDovTotal, "K-D"
-        if sultanDovTotal <= kishuritSultanTotal and sultanDovTotal <= kishuritDovTotal and len(sultanDov):
-            resultList = sultanDov
-            return resultList, sultanDovTotal, "S-D"
+
+        minTotal = float('inf')
+        resultList = []
+        supllierName = ''
+        if len(kishuritSultan) >= longestList:
+            maxItemsLists.append((kishuritSultan, kishuritSultanTotal, 'K-S'))
+        if len(kishuritDov) >= longestList:
+            maxItemsLists.append((kishuritDov, kishuritDovTotal, 'K-D'))
+        if len(sultanDov) >= longestList:
+            maxItemsLists.append((sultanDov, sultanDovTotal, "S-D"))
+        with open('finale.txt', 'w') as file:
+            for Tlist in maxItemsLists:
+                if Tlist[1] < minTotal:
+                    resultList = Tlist[0]
+                    minTotal = Tlist[1]
+                    supllierName = Tlist[2]
+            return resultList, minTotal, supllierName
     except Exception as e:
         print(0)
         exit(0)
@@ -161,31 +168,12 @@ def checkMiss(resList, checkList):
 
 if __name__ == '__main__':
     try:
-        # with open("temp.txt", "w") as file:
-        #     file.write(str(json.loads(sys.argv[1])))
-        # data = {'purchaseList': {'userId': 0, 'products': [{'basicName': 'שמיר', 'quantity': 1}, {'basicName': 'תפוח', 'quantity': 1}, {'basicName': 'קייל', 'quantity': 1}, {'basicName': 'קולורבי', 'quantity': 1}], 'prodsKishurit': [{'basicName': 'תפוח', 'quantity': 1, 'realName': 'item_id_2112537', 'link': None, 'cost': '8'}, {'basicName': 'קולורבי', 'quantity': 1, 'realName': 'item_id_837044', 'link': None, 'cost': '6'}], 'missKishurit': [{'basicName': 'שמיר', 'quantity': 1}, {'basicName': 'קייל', 'quantity': 1}], 'prodsSultan': [{'basicName': 'שמיר', 'quantity': 1, 'realName': '54', 'link': None, 'cost': '4'}, {'basicName': 'תפוח', 'quantity': 1, 'realName': '76', 'link': None, 'cost': '5'}, {'basicName': 'קייל', 'quantity': 1, 'realName': '338', 'link': None, 'cost': '8'}], 'missSultan': [{'basicName': 'קולורבי', 'quantity': 1}], 'prodsDov': [{'basicName': 'שמיר', 'quantity': 1, 'realName': 'edit-submit--29', 'link': 'https://dovdov.co.il/products/category/yrq-wsby-tybwl-71', 'cost': '5.9'}, {'basicName': 'תפוח', 'quantity': 1, 'realName': 'edit-submit--41', 'link': 'https://dovdov.co.il/products/category/yrqwt-32', 'cost': '4.9'}, {'basicName': 'קייל', 'quantity': 1, 'realName': 'edit-submit--27', 'link': 'https://dovdov.co.il/products/category/yrq-wsby-tybwl-71', 'cost': '12.9'}, {'basicName': 'קולורבי', 'quantity': 1, 'realName': 'edit-submit--36', 'link': 'https://dovdov.co.il/products/category/yrqwt-32', 'cost': '8.9'}], 'missDov': []}}
         kishuritVegs, sultanVegs, dovVegs = createVegList()
-        # AllProdsList = []
-        # for veg in kishuritVegs:
-        #     if veg.basicName not in AllProdsList:
-        #         AllProdsList.append(veg.basicName)
-        # for veg in sultanVegs:
-        #     if veg.basicName not in AllProdsList:
-        #         AllProdsList.append(veg.basicName)
-        # for veg in dovVegs:
-        #     if veg.basicName not in AllProdsList:
-        #         AllProdsList.append(veg.basicName)
-        # with open("Stam.txt", "w") as file:
-        #     for veg in AllProdsList:
-        #         file.write(veg.basicName + '\n')
         resList, totalSum, supplierName = findSeperation(kishuritVegs, sultanVegs, dovVegs)
-        if supplierName == 'K-S':
-            res = checkMiss(resList, dovVegs)
-        if supplierName == 'K-D':
-            res = checkMiss(resList, sultanVegs)
-        if supplierName == "S-D":
-            res = checkMiss(resList, kishuritVegs)
-        if res:
+        # with open('finale.txt', 'w') as file:
+        #     for veg in resList:
+
+        if resList:
             finalList = []
             for veg in resList:
                 finalList.append(veg.getVegDic())
