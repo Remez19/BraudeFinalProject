@@ -51,7 +51,7 @@ class App:
         self.UpdateDbBtn = Button(self.mainWindow, text="Update Data Base",
                                   command=self.updateDataBaseBtn, width=20, height=1)
         self.EditDbBtn = Button(self.mainWindow, text="Edit data base", command=self.EditDbBtn, width=20, height=1)
-        self.DeleteBtn = Button(self.mainWindow, text="Delete DataBase", command=self.deleteBtn, width=20, height=1)
+        # self.DeleteBtn = Button(self.mainWindow, text="Delete DataBase", command=self.deleteBtn, width=20, height=1)
         self.saveChangesBtn = Button(self.mainWindow, text="Save changes", command=self.saveChangesBtn, width=20,
                                      height=1)
         self.saveItem = Button(self.mainWindow, text="Verify Item", command=self.saveItemChangeToTable, width=10, height=1)
@@ -104,7 +104,7 @@ class App:
         self.LastUpdateDateLabel.place(x=260, y=50)
         self.UpdateDbBtn.place(x=340, y=78)
         self.EditDbBtn.place(x=340, y=110)
-        self.DeleteBtn.place(x=0, y=0)
+        # self.DeleteBtn.place(x=0, y=0)
 
         # Gui preparation
 
