@@ -119,7 +119,7 @@ app.get('/WhatsNew',(req,res)=>{
 })
 
 app.post('/SeparationOp',(req,res)=>{
-    const pythonProcess = spawn('python',["C:\\Users\\rdone\\PycharmProjects\\BraudeFinalProject\\Python Files\\SeprateScript.py", JSON.stringify(req.body)]);
+    const pythonProcess = spawn('python',["./Python Files/SeprateScript.py", JSON.stringify(req.body)]);
     pythonProcess.stdout.on('data', (data) => {
         var list = convert.decode(data,"win1255");
         if(list!="0") {

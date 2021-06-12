@@ -143,13 +143,12 @@ def findSeperation(kishurit, sultan, dov):
             maxItemsLists.append((kishuritDov, kishuritDovTotal, 'K-D'))
         if len(sultanDov) >= longestList:
             maxItemsLists.append((sultanDov, sultanDovTotal, "S-D"))
-        with open('finale.txt', 'w') as file:
-            for Tlist in maxItemsLists:
-                if Tlist[1] < minTotal:
-                    resultList = Tlist[0]
-                    minTotal = Tlist[1]
-                    supllierName = Tlist[2]
-            return resultList, minTotal, supllierName
+        for Tlist in maxItemsLists:
+            if Tlist[1] < minTotal:
+                resultList = Tlist[0]
+                minTotal = Tlist[1]
+                supllierName = Tlist[2]
+        return resultList, minTotal, supllierName
     except Exception as e:
         print(0)
         exit(0)
